@@ -7,55 +7,14 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 
-UGI_Networked::UGI_Networked(const FObjectInitializer& ObjectInitializer)
+UGI_Networked::UGI_Networked()
 {
-    /*ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
-    if (!ensure(MenuBPClass.Class != nullptr)) return;
-
-    MenuClass = MenuBPClass.Class;
-
-    ConstructorHelpers::FClassFinder<UUserWidget> InGameMenuBPClass(TEXT("/Game/MenuSystem/WBP_InGameMenu"));
-    if (!ensure(InGameMenuBPClass.Class != nullptr)) return;
-
-    InGameMenuClass = InGameMenuBPClass.Class;*/
+    
 }
 
-void UGI_Networked::Init()
-{
-  /*  UE_LOG(LogTemp, Warning, TEXT("Found class %s"), *MenuClass->GetName());*/
-}
-
-void UGI_Networked::LoadMenu()
-{
-    /*if (!ensure(MenuClass != nullptr)) return;
-
-    Menu = CreateWidget<UMainMenu>(this, MenuClass);
-    if (!ensure(Menu != nullptr)) return;
-
-    Menu->Setup();
-
-    Menu->SetMenuInterface(this);*/
-}
-
-void UGI_Networked::InGameLoadMenu()
-{
-   /* if (!ensure(InGameMenuClass != nullptr)) return;
-
-    UMenuWidget* Menu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
-    if (!ensure(Menu != nullptr)) return;
-
-    Menu->Setup();
-
-    Menu->SetMenuInterface(this);*/
-}
 
 void UGI_Networked::Host()
 {
-   /* if (Menu != nullptr)
-    {
-        Menu->Teardown();
-    }*/
-
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr)) return;
 
@@ -69,11 +28,6 @@ void UGI_Networked::Host()
 
 void UGI_Networked::Join(const FString& Address)
 {
-    /*if (Menu != nullptr)
-    {
-        Menu->Teardown();
-    }*/
-
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr)) return;
 

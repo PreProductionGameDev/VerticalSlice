@@ -10,32 +10,23 @@
  * 
  */
 UCLASS()
-class VERTICALSLICE_API UGI_Networked : public UGameInstance
+class UGI_Networked : public UGameInstance
 {
 	GENERATED_BODY()
 	
 public:
-    UGI_Network(const FObjectInitializer& ObjectInitializer);
+    UGI_Networked();
 
-    virtual void Init();
+
+    //UFUNCTION(BlueprintCallable)
+    //    void LoadMenu();
 
     UFUNCTION(BlueprintCallable)
-        void LoadMenu();
+        void Host();
 
     UFUNCTION(BlueprintCallable)
-        void InGameLoadMenu();
+        void Join(const FString& Address);
 
-    UFUNCTION(Exec)
-        void Host() override;
-
-    UFUNCTION(Exec)
-        void Join(const FString& Address) override;
-
-    virtual void LoadMainMenu() override;
-
-private:
-    TSubclassOf<class UUserWidget> MenuClass;
-    TSubclassOf<class UUserWidget> InGameMenuClass;
-
-    class UMainMenu* Menu;
+    UFUNCTION(BlueprintCallable)
+    virtual void LoadMainMenu();
 };
