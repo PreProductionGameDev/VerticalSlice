@@ -18,11 +18,8 @@ public:
     UGI_Networked();
 
 
-    //UFUNCTION(BlueprintCallable)
-    //    void LoadMenu();
-
     UFUNCTION(BlueprintCallable)
-        void Host();
+        void Host(const FString& Location);
 
     UFUNCTION(BlueprintCallable)
         void Join(const FString& Address);

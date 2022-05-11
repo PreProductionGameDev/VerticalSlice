@@ -13,17 +13,20 @@ UGI_Networked::UGI_Networked()
 }
 
 
-void UGI_Networked::Host()
+void UGI_Networked::Host(const FString& Location)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Started Host"));
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr)) return;
 
-    Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
+    Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("GotEngine"));
 
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
 
-    World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
+    Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("got World"));
+
+    World->ServerTravel(Location);
 }
 
 void UGI_Networked::Join(const FString& Address)
