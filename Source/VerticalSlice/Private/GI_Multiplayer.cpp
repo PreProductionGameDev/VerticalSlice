@@ -1,35 +1,46 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GI_Networked.h"
+#include "GI_Multiplayer.h"
 
-#include "Engine/Engine.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Blueprint/UserWidget.h"
 
-UGI_Networked::UGI_Networked()
+
+UGI_Multiplayer::UGI_Multiplayer()
 {
-    
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem != nullptr) {
+        UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+    }
 }
 
+void UGI_Multiplayer::Init()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem != nullptr) {
+        UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+    }
+}
 
-void UGI_Networked::Host(const FString& Location)
+void UGI_Multiplayer::Host(const FString& Location)
 {
     UE_LOG(LogTemp, Warning, TEXT("Started Host"));
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr)) return;
-
-    Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("GotEngine"));
+    UE_LOG(LogTemp, Warning, TEXT("Got Engine"));
 
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
-
-    Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("got World"));
+    UE_LOG(LogTemp, Warning, TEXT("Got World"));
 
     World->ServerTravel(Location);
 }
 
-void UGI_Networked::Join(const FString& Address)
+void UGI_Multiplayer::Search()
+{
+
+}
+
+void UGI_Multiplayer::Join(const FString& Address)
 {
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr)) return;
@@ -42,7 +53,7 @@ void UGI_Networked::Join(const FString& Address)
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
-void UGI_Networked::LoadMainMenu()
+void UGI_Multiplayer::LoadMainMenu()
 {
     APlayerController* PlayerController = GetFirstLocalPlayerController();
     if (!ensure(PlayerController != nullptr)) return;
