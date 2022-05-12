@@ -5,8 +5,9 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 
-
 #include "OnlineSubsystem.h"
+#include "OnlineSessionSettings.h"
+
 #include "Interfaces/OnlineSessionInterface.h"
 #include "Templates/SharedPointer.h"
 
@@ -44,4 +45,5 @@ public:
 
 private:
 
+    IOnlineSessionPtr SessionInterface;
 };

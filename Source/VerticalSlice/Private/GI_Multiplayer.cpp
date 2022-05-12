@@ -18,6 +18,7 @@ void UGI_Multiplayer::Init()
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+        SessionInterface = Subsystem->GetSessionInterface();
     }
 }
 
@@ -31,6 +32,19 @@ void UGI_Multiplayer::Host(const FString& Location)
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
     UE_LOG(LogTemp, Warning, TEXT("Got World"));
+
+    if (SessionInterface.IsValid()) {
+        FOnlineSessionSettings SessionSettings;
+        SessionSettings.bIsLANMatch = false;
+        SessionSettings.NumPublicConnections = 8;
+        SessionSettings.bShouldAdvertise = true;
+        SessionSettings.bUsesPresence = true;
+        SessionSettings.bUseLobbiesIfAvailable = true;
+
+        SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+    }
+    
+
 
     World->ServerTravel(Location);
 }
