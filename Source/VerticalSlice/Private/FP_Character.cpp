@@ -14,11 +14,6 @@ AFP_Character::AFP_Character()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-
-	ThirdPersonMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("3rdPersonMesh"));
-	//ThirdPersonMesh->SetOnlyOwnerSee(false);
-	//ThirdPersonMesh->SetOwnerNoSee(true);
-
 }
 
 // Called when the game starts or when spawned

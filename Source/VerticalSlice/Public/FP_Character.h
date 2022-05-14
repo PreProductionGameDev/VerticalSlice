@@ -19,10 +19,6 @@ class VERTICALSLICE_API AFP_Character : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
 	UCameraComponent* FirstPersonCameraComponent;
-
-	UPROPERTY(EditAnywhere, Category = ThirdPerson);
-	USkeletalMeshComponent* ThirdPersonMesh;
-
 public:
 	// Sets default values for this character's properties
 	AFP_Character();
