@@ -6,5 +6,6 @@ enum class ETestAbilityInputID : uint8
 	None,
 	Confirm,
 	Cancel,
-	Shoot
+	PrimaryAction,
+	SecondaryAction
 };

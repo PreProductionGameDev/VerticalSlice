@@ -29,6 +29,12 @@ public:
 	// Sets default values for this character's properties
 	AFP_Character();
 
+	UFUNCTION(BlueprintCallable)
+	virtual float GetHealth();
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMaxHealth();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
