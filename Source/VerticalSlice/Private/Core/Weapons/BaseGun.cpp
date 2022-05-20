@@ -16,7 +16,8 @@ ABaseGun::ABaseGun()
 void ABaseGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Validation for Data. Deletes Weapon
 	if (Data == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("GUN HAS NO DATA SELECTED"));
@@ -32,15 +33,16 @@ void ABaseGun::Tick(float DeltaTime)
 
 void ABaseGun::BeginPrimary()
 {
+	// If the player can currently shoot, Then shoot
+	// Otherwise Calculate time till they can next shoot and shoot then	
 	if (bCanShoot)
 	{
-		Primary();
-		GetWorldTimerManager().SetTimer(TimerHandle_HandleRefire, this, &ABaseGun::Primary, 60 / Data->FireRate, true);
+		FirstShot();
 	}
 	else
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle_DelayedShot);
-		GetWorldTimerManager().SetTimer(TimerHandle_DelayedShot, this, &ABaseGun::DelayedShot, GetWorldTimerManager().GetTimerRemaining(TimerHandle_CanShoot), false);
+		GetWorldTimerManager().SetTimer(TimerHandle_DelayedShot, this, &ABaseGun::FirstShot, GetWorldTimerManager().GetTimerRemaining(TimerHandle_CanShoot), false);
 	}
 }
 
@@ -51,6 +53,7 @@ void ABaseGun::Primary()
 
 void ABaseGun::EndPrimary()
 {
+	// This stops repeated clicking of left mouse causing issues
 	if (!GetWorldTimerManager().TimerExists(TimerHandle_CanShoot))
 	{
 		SetCanShoot(false);
@@ -79,8 +82,9 @@ void ABaseGun::SetCanShoot(bool bShoot)
 	bCanShoot = bShoot;
 }
 
-void ABaseGun::DelayedShot()
+void ABaseGun::FirstShot()
 {
+	// Do Primary action then setup timers.
 	Primary();
 	GetWorldTimerManager().SetTimer(TimerHandle_HandleRefire, this, &ABaseGun::Primary, 60 / Data->FireRate, true);
 	GetWorldTimerManager().ClearTimer(TimerHandle_DelayedShot);
@@ -88,7 +92,6 @@ void ABaseGun::DelayedShot()
 
 void ABaseGun::ResetShot()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Can Shoot Again"));
 	SetCanShoot(true);
 	GetWorldTimerManager().ClearTimer(TimerHandle_CanShoot);
 }

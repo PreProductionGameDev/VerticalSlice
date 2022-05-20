@@ -59,13 +59,16 @@ public:
 	// Set the Boolean value of CanShoot
 	UFUNCTION(BlueprintCallable)
 	void SetCanShoot(bool bShoot);
-
-	void DelayedShot();
-	
+	// Shot Functionality
+	void FirstShot();
 	void ResetShot();
 protected:
+	// Timers for Shot Functionality
+	// Rapid Fire Shooting
 	FTimerHandle TimerHandle_HandleRefire;
+	// Delay for First Shot
 	FTimerHandle TimerHandle_DelayedShot;
+	// Delay for being able to reshoot
 	FTimerHandle TimerHandle_CanShoot;
 
 	bool bCanShoot = true;
