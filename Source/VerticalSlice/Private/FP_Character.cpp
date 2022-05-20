@@ -29,6 +29,24 @@ AFP_Character::AFP_Character()
 	
 }
 
+float AFP_Character::GetHealth()
+{
+	if(Attributes)
+	{
+		return Attributes->GetHealth();
+	}
+	return 1.f;
+}
+
+float AFP_Character::GetMaxHealth()
+{
+	if(Attributes)
+	{
+		return Attributes->GetMaxHealth();
+	}
+	return 1.f;
+}
+
 // Called when the game starts or when spawned
 void AFP_Character::BeginPlay()
 {
@@ -54,11 +72,11 @@ void AFP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// Bind Fire Events
 	// Primary Fire
-	InputComponent->BindAction("Primary Action", IE_Pressed, this, &AFP_Character::OnPrimaryActionPressed);
-	InputComponent->BindAction("Primary Action", IE_Released, this, &AFP_Character::OnPrimaryActionReleased);
+	InputComponent->BindAction("PrimaryAction", IE_Pressed, this, &AFP_Character::OnPrimaryActionPressed);
+	InputComponent->BindAction("PrimaryAction", IE_Released, this, &AFP_Character::OnPrimaryActionReleased);
 	// Secondary Fire
-	InputComponent->BindAction("Secondary Action", IE_Pressed, this, &AFP_Character::OnSecondaryActionPressed);
-	InputComponent->BindAction("Secondary Action", IE_Released, this, &AFP_Character::OnSecondaryActionReleased);
+	InputComponent->BindAction("SecondaryAction", IE_Pressed, this, &AFP_Character::OnSecondaryActionPressed);
+	InputComponent->BindAction("SecondaryAction", IE_Released, this, &AFP_Character::OnSecondaryActionReleased);
 
 	// Bind Movement Events
 	InputComponent->BindAxis("Move Forward / Backward", this, &AFP_Character::MoveForward);
@@ -89,6 +107,7 @@ void AFP_Character::PossessedBy(AController* NewController)
 	if(AbilitySystemComponent)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		AddStartupGameplayAbilities();
 	}
 }
 void AFP_Character::OnRep_PlayerState()
