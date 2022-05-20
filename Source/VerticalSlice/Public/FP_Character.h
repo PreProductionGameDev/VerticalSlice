@@ -9,6 +9,8 @@
 #include "Components/InputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Core/Weapons/BaseWeapon.h"
+
 #include "Camera/CameraComponent.h"
 
 
@@ -25,6 +27,10 @@ class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystem
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
 	UCameraComponent* FirstPersonCameraComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<ABaseWeapon> EquipedGun;
+	
 public:
 	// Sets default values for this character's properties
 	AFP_Character();
@@ -83,9 +89,21 @@ private:
 	void MoveForward(float value);
 	void MoveRight(float value);
 
+	// Primary Action Functions
+	// Used For Shooting
+	UFUNCTION(BlueprintCallable)
 	void OnPrimaryActionPressed();
+	UFUNCTION(BlueprintCallable)
 	void OnPrimaryActionReleased();
 
+	// Secondary Action Functions
+	// Used for Scoping
+	UFUNCTION(BlueprintCallable)
 	void OnSecondaryActionPressed();
+	UFUNCTION(BlueprintCallable)
 	void OnSecondaryActionReleased();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void EquipGun(ABaseWeapon* const NewGun);
 };

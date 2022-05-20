@@ -26,6 +26,7 @@ AFP_Character::AFP_Character()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	Attributes= CreateDefaultSubobject<UTestAttributeSet>(TEXT("Attributes"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -167,12 +168,18 @@ void AFP_Character::MoveRight(float value)
 
 void AFP_Character::OnPrimaryActionPressed()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Start Shoot"));
+	if (IsValid(EquipedGun))
+	{
+		EquipedGun->BeginPrimary();
+	}
 }
 
 void AFP_Character::OnPrimaryActionReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("End Shoot"));
+	if (IsValid(EquipedGun))
+	{
+		EquipedGun->EndPrimary();
+	}
 }
 
 void AFP_Character::OnSecondaryActionPressed()
@@ -185,8 +192,13 @@ void AFP_Character::OnSecondaryActionReleased()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("End Scope"));
 }
 
+void AFP_Character::EquipGun(ABaseWeapon* const NewGun)
+{
+	EquipedGun = NewGun;
+}
+
 void AFP_Character::HandleDamage(float DamageAmount, const FHitResult& HitInfo,
-	const FGameplayTagContainer& DamageTags, AFP_Character* InstigatorCharacter, AActor* DamageCauser)
+                                 const FGameplayTagContainer& DamageTags, AFP_Character* InstigatorCharacter, AActor* DamageCauser)
 {
 	OnDamaged(DamageAmount, HitInfo, DamageTags, InstigatorCharacter, DamageCauser);
 }
