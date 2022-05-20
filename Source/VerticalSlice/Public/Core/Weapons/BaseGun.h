@@ -53,4 +53,20 @@ public:
 	// End Secondary
 	UFUNCTION(BlueprintCallable)
 	virtual void EndSecondary() override;
+
+
+	// Functions for Correct Shot Functionality
+	// Set the Boolean value of CanShoot
+	UFUNCTION(BlueprintCallable)
+	void SetCanShoot(bool bShoot);
+
+	void DelayedShot();
+	
+	void ResetShot();
+protected:
+	FTimerHandle TimerHandle_HandleRefire;
+	FTimerHandle TimerHandle_DelayedShot;
+	FTimerHandle TimerHandle_CanShoot;
+
+	bool bCanShoot = true;
 };
