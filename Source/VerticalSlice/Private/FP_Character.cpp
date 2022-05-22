@@ -184,6 +184,8 @@ void AFP_Character::MoveRight(float value)
 void AFP_Character::EquipGun(ABaseWeapon* const NewGun)
 {
 	EquipedGun = NewGun;
+	EquipedGun->OwningPlayer = this;
+	EquipedGun->OnEquip();
 }
 
 void AFP_Character::HandleDamage(float DamageAmount, const FHitResult& HitInfo,

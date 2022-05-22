@@ -24,18 +24,25 @@ void ABaseWeapon::BeginPlay()
 
 void ABaseWeapon::OnEquip()
 {
-	/*AFP_Character* Owner = Cast<AFP_Character>(this->GetOwner());
-	
-	UPlayerAbilitySystemComponent* ASC = Owner->GetAbilitySystemComponent();
-
-	//Grant abilities, but only on the server
-	for(TSubclassOf<UPlayerGameplayAbility>& newAbility : GameplayAbilities)
+	if (OwningPlayer)
 	{
-		ASC->GiveAbility(FGameplayAbilitySpec(
-			newAbility, 1, static_cast<int32>(newAbility.GetDefaultObject()->AbilityInputID),
-			this));
+		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
+		if (OwningPlayer->GetLocalRole() == ROLE_Authority)
+		{
+			//Grant abilities, but only on the server
+			for(TSubclassOf<UPlayerGameplayAbility>& StartupAbility : GameplayAbilities)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Ability Added"));
+				ASC->GiveAbility(FGameplayAbilitySpec(
+				StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID),
+				this));
+			}
+		}
 	}
-*/
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gun has no Owning Player"));
+	}
 }
 
 // Called every frame
