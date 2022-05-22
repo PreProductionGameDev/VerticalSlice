@@ -78,6 +78,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UTestAbilitySystemComponent> AbilitySystemComponent;
 
+
 	UPROPERTY()
 	TObjectPtr<UTestAttributeSet> Attributes;
 
@@ -88,25 +89,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	UFUNCTION(BlueprintCallable)
+	UTestAbilitySystemComponent* GetAbilitySystemComponent();
 
+	
 private:
 	// Movement Values
 	void MoveForward(float value);
 	void MoveRight(float value);
-
-	// Primary Action Functions
-	// Used For Shooting
-	UFUNCTION(BlueprintCallable)
-	void OnPrimaryActionPressed();
-	UFUNCTION(BlueprintCallable)
-	void OnPrimaryActionReleased();
-
-	// Secondary Action Functions
-	// Used for Scoping
-	UFUNCTION(BlueprintCallable)
-	void OnSecondaryActionPressed();
-	UFUNCTION(BlueprintCallable)
-	void OnSecondaryActionReleased();
 
 public:
 	UFUNCTION(BlueprintCallable)

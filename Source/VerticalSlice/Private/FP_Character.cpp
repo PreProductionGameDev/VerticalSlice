@@ -69,15 +69,6 @@ void AFP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	// Bind Jump Events
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	// Bind Fire Events
-	// Primary Fire
-	InputComponent->BindAction("PrimaryAction", IE_Pressed, this, &AFP_Character::OnPrimaryActionPressed);
-	InputComponent->BindAction("PrimaryAction", IE_Released, this, &AFP_Character::OnPrimaryActionReleased);
-	// Secondary Fire
-	InputComponent->BindAction("SecondaryAction", IE_Pressed, this, &AFP_Character::OnSecondaryActionPressed);
-	InputComponent->BindAction("SecondaryAction", IE_Released, this, &AFP_Character::OnSecondaryActionReleased);
-
 	// Bind Movement Events
 	InputComponent->BindAxis("Move Forward / Backward", this, &AFP_Character::MoveForward);
 	InputComponent->BindAxis("Move Right / Left", this, &AFP_Character::MoveRight);
@@ -97,6 +88,11 @@ void AFP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
 	}
+}
+
+UTestAbilitySystemComponent* AFP_Character::GetAbilitySystemComponent()
+{
+	return AbilitySystemComponent;
 }
 
 void AFP_Character::PossessedBy(AController* NewController)
@@ -183,32 +179,6 @@ void AFP_Character::MoveRight(float value)
 	{
 		AddMovementInput(GetActorRightVector(), value);
 	}
-}
-
-void AFP_Character::OnPrimaryActionPressed()
-{
-	if (IsValid(EquipedGun))
-	{
-		EquipedGun->BeginPrimary();
-	}
-}
-
-void AFP_Character::OnPrimaryActionReleased()
-{
-	if (IsValid(EquipedGun))
-	{
-		EquipedGun->EndPrimary();
-	}
-}
-
-void AFP_Character::OnSecondaryActionPressed()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Start Scope"));
-}
-
-void AFP_Character::OnSecondaryActionReleased()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("End Scope"));
 }
 
 void AFP_Character::EquipGun(ABaseWeapon* const NewGun)
