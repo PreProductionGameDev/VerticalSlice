@@ -16,6 +16,8 @@ void UTestAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UTestAttributeSet, Health);
+	DOREPLIFETIME(UTestAttributeSet, MaxHealth);
+	DOREPLIFETIME(UTestAttributeSet, Damage);
 }
 
 void UTestAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -50,10 +52,73 @@ void UTestAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		AActor* TargetActor{nullptr};
 		TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		TargetCharacter = Cast<AFP_Character>(TargetActor);
+		
 	}
 
-	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
+	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
+		AActor* SourceActor {nullptr};
+		AFP_Character* SourceCharacter {nullptr};
+		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
+		{
+			AController* SourceController {nullptr};
+			SourceActor = Source->AbilityActorInfo->AvatarActor.Get();
+			SourceController = Source->AbilityActorInfo->PlayerController.Get();
+			if(!SourceController && !SourceActor)
+			{
+				if (const APawn* Pawn{Cast<APawn>(SourceActor)})
+				{
+					SourceController = Pawn->GetController();
+				}
+			}
+
+			// Use the controller to find the source pawn
+			if (SourceController)
+			{
+				SourceCharacter = Cast<AFP_Character>(SourceController->GetPawn());
+			}
+			else
+			{
+				SourceCharacter = Cast<AFP_Character>(SourceActor);
+			}
+
+			// Set the causer actor based on context if its set
+			if (Context.GetEffectCauser())
+			{
+				SourceActor = Context.GetEffectCauser();
+			}
+		}
+
+		// Try to extract hit result
+		FHitResult HitResult;
+		if (Context.GetHitResult())
+		{
+			HitResult = *Context.GetHitResult();
+		}
+
+		// Store Local Copy of amount of damage done and clear damage attribute
+		const float LocalDamageDone = GetDamage();
+		SetDamage(0.0f);
+
+		if (LocalDamageDone > 0)
+		{
+			// Apply the health change and then clamp it
+			const float OldHealth = GetHealth();
+			SetHealth(FMath::Clamp(OldHealth - LocalDamageDone, 0.0f, GetMaxHealth()));
+
+			if (TargetCharacter)
+			{
+				// This is Proper damage
+				TargetCharacter->HandleDamage(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
+
+				// Call for health changes
+				TargetCharacter->HandleHealthChanged(-LocalDamageDone, SourceTags);
+			}
+		}
+	}
+	else if(Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		// Handle other health changes such as healing or direct modifers
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
 		if (TargetCharacter) {
 			TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
@@ -81,9 +146,15 @@ void UTestAttributeSet::AdjustAttributeForMaxChange(const FGameplayAttributeData
 void UTestAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, Health, OldValue);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
 }
 
 void UTestAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, MaxHealth, OldValue);
+}
+
+void UTestAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, Damage, OldValue);
 }

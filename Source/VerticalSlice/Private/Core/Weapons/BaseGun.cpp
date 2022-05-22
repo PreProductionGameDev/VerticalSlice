@@ -48,7 +48,7 @@ void ABaseGun::BeginPrimary()
 
 void ABaseGun::Primary()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Shot"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Shot"));
 }
 
 void ABaseGun::EndPrimary()
