@@ -15,9 +15,9 @@
 
 #include "FP_Character.generated.h"
 
-class UTestGameplayAbility;
-class UTestAbilitySystemComponent;
-class UTestAttributeSet;
+class UPlayerGameplayAbility;
+class UPlayerAbilitySystemComponent;
+class UPlayerAttributeSet;
 
 UCLASS()
 class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystemInterface
@@ -56,7 +56,7 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
-	TArray<TSubclassOf<UTestGameplayAbility>> GameplayAbilities;
+	TArray<TSubclassOf<UPlayerGameplayAbility>> GameplayAbilities;
 
 	UPROPERTY()
 	uint8 bAbilitiesInitialized:1;
@@ -73,14 +73,14 @@ protected:
 
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
-	friend UTestAttributeSet;
+	friend UPlayerAttributeSet;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	TObjectPtr<UTestAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UPlayerAbilitySystemComponent> AbilitySystemComponent;
 
 
 	UPROPERTY()
-	TObjectPtr<UTestAttributeSet> Attributes;
+	TObjectPtr<UPlayerAttributeSet> Attributes;
 
 public:	
 	// Called every frame
@@ -90,7 +90,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UFUNCTION(BlueprintCallable)
-	UTestAbilitySystemComponent* GetAbilitySystemComponent();
+	UPlayerAbilitySystemComponent* GetAbilitySystemComponent();
 
 	
 private:

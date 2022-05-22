@@ -5,21 +5,21 @@
 #include "CoreMinimal.h"
 #include "Data.h"
 #include "Abilities/GameplayAbility.h"
-#include "TestGameplayAbility.generated.h"
+#include "PlayerGameplayAbility.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VERTICALSLICE_API UTestGameplayAbility : public UGameplayAbility
+class VERTICALSLICE_API UPlayerGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UTestGameplayAbility();
+	UPlayerGameplayAbility();
 
 	//Abilities will activate when input is pressed
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
-	ETestAbilityInputID AbilityInputID{ETestAbilityInputID::None};
+	EPlayerAbilityInputID AbilityInputID{EPlayerAbilityInputID::None};
 	
 };

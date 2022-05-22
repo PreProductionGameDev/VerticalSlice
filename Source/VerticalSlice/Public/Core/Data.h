@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 UENUM(BlueprintType)
-enum class ETestAbilityInputID : uint8
+enum class EPlayerAbilityInputID : uint8
 {
 	None,
 	Confirm,

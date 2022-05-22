@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
-#include "TestAttributeSet.generated.h"
+#include "PlayerAttributeSet.generated.h"
 
 //uses macros from Attributes.h
 #define ATTRIBUTER_ACCESSORS(ClassName, PropertyName)\
@@ -18,12 +18,12 @@
  * 
  */
 UCLASS()
-class VERTICALSLICE_API UTestAttributeSet : public UAttributeSet
+class VERTICALSLICE_API UPlayerAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
 public:
-	UTestAttributeSet();
+	UPlayerAttributeSet();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
@@ -31,15 +31,15 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Attributes")
 	FGameplayAttributeData Health;
-	ATTRIBUTER_ACCESSORS(UTestAttributeSet, Health);
+	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, Health);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Attributes")
 	FGameplayAttributeData MaxHealth;
-	ATTRIBUTER_ACCESSORS(UTestAttributeSet, MaxHealth);
+	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, MaxHealth);
 		
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Damage, Category = "Attributes")
 	FGameplayAttributeData Damage;
-	ATTRIBUTER_ACCESSORS(UTestAttributeSet, Damage);
+	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, Damage);
 
 	void AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute,
 		const FGameplayAttributeData& MaxAttribute,

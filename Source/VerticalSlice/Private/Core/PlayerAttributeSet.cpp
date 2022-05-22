@@ -1,26 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Core/TestAttributeSet.h"
+#include "Core/PlayerAttributeSet.h"
 
 #include "FP_Character.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 
-UTestAttributeSet::UTestAttributeSet()
+UPlayerAttributeSet::UPlayerAttributeSet()
 {
 }
 
-void UTestAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UPlayerAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UTestAttributeSet, Health);
-	DOREPLIFETIME(UTestAttributeSet, MaxHealth);
-	DOREPLIFETIME(UTestAttributeSet, Damage);
+	DOREPLIFETIME(UPlayerAttributeSet, Health);
+	DOREPLIFETIME(UPlayerAttributeSet, MaxHealth);
+	DOREPLIFETIME(UPlayerAttributeSet, Damage);
 }
 
-void UTestAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+void UPlayerAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
@@ -30,7 +30,7 @@ void UTestAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	}
 }
 
-void UTestAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+void UPlayerAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
 
@@ -127,7 +127,7 @@ void UTestAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 }
 
-void UTestAttributeSet::AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute,
+void UPlayerAttributeSet::AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute,
 	const FGameplayAttributeData& MaxAttribute, float NewMaxValue,
 	const FGameplayAttribute& AffectedAttributeProperty) const
 {
@@ -143,18 +143,18 @@ void UTestAttributeSet::AdjustAttributeForMaxChange(const FGameplayAttributeData
 	}
 }
 
-void UTestAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
+void UPlayerAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, Health, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, Health, OldValue);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
 }
 
-void UTestAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
+void UPlayerAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, MaxHealth, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, MaxHealth, OldValue);
 }
 
-void UTestAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldValue)
+void UPlayerAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UTestAttributeSet, Damage, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, Damage, OldValue);
 }

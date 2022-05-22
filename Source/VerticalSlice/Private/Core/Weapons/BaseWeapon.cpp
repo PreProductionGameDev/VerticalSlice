@@ -5,7 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "FP_Character.h"
-#include "Core/TestAbilitySystemComponent.h"
+#include "Core/PlayerAbilitySystemComponent.h"
 
 // Sets default values
 ABaseWeapon::ABaseWeapon()
@@ -26,10 +26,10 @@ void ABaseWeapon::OnEquip()
 {
 	/*AFP_Character* Owner = Cast<AFP_Character>(this->GetOwner());
 	
-	UTestAbilitySystemComponent* ASC = Owner->GetAbilitySystemComponent();
+	UPlayerAbilitySystemComponent* ASC = Owner->GetAbilitySystemComponent();
 
 	//Grant abilities, but only on the server
-	for(TSubclassOf<UTestGameplayAbility>& newAbility : GameplayAbilities)
+	for(TSubclassOf<UPlayerGameplayAbility>& newAbility : GameplayAbilities)
 	{
 		ASC->GiveAbility(FGameplayAbilitySpec(
 			newAbility, 1, static_cast<int32>(newAbility.GetDefaultObject()->AbilityInputID),

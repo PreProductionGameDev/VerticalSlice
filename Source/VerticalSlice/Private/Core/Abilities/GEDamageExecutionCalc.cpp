@@ -2,8 +2,8 @@
 
 
 #include "Core/Abilities/GEDamageExecutionCalc.h"
-#include "Core/TestAttributeSet.h"
-#include "Core/TestAbilitySystemComponent.h"
+#include "Core/PlayerAttributeSet.h"
+#include "Core/PlayerAbilitySystemComponent.h"
 
 struct GSDamageStatics
 {
@@ -14,7 +14,7 @@ struct GSDamageStatics
 		// Snapshot happens at the time of GESpec creation
 		// We're not capturing anything from the Source in this example, but there could be like AttackPower attributes that you might want.
 		// Capture optional Damage set on the damage GE as a CalculationModifier under the ExecutionCalculation
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UTestAttributeSet, Damage, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UPlayerAttributeSet, Damage, Source, true);
 	}
 };
 

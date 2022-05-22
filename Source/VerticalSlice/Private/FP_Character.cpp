@@ -4,9 +4,9 @@
 #include "FP_Character.h"
 
 #include "Core/Data.h"
-#include "Core/TestAbilitySystemComponent.h"
-#include "Core/TestAttributeSet.h"
-#include "Core/TestGameplayAbility.h"
+#include "Core/PlayerAbilitySystemComponent.h"
+#include "Core/PlayerAttributeSet.h"
+#include "Core/PlayerGameplayAbility.h"
 
 // Sets default values
 AFP_Character::AFP_Character()
@@ -21,11 +21,11 @@ AFP_Character::AFP_Character()
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
-	AbilitySystemComponent = CreateDefaultSubobject<UTestAbilitySystemComponent>(TEXT("Ability System"));
+	AbilitySystemComponent = CreateDefaultSubobject<UPlayerAbilitySystemComponent>(TEXT("Ability System"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
-	Attributes= CreateDefaultSubobject<UTestAttributeSet>(TEXT("Attributes"));
+	Attributes= CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("Attributes"));
 	
 }
 
@@ -82,15 +82,15 @@ void AFP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		const FGameplayAbilityInputBinds Binds(
 			"Confirm",
 			"Cancel",
-			"ETestAbilityInputID",
-			static_cast<int32>(ETestAbilityInputID::Confirm),
-			static_cast<int32>(ETestAbilityInputID::Cancel));
+			"EPlayerAbilityInputID",
+			static_cast<int32>(EPlayerAbilityInputID::Confirm),
+			static_cast<int32>(EPlayerAbilityInputID::Cancel));
 
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
 	}
 }
 
-UTestAbilitySystemComponent* AFP_Character::GetAbilitySystemComponent()
+UPlayerAbilitySystemComponent* AFP_Character::GetAbilitySystemComponent()
 {
 	return AbilitySystemComponent;
 }
@@ -117,9 +117,9 @@ void AFP_Character::OnRep_PlayerState()
 		const FGameplayAbilityInputBinds Binds(
 			"Confirm",
 			"Cancel",
-			"ETestAbilityInputID",
-			static_cast<int32>(ETestAbilityInputID::Confirm),
-			static_cast<int32>(ETestAbilityInputID::Cancel));
+			"EPlayerAbilityInputID",
+			static_cast<int32>(EPlayerAbilityInputID::Confirm),
+			static_cast<int32>(EPlayerAbilityInputID::Cancel));
 
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
 	}
@@ -138,7 +138,7 @@ void AFP_Character::AddStartupGameplayAbilities()
 	if (GetLocalRole() == ROLE_Authority && !bAbilitiesInitialized)
 	{
 		//Grant abilities, but only on the server
-		for(TSubclassOf<UTestGameplayAbility>& StartupAbility : GameplayAbilities)
+		for(TSubclassOf<UPlayerGameplayAbility>& StartupAbility : GameplayAbilities)
 		{
 			AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(
 				StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID),

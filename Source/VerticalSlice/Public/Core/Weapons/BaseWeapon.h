@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Core/TestGameplayAbility.h"
+#include "Core/PlayerGameplayAbility.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -20,7 +20,7 @@ public:
 	ABaseWeapon();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
-	TArray<TSubclassOf<UTestGameplayAbility>> GameplayAbilities;
+	TArray<TSubclassOf<UPlayerGameplayAbility>> GameplayAbilities;
 
 protected:
 	// Called when the game starts or when spawned
