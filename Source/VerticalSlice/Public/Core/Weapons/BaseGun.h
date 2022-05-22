@@ -29,47 +29,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	// Weapon Firing Functions
-	// Used for Constant Firing Weapons
-	// Start Firing
-	UFUNCTION(BlueprintCallable)
-	virtual void BeginPrimary() override;
-	// Single Fire
-	UFUNCTION(BlueprintCallable)
-	virtual void Primary() override;
-	// End the Firing
-	UFUNCTION(BlueprintCallable)
-	virtual void EndPrimary() override;
-
-
-	// Weapon Secondary Functions
-	// Used for Scopes and Alternate Fires
-	// Begin Secondary
-	UFUNCTION(BlueprintCallable)
-	virtual void BeginSecondary() override;
-	UFUNCTION(BlueprintCallable)
-	virtual void Secondary() override;
-	// End Secondary
-	UFUNCTION(BlueprintCallable)
-	virtual void EndSecondary() override;
-
-
-	// Functions for Correct Shot Functionality
-	// Set the Boolean value of CanShoot
-	UFUNCTION(BlueprintCallable)
-	void SetCanShoot(bool bShoot);
-	// Shot Functionality
-	void FirstShot();
-	void ResetShot();
 protected:
-	// Timers for Shot Functionality
-	// Rapid Fire Shooting
-	FTimerHandle TimerHandle_HandleRefire;
-	// Delay for First Shot
-	FTimerHandle TimerHandle_DelayedShot;
-	// Delay for being able to reshoot
-	FTimerHandle TimerHandle_CanShoot;
-
 	bool bCanShoot = true;
 };
