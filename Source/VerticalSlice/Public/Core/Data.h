@@ -7,7 +7,11 @@ enum class EPlayerAbilityInputID : uint8
 	Confirm,
 	Cancel,
 	PrimaryAction,
-	SecondaryAction
+	SecondaryAction,
+	AbilityAction,
+	Heal,
+	Reload,
+	Respawn
 };
 
 UENUM(BlueprintType)
