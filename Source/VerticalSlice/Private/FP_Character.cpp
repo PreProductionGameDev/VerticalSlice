@@ -26,7 +26,6 @@ AFP_Character::AFP_Character()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	Attributes= CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("Attributes"));
-	
 }
 
 float AFP_Character::GetHealth()
@@ -51,14 +50,12 @@ float AFP_Character::GetMaxHealth()
 void AFP_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AFP_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -197,5 +194,18 @@ void AFP_Character::HandleHealthChanged(float DeltaValue, const FGameplayTagCont
 	if(bAbilitiesInitialized)
 	{
 		OnHealthChanged(DeltaValue, EventTags);
+		DeathCheck();
 	}
 }
+
+void AFP_Character::DeathCheck()
+{
+	if(Attributes)
+	{
+		if(Attributes->GetHealth()<=0.001f)
+		{
+			OnDeath();
+		}
+	}
+}
+
