@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Core/PlayerGameplayAbility.h"
-
 #include "BaseWeapon.generated.h"
 
 class AFP_Character;
@@ -22,7 +21,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TArray<TSubclassOf<UPlayerGameplayAbility>> GameplayAbilities;
 
-	AFP_Character* OwningPlayer = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Abilites")
+	TArray<FGameplayAbilitySpecHandle> GameplayAbilityHandles;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,4 +35,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void OnEquip();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void OnUnequip();
 };

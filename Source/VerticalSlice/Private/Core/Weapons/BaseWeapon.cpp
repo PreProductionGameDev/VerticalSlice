@@ -24,24 +24,39 @@ void ABaseWeapon::BeginPlay()
 
 void ABaseWeapon::OnEquip()
 {
-	if (OwningPlayer)
+	if (Owner)
 	{
+		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
 		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
-		if (OwningPlayer->GetLocalRole() == ROLE_Authority)
+		if (Owner->GetLocalRole() == ROLE_Authority)
 		{
 			//Grant abilities, but only on the server
 			for(TSubclassOf<UPlayerGameplayAbility>& StartupAbility : GameplayAbilities)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Ability Added"));
-				ASC->GiveAbility(FGameplayAbilitySpec(
+				GameplayAbilityHandles.Add(ASC->GiveAbility(FGameplayAbilitySpec(
 				StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID),
-				this));
-			}
+				this)));
+			} 
 		}
 	}
-	else
+}
+
+void ABaseWeapon::OnUnequip()
+{
+	if (Owner)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Gun has no Owning Player"));
+		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
+		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
+		if (Owner->GetLocalRole() == ROLE_Authority)
+		{
+			//Grant abilities, but only on the server
+			for(FGameplayAbilitySpecHandle& AbilityToRemove : GameplayAbilityHandles)
+			{
+				ASC->ClearAbility(AbilityToRemove);
+			}
+			GameplayAbilityHandles.Empty();
+		}
 	}
 }
 

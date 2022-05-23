@@ -68,6 +68,11 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDeath();
+
+	virtual void DeathCheck();
+	
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags,
 		AFP_Character* InstigatorCharacter, AActor* DamageCauser);
 
