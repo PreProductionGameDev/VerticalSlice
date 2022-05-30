@@ -20,6 +20,11 @@ void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (Data == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("WEAPON HAS NO DATA SELECTED"));
+		Destroy();
+	}
 }
 
 void ABaseWeapon::OnEquip()

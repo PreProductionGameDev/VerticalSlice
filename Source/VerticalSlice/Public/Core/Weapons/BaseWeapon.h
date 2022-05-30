@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Core/PlayerGameplayAbility.h"
+#include "Core/Weapons/BaseWeaponDataAsset.h"
+
 #include "BaseWeapon.generated.h"
 
 class AFP_Character;
@@ -23,6 +25,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Abilites")
 	TArray<FGameplayAbilitySpecHandle> GameplayAbilityHandles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UBaseWeaponDataAsset* Data;
 
 protected:
 	// Called when the game starts or when spawned
