@@ -46,6 +46,11 @@ float AFP_Character::GetMaxHealth()
 	return 1.f;
 }
 
+ABaseWeapon* AFP_Character::GetEquippedGun()
+{
+	return EquipedGun;
+}
+
 // Called when the game starts or when spawned
 void AFP_Character::BeginPlay()
 {

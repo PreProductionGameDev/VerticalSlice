@@ -3,24 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
-#include "BaseWeaponDataAsset.generated.h"
+#include "Core/Weapons/BaseWeaponDataAsset.h"
+#include "HitscanWeaponDataAsset.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable)
-class VERTICALSLICE_API UBaseWeaponDataAsset : public UDataAsset
+class VERTICALSLICE_API UHitscanWeaponDataAsset : public UBaseWeaponDataAsset
 {
 	GENERATED_BODY()
-	
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText DisplayName;
+	int Damage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int MaxAmmo;
+	int MaxRange;
+
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float FireRate;
 };

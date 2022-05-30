@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxHealth();
 
+	UFUNCTION(BlueprintCallable)
+	ABaseWeapon* GetEquippedGun();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
