@@ -42,6 +42,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ABaseWeapon* GetEquippedGun();
+
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ClientCameraRotation();
+	
+	UFUNCTION(Server, Reliable)
+	void ServerCameraRotation(FTransform Transform);
 	
 protected:
 	// Called when the game starts or when spawned
