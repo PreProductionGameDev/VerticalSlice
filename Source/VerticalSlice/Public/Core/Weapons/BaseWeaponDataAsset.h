@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int MaxAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int StartingAmmo;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float FireRate;

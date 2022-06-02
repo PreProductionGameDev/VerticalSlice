@@ -12,7 +12,6 @@ ABaseWeapon::ABaseWeapon()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +23,10 @@ void ABaseWeapon::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("WEAPON HAS NO DATA SELECTED"));
 		Destroy();
+	}
+	else
+	{
+		CurrentAmmoPool = Data->StartingAmmo;
 	}
 }
 
@@ -65,10 +68,31 @@ void ABaseWeapon::OnUnequip()
 	}
 }
 
-// Called every frame
-void ABaseWeapon::Tick(float DeltaTime)
+bool ABaseWeapon::CanPickupAmmo()
 {
-	Super::Tick(DeltaTime);
+	return !(CurrentAmmoPool == Data->MaxAmmo);
+}
 
+void ABaseWeapon::AddAmmo(int ammoPickup)
+{
+	CurrentAmmoPool = FMath::Clamp(CurrentAmmoPool+= ammoPickup, 0, Data->MaxAmmo);
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%i"), CurrentAmmoPool));
+}
+
+void ABaseWeapon::RemoveAmmo(int AmmoToRemove)
+{
+	CurrentAmmoPool = FMath::Clamp(CurrentAmmoPool -= AmmoToRemove, 0, Data->MaxAmmo);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%i"), CurrentAmmoPool));
+}
+
+int ABaseWeapon::GetAmmo()
+{
+	return CurrentAmmoPool;
+}
+
+bool ABaseWeapon::CanShoot()
+{
+	return CurrentAmmoPool > 0;
 }
 
