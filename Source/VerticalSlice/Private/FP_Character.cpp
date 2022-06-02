@@ -51,6 +51,16 @@ ABaseWeapon* AFP_Character::GetEquippedGun()
 	return EquipedGun;
 }
 
+void AFP_Character::ClientCameraRotation_Implementation()
+{
+	ServerCameraRotation(FirstPersonCameraComponent->GetComponentTransform());
+}
+
+void AFP_Character::ServerCameraRotation_Implementation(FTransform Transform)
+{
+	FirstPersonCameraComponent->SetWorldTransform(Transform);
+}
+
 // Called when the game starts or when spawned
 void AFP_Character::BeginPlay()
 {

@@ -13,7 +13,6 @@
 
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Blueprint/UserWidget.h"
 
 #include "GI_Multiplayer.generated.h"
 

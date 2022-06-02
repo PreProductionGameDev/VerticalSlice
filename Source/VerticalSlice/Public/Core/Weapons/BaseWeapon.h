@@ -33,14 +33,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Ammo Pool for the Weapon
+	UPROPERTY(EditAnywhere)
+	int CurrentAmmoPool;
 
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void OnEquip();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void OnUnequip();
+
+	// Checks if the User can pickup ammo (I.E. Not at max ammo)
+	UFUNCTION(BlueprintCallable)
+	bool CanPickupAmmo();
+	
+	// Adds the specified Ammo ammount
+	// Clamps to Max Ammo Specified in Data asset.
+	UFUNCTION(BlueprintCallable)
+	void AddAmmo(int ammoPickup);
+
+	// Decrease Ammo per for a shot
+	UFUNCTION(BlueprintCallable)
+	void RemoveAmmo(int AmmoToRemove);
+
+	// Gets the Ammo count
+	UFUNCTION(BlueprintCallable)
+	int GetAmmo();
+	
+	// Checks if the Weapon can shoot
+	UFUNCTION(BlueprintCallable)
+	bool CanShoot();
 };
