@@ -76,14 +76,11 @@ bool ABaseWeapon::CanPickupAmmo()
 void ABaseWeapon::AddAmmo(int ammoPickup)
 {
 	CurrentAmmoPool = FMath::Clamp(CurrentAmmoPool+= ammoPickup, 0, Data->MaxAmmo);
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%i"), CurrentAmmoPool));
 }
 
 void ABaseWeapon::RemoveAmmo(int AmmoToRemove)
 {
 	CurrentAmmoPool = FMath::Clamp(CurrentAmmoPool -= AmmoToRemove, 0, Data->MaxAmmo);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%i"), CurrentAmmoPool));
 }
 
 int ABaseWeapon::GetAmmo()
