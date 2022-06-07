@@ -74,3 +74,26 @@ void UGI_Multiplayer::LoadMainMenu()
 
     PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }
+
+TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> UnsortedMap)
+{
+    TMap<FString, int32> SortedMap;
+    int Loops = UnsortedMap.Num();
+    for(int i = 0; i < Loops ; i++)
+    {
+        int32 Max = -1;
+        TTuple<FString, int> TopScore;
+        for (auto Map : UnsortedMap)
+        {
+            if(Max < Map.Value)
+            {
+                TopScore = Map;
+                Max = Map.Value;
+            }
+        }
+        UnsortedMap.Remove(TopScore.Key);
+        SortedMap.Add(TopScore);
+    }
+    return SortedMap;
+    
+}

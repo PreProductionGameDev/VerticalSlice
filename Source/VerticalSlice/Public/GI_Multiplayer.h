@@ -42,6 +42,8 @@ public:
     UFUNCTION(BlueprintCallable)
         virtual void LoadMainMenu();
 
+    UFUNCTION(BlueprintCallable)
+    static TMap<FString, int32> SortScoreBoard(TMap<FString, int32> UnsortedMap);
 private:
 
     IOnlineSessionPtr SessionInterface;
