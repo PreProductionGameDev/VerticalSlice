@@ -19,11 +19,11 @@ public:
 	FText DisplayName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int MaxAmmo;
+	int MaxAmmo = 999;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int StartingAmmo;
+	int StartingAmmo = 100;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float FireRate;
+	float FireRate = 300;
 };
