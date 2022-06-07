@@ -26,4 +26,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float FireRate = 300;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UAnimMontage* WeaponAnim;
 };
