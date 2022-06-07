@@ -11,6 +11,8 @@
 
 class AFP_Character;
 
+class USkeletalMeshComponent;
+
 UCLASS()
 class VERTICALSLICE_API ABaseWeapon : public AActor
 {
@@ -29,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UBaseWeaponDataAsset* Data;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
+	USkeletalMeshComponent* FP_Mesh;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
