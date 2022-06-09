@@ -16,10 +16,17 @@ class VERTICALSLICE_API UHitscanWeaponDataAsset : public UBaseWeaponDataAsset
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int Damage;
+	int Damage = 20;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int MaxRange;
+	int MaxRange = 6000;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float HorizontalWeaponSpread = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float VerticalWeaponSpread = 0;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int NumberOfShots = 1;
 };
