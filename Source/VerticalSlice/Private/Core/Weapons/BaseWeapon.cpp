@@ -68,7 +68,9 @@ void ABaseWeapon::OnUnequip()
 			}
 			GameplayAbilityHandles.Empty();
 		}
-	}
+		// DIRTY CODE PLEASE REMOVE STEF
+		Destroy();
+	}	
 }
 
 bool ABaseWeapon::CanPickupAmmo()
