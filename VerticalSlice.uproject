@@ -38,6 +38,10 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "SoundEQEditor",
+			"Enabled": true
 		}
 	]
 }
