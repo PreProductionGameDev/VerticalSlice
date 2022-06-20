@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Sound/SoundCue.h"
 #include "Core/Weapons/BaseWeaponDataAsset.h"
 #include "HitscanWeaponDataAsset.generated.h"
 
@@ -29,4 +30,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int NumberOfShots = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundCue* shotSound;
 };
