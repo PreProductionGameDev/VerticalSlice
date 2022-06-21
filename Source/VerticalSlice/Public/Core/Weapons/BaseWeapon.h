@@ -47,8 +47,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void OnEquip();
 
-	UFUNCTION(BlueprintCallable)
-	virtual void OnUnequip();
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void OnUnequip();
+
+	virtual void OnUnequip_Implementation();
 
 	// Checks if the User can pickup ammo (I.E. Not at max ammo)
 	UFUNCTION(BlueprintCallable)

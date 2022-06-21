@@ -53,10 +53,11 @@ void ABaseWeapon::OnEquip()
 	}
 }
 
-void ABaseWeapon::OnUnequip()
+void ABaseWeapon::OnUnequip_Implementation()
 {
 	if (Owner)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TRY TO DELETE"));
 		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
 		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
 		if (Owner->GetLocalRole() == ROLE_Authority)
@@ -70,7 +71,11 @@ void ABaseWeapon::OnUnequip()
 		}
 		// DIRTY CODE PLEASE REMOVE STEF
 		Destroy();
-	}	
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("NOT OWNER"));
+	}
 }
 
 bool ABaseWeapon::CanPickupAmmo()

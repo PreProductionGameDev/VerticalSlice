@@ -26,6 +26,14 @@ AFP_Character::AFP_Character()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	Attributes= CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("Attributes"));
+	
+	SetReplicates(true);
+}
+
+void AFP_Character::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AFP_Character, EquipedGun);
 }
 
 float AFP_Character::GetHealth()

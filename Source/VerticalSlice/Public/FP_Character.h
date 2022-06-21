@@ -9,6 +9,7 @@
 #include "Components/InputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Core/Weapons/BaseWeapon.h"
 #include "Camera/CameraComponent.h"
 
@@ -27,13 +28,15 @@ class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystem
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
 	UCameraComponent* FirstPersonCameraComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 	TObjectPtr<ABaseWeapon> EquipedGun;
 	
 public:
 	// Sets default values for this character's properties
 	AFP_Character();
-
+	
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override;
+	
 	UFUNCTION(BlueprintCallable)
 	virtual float GetHealth();
 
