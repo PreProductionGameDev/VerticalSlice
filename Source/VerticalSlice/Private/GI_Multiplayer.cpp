@@ -40,6 +40,7 @@ void UGI_Multiplayer::Host(const FString& Location)
         SessionSettings.bShouldAdvertise = true;
         SessionSettings.bUsesPresence = true;
         SessionSettings.bUseLobbiesIfAvailable = true;
+        SessionSettings.bAllowJoinInProgress = true;
 
         SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
     }
