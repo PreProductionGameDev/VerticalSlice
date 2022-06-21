@@ -48,6 +48,10 @@ float AFP_Character::GetMaxHealth()
 
 ABaseWeapon* AFP_Character::GetEquippedGun()
 {
+	if (!EquipedGun)
+	{
+		return nullptr;
+	}
 	return EquipedGun;
 }
 
