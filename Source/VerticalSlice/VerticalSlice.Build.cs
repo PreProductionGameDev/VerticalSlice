@@ -9,6 +9,6 @@ public class VerticalSlice : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "OnlineSubsystem", "OnlineSubsystemSteam", "GameplayTags", "GameplayAbilities", "GameplayTasks" });
-		PrivateDependencyModuleNames.AddRange(new string[] { "Blutility"});
+		PrivateDependencyModuleNames.AddRange(new string[] { });
 	}
 }
