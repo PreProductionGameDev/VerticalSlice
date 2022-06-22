@@ -31,5 +31,5 @@ public:
 	UAnimMontage* WeaponAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UTexture* WeaponIcon;
+	UTexture2D* WeaponIcon;
 };
