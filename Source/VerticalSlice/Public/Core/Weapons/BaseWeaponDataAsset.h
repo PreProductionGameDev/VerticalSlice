@@ -29,4 +29,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UAnimMontage* WeaponAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture* WeaponIcon;
 };
