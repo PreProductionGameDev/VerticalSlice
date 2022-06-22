@@ -14,6 +14,8 @@
 
 class AFP_Character;
 
+class UBillboardComponent;
+
 class USkeletalMeshComponent;
 
 UCLASS()
