@@ -44,7 +44,7 @@ void ABaseWeapon::OnEquip()
 			//Grant abilities, but only on the server
 			for(TSubclassOf<UPlayerGameplayAbility>& StartupAbility : GameplayAbilities)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Ability Added"));
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Ability Added"));
 				GameplayAbilityHandles.Add(ASC->GiveAbility(FGameplayAbilitySpec(
 				StartupAbility, 1, static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID),
 				this)));
@@ -57,7 +57,7 @@ void ABaseWeapon::OnUnequip_Implementation()
 {
 	if (Owner)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TRY TO DELETE"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TRY TO DELETE"));
 		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
 		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
 		if (Owner->GetLocalRole() == ROLE_Authority)
