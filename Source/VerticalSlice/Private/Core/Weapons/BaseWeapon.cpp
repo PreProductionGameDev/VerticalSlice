@@ -15,6 +15,7 @@ ABaseWeapon::ABaseWeapon()
 
 	FP_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
 	FP_Mesh->bOnlyOwnerSee = true;
+	FP_Mesh->SetCastShadow(false);
 }
 
 // Called when the game starts or when spawned
