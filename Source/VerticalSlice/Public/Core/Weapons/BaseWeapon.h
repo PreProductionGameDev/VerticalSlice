@@ -7,6 +7,9 @@
 #include "Core/PlayerGameplayAbility.h"
 #include "Core/Weapons/BaseWeaponDataAsset.h"
 
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
 #include "BaseWeapon.generated.h"
 
 class AFP_Character;
@@ -48,6 +51,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	int CurrentAmmoPool;
 
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* VFXSystem;
 
 public:	
 	UFUNCTION(BlueprintCallable)
@@ -58,6 +63,16 @@ public:
 
 	virtual void OnUnequip_Implementation();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_SpawnVFX();
+
+	virtual void Server_SpawnVFX_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void Multi_SpawnVFX();
+
+	virtual void Multi_SpawnVFX_Implementation();
+	
 	// Checks if the User can pickup ammo (I.E. Not at max ammo)
 	UFUNCTION(BlueprintCallable)
 	bool CanPickupAmmo();
