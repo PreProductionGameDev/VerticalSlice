@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "FP_Character.h"
+#include "Components/BillboardComponent.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 
 // Sets default values
@@ -21,6 +22,9 @@ ABaseWeapon::ABaseWeapon()
 	TP_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ThirdPersonMesh"));
 	TP_Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	TP_Mesh->bOwnerNoSee = true;
+
+	TPHelper = CreateDefaultSubobject<UBillboardComponent>(TEXT("ThirdPersonPositioning"));
+	TPHelper->AttachToComponent(TP_Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned

@@ -36,6 +36,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	USkeletalMeshComponent* TP_Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pos")
+	UBillboardComponent* TPHelper;
 	
 protected:
 	// Called when the game starts or when spawned
