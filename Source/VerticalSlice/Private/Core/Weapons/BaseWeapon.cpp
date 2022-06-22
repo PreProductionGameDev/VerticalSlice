@@ -90,6 +90,24 @@ void ABaseWeapon::OnUnequip_Implementation()
 	}
 }
 
+void ABaseWeapon::Server_SpawnVFX_Implementation()
+{
+	Multi_SpawnVFX();
+}
+
+void ABaseWeapon::Multi_SpawnVFX_Implementation()
+{
+	if (!Owner)
+	{
+		return;
+	}
+	if (Cast<AFP_Character>(Owner)->IsLocallyControlled())
+	{
+		return;
+	}
+	UNiagaraFunctionLibrary::SpawnSystemAttached(VFXSystem, TP_Mesh, FName("MuzzlePos"), FVector(0.0f,0.0f,0.0f), TP_Mesh->GetSocketRotation(FName("MuzzlePos")), EAttachLocation::Type::SnapToTarget, true, true);
+}
+
 bool ABaseWeapon::CanPickupAmmo()
 {
 	return !(CurrentAmmoPool == Data->MaxAmmo);
