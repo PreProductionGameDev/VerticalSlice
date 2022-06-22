@@ -14,7 +14,13 @@ ABaseWeapon::ABaseWeapon()
 	PrimaryActorTick.bCanEverTick = false;
 
 	FP_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+	FP_Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	FP_Mesh->bOnlyOwnerSee = true;
+	FP_Mesh->SetCastShadow(false);
+
+	TP_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ThirdPersonMesh"));
+	TP_Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	TP_Mesh->bOwnerNoSee = true;
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +36,8 @@ void ABaseWeapon::BeginPlay()
 	else
 	{
 		CurrentAmmoPool = Data->StartingAmmo;
+		FP_Mesh->GetAnimInstance()->Montage_Play(Data->WeaponAnim, 1);
+		FP_Mesh->GetAnimInstance()->Montage_JumpToSection(FName("Idle"));
 	}
 }
 
