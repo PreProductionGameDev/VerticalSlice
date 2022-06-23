@@ -14,6 +14,8 @@
 
 class AFP_Character;
 
+class UBillboardComponent;
+
 class USkeletalMeshComponent;
 
 UCLASS()
@@ -36,6 +38,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	USkeletalMeshComponent* FP_Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pos")
+	UBillboardComponent* FPHelper;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	USkeletalMeshComponent* TP_Mesh;

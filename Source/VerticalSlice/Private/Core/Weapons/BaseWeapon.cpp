@@ -19,6 +19,10 @@ ABaseWeapon::ABaseWeapon()
 	FP_Mesh->bOnlyOwnerSee = true;
 	FP_Mesh->SetCastShadow(false);
 
+	
+	FPHelper = CreateDefaultSubobject<UBillboardComponent>(TEXT("FirstPersonPositioning"));
+	FPHelper->AttachToComponent(FP_Mesh, FAttachmentTransformRules::KeepRelativeTransform);
+
 	TP_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ThirdPersonMesh"));
 	TP_Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	TP_Mesh->bOwnerNoSee = true;
