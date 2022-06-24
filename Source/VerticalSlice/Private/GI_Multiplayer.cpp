@@ -33,7 +33,8 @@ void UGI_Multiplayer::Host(const FString& Location)
     if (!ensure(World != nullptr)) return;
     UE_LOG(LogTemp, Warning, TEXT("Got World"));
 
-    if (SessionInterface.IsValid()) {
+    if (SessionInterface.IsValid())
+    {
         FOnlineSessionSettings SessionSettings;
         SessionSettings.bIsLANMatch = false;
         SessionSettings.NumPublicConnections = 8;
@@ -42,10 +43,9 @@ void UGI_Multiplayer::Host(const FString& Location)
         SessionSettings.bUseLobbiesIfAvailable = true;
         SessionSettings.bAllowJoinInProgress = true;
 
-        SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+        SessionInterface->DestroySession(TEXT("RandomTempName42"));
+        SessionInterface->CreateSession(0, TEXT("RandomTempName42"), SessionSettings);
     }
-    
-
 
     World->ServerTravel(Location);
 }
