@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define COLLISION_PICKUP						ECollisionChannel::ECC_GameTraceChannel1
+
 UENUM(BlueprintType)
 enum class EPlayerAbilityInputID : uint8
 {

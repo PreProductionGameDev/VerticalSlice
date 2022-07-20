@@ -56,8 +56,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//Abillity System functions
-	//Class Overides
+	//Ability System functions
+	//Class Overrides
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
@@ -84,6 +84,7 @@ protected:
 	void OnDeath();
 
 	virtual void DeathCheck();
+
 	
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags,
 		AFP_Character* InstigatorCharacter, AActor* DamageCauser);
@@ -99,6 +100,8 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UPlayerAttributeSet> Attributes;
 
+	UPROPERTY()
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -109,6 +112,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UPlayerAbilitySystemComponent* GetAbilitySystemComponent();
 
+	virtual bool IsAlive();
 	
 private:
 	// Movement Values

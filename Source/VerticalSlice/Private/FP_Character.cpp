@@ -237,3 +237,8 @@ void AFP_Character::DeathCheck()
 	}
 }
 
+bool AFP_Character::IsAlive()
+{
+	return Attributes->GetHealth() > 0.001f; 
+}
+
