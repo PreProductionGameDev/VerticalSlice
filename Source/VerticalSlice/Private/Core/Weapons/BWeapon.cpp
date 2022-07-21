@@ -183,10 +183,13 @@ void ABWeapon::UnEquip()
 
 void ABWeapon::AddAbilities()
 {
+	UE_LOG(LogTemp, Error, TEXT("Trying to Add Abilties"));
+	
 	if (!IsValid(OwningCharacter) || !OwningCharacter->GetAbilitySystemComponent())
 	{
 		return;
 	}
+
 
 	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 
@@ -202,8 +205,10 @@ void ABWeapon::AddAbilities()
 		return;
 	}
 
+	
 	for (TSubclassOf<UPlayerGameplayAbility>& Ability : Abilities)
 	{
+		UE_LOG(LogTemp, Error, TEXT("Adding Ability %s"), *Ability->GetName());
 		AbilitySpecHandles.Add(ASC->GiveAbility(FGameplayAbilitySpec(Ability, GetAbilityLevel(Ability.GetDefaultObject()->AbilityInputID), static_cast<int32>(Ability.GetDefaultObject()->AbilityInputID), this)));
 	}
 }

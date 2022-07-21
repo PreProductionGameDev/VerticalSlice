@@ -63,6 +63,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void PostInitializeComponents() override;
+
 	//Ability System functions
 	//Class Overrides
 	virtual void PossessedBy(AController* NewController) override;
@@ -116,7 +118,7 @@ protected:
 	TMap<FGameplayTag, ABWeapon*> WeaponInventory;
 
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeapon)
-	ABWeapon* CurrentWeapon;
+	ABWeapon* CurrentWeapon = nullptr;
 
 	bool DoesWeaponExistInInventory(const ABWeapon* InWeapon) const;
 
@@ -137,6 +139,30 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName WeaponAttachPoint;
 
+	void SpawnDefaultInventory();
+	
+	// The CurrentWeapon is only automatically replicated to simulated clients.
+	// The autonomous client can use this to request the proper CurrentWeapon from the server when it knows it may be
+	// out of sync with it from predictive client-side changes.
+	UFUNCTION(Server, Reliable)
+	void ServerSyncCurrentWeapon();
+	void ServerSyncCurrentWeapon_Implementation();
+	bool ServerSyncCurrentWeapon_Validate();
+
+	// The CurrentWeapon is only automatically replicated to simulated clients.
+	// Use this function to manually sync the autonomous client's CurrentWeapon when we're ready to.
+	// This allows us to predict weapon changes (changing weapons fast multiple times in a row so that the server doesn't
+	// replicate and clobber our CurrentWeapon).
+	UFUNCTION(Client, Reliable)
+	void ClientSyncCurrentWeapon(ABWeapon* InWeapon);
+	void ClientSyncCurrentWeapon_Implementation(ABWeapon* InWeapon);
+	bool ClientSyncCurrentWeapon_Validate(ABWeapon* InWeapon);
+
+	// Set to true when we change the weapon predictively and flip it to false when the Server replicates to confirm.
+	// We use this if the Server refused a weapon change ability's activation to ask the Server to sync the client back up
+	// with the correct CurrentWeapon.
+	bool bChangedWeaponLocally;
+	
 	// Cached Tags
 	FGameplayTag CurrentWeaponTag;
 	FGameplayTag NoWeaponTag;
