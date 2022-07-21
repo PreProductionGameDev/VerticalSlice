@@ -12,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Core/Weapons/BaseWeapon.h"
 #include "Camera/CameraComponent.h"
+#include "Core/Weapons/BWeapon.h"
 
 
 #include "FP_Character.generated.h"
@@ -53,6 +54,12 @@ public:
 	void ServerCameraRotation(FTransform Transform);
 	
 protected:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	USkeletalMeshComponent* FirstPersonMesh;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	USkeletalMeshComponent* ThirdPersonMesh;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -100,9 +107,48 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UPlayerAttributeSet> Attributes;
 
-	UPROPERTY()
+	// NEW WEAPON SYSTEMS
+	// Default Weapons for the player upon spawn. Can move into the game mode upon further development
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|Weapon")
+	TArray<TSubclassOf<ABWeapon>> DefaultInventoryWeapons;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|Weapon")
+	TMap<FGameplayTag, ABWeapon*> WeaponInventory;
 
-public:	
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeapon)
+	ABWeapon* CurrentWeapon;
+
+	bool DoesWeaponExistInInventory(const ABWeapon* InWeapon) const;
+
+	void SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon);
+	
+	// UnEquip specified weapon.
+	void UnEquipWeapon(ABWeapon* WeaponToUnEquip);
+	
+	// UnEquips the current Weapon. Used for dropping.
+	void UnEquipCurrentWeapon();
+
+	UFUNCTION()
+	virtual void CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo);
+	
+	UFUNCTION()
+	void OnRep_CurrentWeapon(ABWeapon* LastWeapon);
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FName WeaponAttachPoint;
+
+	// Cached Tags
+	FGameplayTag CurrentWeaponTag;
+	FGameplayTag NoWeaponTag;
+	FGameplayTag WeaponAbilityTag;
+public:
+
+	UFUNCTION()
+	USkeletalMeshComponent* GetFirstPersonMesh();
+
+	UFUNCTION()
+	USkeletalMeshComponent* GetThirdPersonMesh();
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -113,6 +159,50 @@ public:
 	UPlayerAbilitySystemComponent* GetAbilitySystemComponent();
 
 	virtual bool IsAlive();
+
+	// NEW WEAPON SYSTEM
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	FName GetWeaponAttachPoint();
+	
+	// Get the Current Weapon
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	ABWeapon* GetCurrentWeapon() const;
+
+	// Adds a new weapon to the inventory.
+	// Will return false if weapon already exists in inventory
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	bool AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon = false);
+
+	// Remove Weapon from Inventory
+	// Returns False if the weapon already exists in the inventory, True if its a New Weapon
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	bool RemoveWeaponFromInventory(ABWeapon* WeaponToRemove);
+
+	// Clear all Weapons from the Player
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void RemoveAllWeaponsFromInventory();
+
+	// Equip a Weapon
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void EquipWeapon(ABWeapon* NewWeapon);
+	
+	UFUNCTION(Server, Reliable)
+	void ServerEquipWeapon(ABWeapon* NewWeapon);
+	void ServerEquipWeapon_Implementation(ABWeapon* NewWeapon);
+	bool ServerEquipWeapon_Validate(ABWeapon* NewWeapon);
+
+	/*
+	 * Cycling Between Weapons requires additional logic
+	 */
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	int32 GetPrimaryClipAmmo() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	int32 GetMaxPrimaryClipAmmo() const;
+
+
 	
 private:
 	// Movement Values

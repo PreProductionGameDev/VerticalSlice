@@ -160,7 +160,7 @@ protected:
 	FVector WeaponMesh3PEquippedRelativeLocation;
 
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ShiitakeShowdown|GASWeapon")
-	AFP_Character* Owning_Character;
+	AFP_Character* OwningCharacter;
 
 	UPROPERTY(EditAnywhere, Category = "ShiitakeShowdown|GASWeapon")
 	TArray<TSubclassOf<UPlayerGameplayAbility>> Abilities;
@@ -168,7 +168,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "ShiitakeShowdown|GASWeapon")
 	TArray<FGameplayAbilitySpecHandle> AbilitySpecHandles;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GASShooter|GSWeapon")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon")
 	FGameplayTag DefaultFireMode;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon")

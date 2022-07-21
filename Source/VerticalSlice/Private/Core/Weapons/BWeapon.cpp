@@ -81,7 +81,7 @@ void ABWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(ABWeapon, Owning_Character, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(ABWeapon, OwningCharacter, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, PrimaryClipAmmo, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, MaxPrimaryClipAmmo, COND_OwnerOnly);
 }
@@ -95,23 +95,22 @@ void ABWeapon::PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker
 
 void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 {
-	Owning_Character = InOwningCharacter;
-	if (Owning_Character)
+	OwningCharacter = InOwningCharacter;
+	if (OwningCharacter)
 	{
 		// Called when Added to Inventory
-		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(Owning_Character->GetAbilitySystemComponent());
+		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 		SetOwner(InOwningCharacter);
-		AttachToComponent(Owning_Character->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-		/* COME BACK AND FIX WHEN PLAYER CHARACTER HAS CHANGED TO HANDLE NEW WEAPON
-		if (Owning_Character->GetCurrentWeapon() != this)
+		
+		if (OwningCharacter->GetCurrentWeapon() != this)
 		{
 			WeaponMesh3P->CastShadow = false;
 			WeaponMesh3P->SetVisibility(true, true);
 			WeaponMesh3P->SetVisibility(false, true);
 		}
-		*/
+		
 	}
 	else
 	{
@@ -125,7 +124,7 @@ void ABWeapon::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	if (IsValid(this) && !Owning_Character)
+	if (IsValid(this) && !OwningCharacter)
 	{
 		PickUpOnTouch(Cast<AFP_Character>(OtherActor));
 	}
@@ -134,18 +133,18 @@ void ABWeapon::NotifyActorBeginOverlap(AActor* OtherActor)
 void ABWeapon::Equip()
 {
 	// Validate the Owning Character
-	if (!Owning_Character)
+	if (!OwningCharacter)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s %s OwningCharacter is nullptr"), *FString(__FUNCTION__), *GetName());
 		return;
 	}
 
-	/* Fix when updating Character. This connects to the models to the person correctly.
-	FName AttachPoint = Owning_Character->GetWeaponAttachPoint();
+	// when updating Character. This connects to the models to the person correctly.
+	FName AttachPoint = OwningCharacter->GetWeaponAttachPoint();
 
 	if (WeaponMesh1P)
 	{
-		WeaponMesh1P->AttachToComponent(Owning_Character->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+		WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 		WeaponMesh1P->SetRelativeRotation(FRotator(0, 0, -90.0f));
 
@@ -154,19 +153,19 @@ void ABWeapon::Equip()
 
 	if (WeaponMesh3P)
 	{
-		WeaponMesh3P->AttachToComponent(Owning_Character->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+		WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
 		WeaponMesh3P->SetRelativeRotation(FRotator(0, 0, -90.0f));
 
 		WeaponMesh3P->SetVisibility(true, true); // Without this, the weapon's 3P shadow doesn't show
 		WeaponMesh3P->SetVisibility(false, true);
 	}
-	*/
+	
 }
 
 void ABWeapon::UnEquip()
 {
-	if (Owning_Character == nullptr)
+	if (OwningCharacter == nullptr)
 	{
 		return;
 	}
@@ -184,16 +183,16 @@ void ABWeapon::UnEquip()
 
 void ABWeapon::AddAbilities()
 {
-	if (!IsValid(Owning_Character) || !Owning_Character->GetAbilitySystemComponent())
+	if (!IsValid(OwningCharacter) || !OwningCharacter->GetAbilitySystemComponent())
 	{
 		return;
 	}
 
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(Owning_Character->GetAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 
 	if (!ASC)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(Owning_Character->GetLocalRole())));
+		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningCharacter->GetLocalRole())));
 		return;
 	}
 
@@ -211,12 +210,12 @@ void ABWeapon::AddAbilities()
 
 void ABWeapon::RemoveAbilities()
 {
-	if (!IsValid(Owning_Character) || !Owning_Character->GetAbilitySystemComponent())
+	if (!IsValid(OwningCharacter) || !OwningCharacter->GetAbilitySystemComponent())
 	{
 		return;
 	}
 
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(Owning_Character->GetAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 
 	if (!ASC)
 	{
@@ -324,7 +323,7 @@ void ABWeapon::BeginPlay()
 {
 	ResetWeapon();
 	
-	if (!Owning_Character && bSpawnWithCollision)
+	if (!OwningCharacter && bSpawnWithCollision)
 	{
 		// Spawned into the world without an owner, enable collision as we are in pickup mode
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -345,15 +344,13 @@ void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 	{
 		return;
 	}
-
-	/*
+	
 	if (InCharacter->AddWeaponToInventory(this, true))
 	{
 		WeaponMesh3P->CastShadow = false;
 		WeaponMesh3P->SetVisibility(true, true);
 		WeaponMesh3P->SetVisibility(false, true);
 	}
-	*/
 }
 
 void ABWeapon::OnRep_PrimaryClipAmmo(int32 OldPrimaryClipAmmo)
