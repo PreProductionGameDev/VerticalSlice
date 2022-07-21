@@ -110,24 +110,11 @@ bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const
 
 void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 {
-	UE_LOG(LogTemp, Error, TEXT("Set Current Weapon Function"));
 	if (NewWeapon == LastWeapon)
 	{
-		if (NewWeapon == nullptr)
-		{
-			UE_LOG(LogTemp, Error, TEXT("FUCK ITS NULL"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("%s, %s"), *NewWeapon->GetClass()->GetName(), *LastWeapon->GetClass()->GetName());
-			
-		}
-		UE_LOG(LogTemp, Error, TEXT("UhOh They're the same"));
 		return;
 	}
-
-	UE_LOG(LogTemp, Error, TEXT("%s"), *CurrentWeaponTag.ToString());
-	UE_LOG(LogTemp, Error, TEXT("Setting Current Weapon"))
+	
 	// Cancel Active Weapon Abilities
 	if (AbilitySystemComponent)
 	{
@@ -139,7 +126,6 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 
 	if (NewWeapon)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Please Get Here"));
 		if (AbilitySystemComponent)
 		{
 			// Clear out Potential NoWeaponTag
@@ -231,14 +217,11 @@ void AFP_Character::OnRep_CurrentWeapon(ABWeapon* LastWeapon)
 {
 	bChangedWeaponLocally = false;
 
-	UE_LOG(LogTemp, Error, TEXT("hmmm"));
-	UE_LOG(LogTemp, Error, TEXT("%s, %s"), *CurrentWeapon->GetClass()->GetName(), *LastWeapon->GetClass()->GetName());
 	SetCurrentWeapon(CurrentWeapon, LastWeapon);
 }
 
 void AFP_Character::SpawnDefaultInventory()
 {
-	UE_LOG(LogTemp, Error, TEXT("Spawning Inv"));
 	if (GetLocalRole() < ROLE_Authority)
 	{
 		return;
@@ -247,8 +230,7 @@ void AFP_Character::SpawnDefaultInventory()
 	ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(DefaultInventoryWeapons[0], FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	NewWeapon->bSpawnWithCollision = false;
 	NewWeapon->FinishSpawning(FTransform::Identity);
-		
-	UE_LOG(LogTemp, Error, TEXT("Weapon Made. Time To Add to Inv"));
+
 	AddWeaponToInventory(NewWeapon, true);
 }
 
@@ -264,7 +246,6 @@ bool AFP_Character::ServerSyncCurrentWeapon_Validate()
 
 void AFP_Character::ClientSyncCurrentWeapon_Implementation(ABWeapon* InWeapon)
 {
-	UE_LOG(LogTemp, Error, TEXT(" Client Sync %s, %s"), *CurrentWeapon->GetClass()->GetName(), *InWeapon->GetClass()->GetName());
 	ABWeapon* LastWeapon = CurrentWeapon;
 	CurrentWeapon = InWeapon;
 	OnRep_CurrentWeapon(LastWeapon);
@@ -489,7 +470,6 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 		return false;
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("Adding To map"));
 	// Add the New Weapon the the Map.
 	WeaponInventory.Add(NewWeapon->WeaponTag, NewWeapon);
 	NewWeapon->SetOwningCharacter(this);
@@ -497,7 +477,6 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 
 	if (bEquipWeapon)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Pog Equip Time"));
 		EquipWeapon(NewWeapon);
 		ClientSyncCurrentWeapon(CurrentWeapon);
 	}
@@ -548,17 +527,12 @@ void AFP_Character::EquipWeapon(ABWeapon* NewWeapon)
 {
 	if (GetLocalRole() < ROLE_Authority)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Setting Weapons"));
 		ServerEquipWeapon(NewWeapon);
 		SetCurrentWeapon(NewWeapon, CurrentWeapon);
 		bChangedWeaponLocally = true;
 	}
 	else
 	{
-		if (NewWeapon == nullptr)
-		{
-			UE_LOG(LogTemp, Error, TEXT("what the fuck"));
-		}
 		SetCurrentWeapon(NewWeapon, CurrentWeapon);
 	}
 }
