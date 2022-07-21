@@ -99,7 +99,7 @@ void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
+	//GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
 
 bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const
