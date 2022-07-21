@@ -14,6 +14,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponAmmoChangedDelegate, int32, OldValue, int32, NewValue);
 
+class AATA_LineTrace;
 class AFP_Character;
 class APlayerAbilitySystemComponent;
 
@@ -119,7 +120,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* GetPickupSound() const;
-
+	
+	// Getter for LineTraceTargetActor. Spawns it if it doesn't exist yet.
+	UFUNCTION(BlueprintCallable, Category = "GASShooter|Targeting")
+	AATA_LineTrace* GetLineTraceTargetActor();
 protected:
 	UPROPERTY()
 	UPlayerAbilitySystemComponent* AbilitySystemComponent;
@@ -185,6 +189,8 @@ protected:
 	FGameplayTag WeaponPrimaryInstantAbilityTag;
 	FGameplayTag WeaponSecondaryInstantAbilityTag;
 	FGameplayTag WeaponIsFiringTag;
+
+	AATA_LineTrace* LineTraceTargetActor;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

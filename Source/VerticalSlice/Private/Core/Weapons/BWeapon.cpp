@@ -7,6 +7,7 @@
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Core/Abilities/AbilityTargetActor/ATA_LineTrace.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -318,6 +319,18 @@ UAnimMontage* ABWeapon::GetEquip3PMontage() const
 USoundCue* ABWeapon::GetPickupSound() const
 {
 	return PickupSound;
+}
+
+AATA_LineTrace* ABWeapon::GetLineTraceTargetActor()
+{
+	if (LineTraceTargetActor)
+	{
+		return LineTraceTargetActor;
+	}
+
+	LineTraceTargetActor = GetWorld()->SpawnActor<AATA_LineTrace>();
+	LineTraceTargetActor->SetOwner(this);
+	return LineTraceTargetActor;
 }
 
 // Called when the game starts or when spawned
