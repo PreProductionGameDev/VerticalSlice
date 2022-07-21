@@ -13,3 +13,10 @@ AVerticalSliceGameMode::AVerticalSliceGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void AVerticalSliceGameMode::ServerTravel(FString Map)
+{
+	UWorld* World = GetWorld();
+	bUseSeamlessTravel = true;
+	World->ServerTravel(Map);
+}
