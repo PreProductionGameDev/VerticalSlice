@@ -13,6 +13,10 @@ class AVerticalSliceGameMode : public AGameModeBase
 
 public:
 	AVerticalSliceGameMode();
+
+	UFUNCTION(BlueprintCallable)
+	void ServerTravel(FString Map);
+
 };
 
 
