@@ -2,7 +2,7 @@
 
 
 #include "Core/Abilities/AbilityTasks/AT_WaitTargetDataUsingActor.h"
-
+#include "Core/Abilities/AbilityTargetActor/ATA_Trace.h"
 #include "AbilitySystemComponent.h"
 
 UAT_WaitTargetDataUsingActor* UAT_WaitTargetDataUsingActor::WaitTargetDataWithReusableActor(
@@ -24,6 +24,8 @@ void UAT_WaitTargetDataUsingActor::Activate()
 		return;
 	}
 
+	// Setup Actor and Callbacks if Valid,
+	// Otherwise End the Task
 	if (Ability && TargetActor)
 	{
 		InitializeTargetActor();
@@ -40,9 +42,9 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCallback(const FGamepla
 {
 	check(AbilitySystemComponent);
 
+	// Store Data in a Mutable Form
 	FGameplayAbilityTargetDataHandle MutableData = Data;
 	AbilitySystemComponent->ConsumeClientReplicatedTargetData(GetAbilitySpecHandle(), GetActivationPredictionKey());
-
 	/**
 	 *  Call into the TargetActor to sanitize/verify the data. If this returns false, we are rejecting
 	 *	the replicated target data and will treat this as a cancel.
@@ -54,6 +56,7 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCallback(const FGamepla
 	 */
 	if (TargetActor && !TargetActor->OnReplicatedTargetDataReceived(MutableData))
 	{
+		// Call Cancelled Delegate
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
 			Cancelled.Broadcast(MutableData);
@@ -61,12 +64,13 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCallback(const FGamepla
 	}
 	else
 	{
+		// Call the Valid Data Delegate
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
 			ValidData.Broadcast(MutableData);
 		}
 	}
-
+	// End Task on Confirmation type
 	if (ConfirmationType != EGameplayTargetingConfirmation::CustomMulti)
 	{
 		EndTask();
@@ -76,6 +80,7 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCallback(const FGamepla
 void UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCancelledCallback()
 {
 	check(AbilitySystemComponent);
+	// Call Cancelled Delegate
 	if (ShouldBroadcastAbilityTaskDelegates())
 	{
 		Cancelled.Broadcast(FGameplayAbilityTargetDataHandle());
@@ -90,12 +95,13 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReadyCallback(const FGameplayAbil
 	{
 		return;
 	}
-
+	// Setup Prediction Window
 	FScopedPredictionWindow ScopedPrediction(AbilitySystemComponent, ShouldReplicateDataToServer() && (bCreateKeyIfNotValidForMorePredicting && !AbilitySystemComponent->ScopedPredictionKey.IsValidForMorePrediction()));
-
 	const FGameplayAbilityActorInfo* Info = Ability->GetCurrentActorInfo();
+	// If Client is predicting, Handle server callbacks
 	if (IsPredictingClient())
 	{
+		// Client should not produce data on server
 		if (!TargetActor->ShouldProduceTargetDataOnServer)
 		{
 			AbilitySystemComponent->CallServerSetReplicatedTargetData(GetAbilitySpecHandle(), GetActivationPredictionKey(), Data, FGameplayTag(), AbilitySystemComponent->ScopedPredictionKey);
@@ -106,12 +112,12 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReadyCallback(const FGameplayAbil
 			AbilitySystemComponent->ServerSetReplicatedEvent(EAbilityGenericReplicatedEvent::GenericConfirm, GetAbilitySpecHandle(), GetActivationPredictionKey(), AbilitySystemComponent->ScopedPredictionKey);
 		}
 	}
-
+	// Broad cast that data is valid
 	if (ShouldBroadcastAbilityTaskDelegates())
 	{
 		ValidData.Broadcast(Data);
 	}
-
+	// End Task on Confirmation type
 	if (ConfirmationType != EGameplayTargetingConfirmation::CustomMulti)
 	{
 		EndTask();
@@ -121,17 +127,19 @@ void UAT_WaitTargetDataUsingActor::OnTargetDataReadyCallback(const FGameplayAbil
 void UAT_WaitTargetDataUsingActor::OnTargetDataCancelledCallback(const FGameplayAbilityTargetDataHandle& Data)
 {
 	check(AbilitySystemComponent);
-
+	// Setup Prediction Window
 	FScopedPredictionWindow ScopedPrediction(AbilitySystemComponent, IsPredictingClient());
-
+	// If Client is predicting, Handle server callbacks
 	if (IsPredictingClient())
 	{
+		// Client should not produce data on server
 		if (!TargetActor->ShouldProduceTargetDataOnServer)
 		{
 			AbilitySystemComponent->ServerSetReplicatedTargetDataCancelled(GetAbilitySpecHandle(), GetActivationPredictionKey(), AbilitySystemComponent->ScopedPredictionKey);
 		}
 		else
 		{
+			// Unable to send target data, but can send generic cancelled message
 			AbilitySystemComponent->ServerSetReplicatedEvent(EAbilityGenericReplicatedEvent::GenericCancel, GetAbilitySpecHandle(), GetActivationPredictionKey(), AbilitySystemComponent->ScopedPredictionKey);
 		}
 	}
@@ -166,9 +174,7 @@ void UAT_WaitTargetDataUsingActor::InitializeTargetActor() const
 {
 	check(TargetActor);
 	check(Ability);
-
 	TargetActor->MasterPC = Ability->GetCurrentActorInfo()->PlayerController.Get();
-
 	// If we spawned the target actor, always register the callbacks for the when the data is ready.
 	TargetActor->TargetDataReadyDelegate.AddUObject(const_cast<UAT_WaitTargetDataUsingActor*>(this), &UAT_WaitTargetDataUsingActor::OnTargetDataReadyCallback);
 	TargetActor->CanceledDelegate.AddUObject(const_cast<UAT_WaitTargetDataUsingActor*>(this), &UAT_WaitTargetDataUsingActor::OnTargetDataCancelledCallback);
@@ -178,9 +184,7 @@ void UAT_WaitTargetDataUsingActor::FinalizeTargetActor() const
 {
 	check(TargetActor);
 	check(Ability);
-
 	TargetActor->StartTargeting(Ability);
-
 	if (TargetActor->ShouldProduceTargetData())
 	{
 		// If instant confirm, then stop targeting immediately.
@@ -204,12 +208,9 @@ void UAT_WaitTargetDataUsingActor::RegisterTargetDataCallbacks()
 	{
 		return;
 	}
-
 	check(Ability);
-
 	const bool bIsLocallyControlled = Ability->GetCurrentActorInfo()->IsLocallyControlled();
 	const bool bShouldProduceTargetDataOnServer = TargetActor->ShouldProduceTargetDataOnServer;
-
 	// If not locally controlled [Server for remote client] See if TargetData was Already Sent
 	// Else Register a callback for when it does get here
 	if (!bIsLocallyControlled)
@@ -223,9 +224,7 @@ void UAT_WaitTargetDataUsingActor::RegisterTargetDataCallbacks()
 			// Since MultiFire is supported, We still need to hook up the callbacks.
 			AbilitySystemComponent->AbilityTargetDataSetDelegate(SpecHandle, ActivationPredictionKey).AddUObject(this, &UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCallback);
 			AbilitySystemComponent->AbilityTargetDataCancelledDelegate(SpecHandle, ActivationPredictionKey).AddUObject(this, &UAT_WaitTargetDataUsingActor::OnTargetDataReplicatedCancelledCallback);
-
 			AbilitySystemComponent->CallReplicatedTargetDataDelegatesIfSet(SpecHandle, ActivationPredictionKey);
-
 			SetWaitingOnRemotePlayerData();
 		}
 	}
@@ -235,8 +234,8 @@ void UAT_WaitTargetDataUsingActor::OnDestroy(bool AbilityEnded)
 {
 	if (TargetActor)
 	{
-		/*	CREATE THE TARGET TRACE ACTOR CLASS FIRST
-		AGSGATA_Trace* TraceTargetActor = Cast<AGSGATA_Trace>(TargetActor);
+		// Stop Targeting if Valid
+		AATA_Trace* TraceTargetActor = Cast<AATA_Trace>(TargetActor);
 		if (TraceTargetActor)
 		{
 			TraceTargetActor->StopTargeting();
@@ -245,16 +244,14 @@ void UAT_WaitTargetDataUsingActor::OnDestroy(bool AbilityEnded)
 		{
 			// TargetActor doesn't have a StopTargeting function
 			TargetActor->SetActorTickEnabled(false);
-
 			// Clear added callbacks
 			TargetActor->TargetDataReadyDelegate.RemoveAll(this);
 			TargetActor->CanceledDelegate.RemoveAll(this);
-
+			// Call Generic Confirm and Cancel callbacks
 			AbilitySystemComponent->GenericLocalConfirmCallbacks.RemoveDynamic(TargetActor, &AGameplayAbilityTargetActor::ConfirmTargeting);
 			AbilitySystemComponent->GenericLocalCancelCallbacks.RemoveDynamic(TargetActor, &AGameplayAbilityTargetActor::CancelTargeting);
 			TargetActor->GenericDelegateBoundASC = nullptr;
 		}
-		*/
 	}
 	Super::OnDestroy(AbilityEnded);
 }
@@ -265,13 +262,11 @@ bool UAT_WaitTargetDataUsingActor::ShouldReplicateDataToServer() const
 	{
 		return false;
 	}
-
 	// Send TargetData to the Server IF we are teh client and this isn't a GameplayTargetActor that can produce data on the server
 	const FGameplayAbilityActorInfo* Info = Ability->GetCurrentActorInfo();
 	if (!Info->IsNetAuthority() && !TargetActor->ShouldProduceTargetDataOnServer)
 	{
 		return true;
 	}
-	
 	return false;
 }
