@@ -9,6 +9,11 @@ UPlayerGameplayAbility::UPlayerGameplayAbility()
 {
 }
 
+UObject* UPlayerGameplayAbility::K2_GetSourceObject(FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo& ActorInfo) const
+{
+	return GetSourceObject(Handle, &ActorInfo);
+}
+
 bool UPlayerGameplayAbility::BatchRPCTryActivateAbility(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately)
 {
 	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(GetAbilitySystemComponentFromActorInfo());
@@ -26,4 +31,21 @@ void UPlayerGameplayAbility::ExternalEndAbility()
 	bool bReplicateEndAbility = true;
 	bool bWasCancelled = false;
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+bool UPlayerGameplayAbility::CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
+}
+
+bool UPlayerGameplayAbility::GSCheckCost_Implementation(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo& ActorInfo) const
+{
+	return true;
+}
+
+void UPlayerGameplayAbility::ApplyCost(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
+{
+	GSApplyCost(Handle, *ActorInfo, ActivationInfo);
+	Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
 }
