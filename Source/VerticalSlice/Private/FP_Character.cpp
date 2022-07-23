@@ -7,6 +7,7 @@
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
 #include "Core/PlayerGameplayAbility.h"
+#include "Core/Abilities/AttributeSets/AmmoAttributeSet.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 
@@ -36,6 +37,9 @@ AFP_Character::AFP_Character()
 	// Create the Player Health AttributeSet
 	Attributes = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("Attributes"));
 
+	// Create the Player Ammo AttributeSet
+	AmmoAttributes = CreateDefaultSubobject<UAmmoAttributeSet>(TEXT("AmmoAttributeSet"));
+	
 	// Enable Replication
 	SetReplicates(true);
 }
@@ -225,7 +229,7 @@ bool AFP_Character::RemoveWeaponFromInventory(ABWeapon* WeaponToRemove)
 		WeaponToRemove->ResetWeapon();
 
 		// Currently Does not handle drop
-		// TODO Discuss and possibly setup Functionality for Drop
+		// TODO: Discuss and possibly setup Functionality for Drop
 
 		return true;
 	}
@@ -317,8 +321,7 @@ void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	/*		TODO:
-	 *		REMOVE THIS UPON THE COMPLETE IMPLEMENTATION OF NEW WEAPON SYSTEM
+	/*		TODO: REMOVE THIS UPON THE COMPLETE IMPLEMENTATION OF NEW WEAPON SYSTEM
 	 */
 	//GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
@@ -554,8 +557,7 @@ void AFP_Character::SpawnDefaultInventory()
 	}
 
 	/*
-	 *		TODO:
-	 *		Overhaul and Make this a loop to properly equip all default weapons
+	 *		TODO: Overhaul and Make this a loop to properly equip all default weapons
 	 *
 	 */
 	ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(DefaultInventoryWeapons[0], FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);

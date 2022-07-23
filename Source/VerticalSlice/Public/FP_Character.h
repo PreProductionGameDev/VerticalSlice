@@ -20,6 +20,7 @@
 class UPlayerGameplayAbility;
 class UPlayerAbilitySystemComponent;
 class UPlayerAttributeSet;
+class UAmmoAttributeSet;
 
 UCLASS()
 class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystemInterface
@@ -109,9 +110,8 @@ public:
 	bool ServerEquipWeapon_Validate(ABWeapon* NewWeapon);
 
 	/*
-	 * Cycling Between Weapons requires additional logic
+	 * TODO: Cycling Between Weapons requires additional logic
 	 * Have not been setup yet.
-	 * On TODO List
 	 */
 
 	// Return the Equipped Weapons Primary Ammo
@@ -185,7 +185,9 @@ protected:
 	// Players Health Attribute Set
 	UPROPERTY()
 	TObjectPtr<UPlayerAttributeSet> Attributes;
-
+	// Players Ammo Attribute Set
+	TObjectPtr<UAmmoAttributeSet> AmmoAttributes;
+		
 	/*
 	 *	NEW WEAPON SYSTEM
 	 *	Improved the level of GAS Orientated Design
@@ -213,7 +215,7 @@ protected:
 	void UnEquipWeapon(ABWeapon* WeaponToUnEquip);
 	// UnEquips the current Weapon. Used for dropping.
 	void UnEquipCurrentWeapon();
-	// TODO ADD IMPLEMENTATION UPON ADDING THE AMMO SYSTEM 
+	// TODO: ADD IMPLEMENTATION UPON ADDING THE AMMO SYSTEM 
 	UFUNCTION()
 	virtual void CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo);
 
