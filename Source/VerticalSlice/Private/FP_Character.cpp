@@ -182,7 +182,7 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 		}
 
 		/*
-		 *	SET UP AMMO PICKUP
+		 *	TODO: SET UP AMMO PICKUP
 		 *
 		 */
 
@@ -298,6 +298,20 @@ int32 AFP_Character::GetMaxPrimaryClipAmmo() const
 	return 0;
 }
 
+int32 AFP_Character::GetPrimaryReserveAmmo()
+{
+	// Access the AmmoAttributeSet and return the Ammo Value related to the weapon.
+	if (CurrentWeapon && AmmoAttributes)
+	{
+		FGameplayAttribute Attribute = AmmoAttributes->GetReserveAmmoAttributeFromTag(CurrentWeapon->PrimaryAmmoType);
+		if (Attribute.IsValid())
+		{
+			return AbilitySystemComponent->GetNumericAttribute(Attribute);
+		}
+	}
+	return 0;
+}
+
 void AFP_Character::EquipGun(ABaseWeapon* const NewGun)
 {
 	EquipedGun = NewGun;
@@ -321,7 +335,7 @@ void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	/*		TODO: REMOVE THIS UPON THE COMPLETE IMPLEMENTATION OF NEW WEAPON SYSTEM
+	/*		TODO: REMOVE THE COMMENT UPON THE COMPLETION OF THE NEW SYSTEM
 	 */
 	//GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
@@ -463,6 +477,7 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		CurrentWeapon->Equip();
 		CurrentWeaponTag = CurrentWeapon->WeaponTag;
 
+		// Set the Equipped Weapon tag
 		if (AbilitySystemComponent)
 		{
 			AbilitySystemComponent->AddLooseGameplayTag(CurrentWeaponTag);
@@ -475,9 +490,10 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 
 		NewWeapon->OnPrimaryClipAmmoChanged.AddDynamic(this, &AFP_Character::CurrentWeaponPrimaryClipAmmoChanged);
 
+		// Setup Ammo Changed Delegates for UI changes
 		if (AbilitySystemComponent)
 		{
-			// SETUP AMMO DELEGATE
+			PrimaryReserveAmmoChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(CurrentWeapon->PrimaryAmmoType)).AddUObject(this, &AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged);
 		}
 
 		// Handle FirstPerson Equip Montage
@@ -510,8 +526,8 @@ void AFP_Character::UnEquipWeapon(ABWeapon* WeaponToUnEquip)
 
 		if (AbilitySystemComponent)
 		{
-			// Setup After Ammo Attributes are made
-			// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate()
+			// Remove the UI Update Delegate for Weapon Ammo
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(WeaponToUnEquip->PrimaryAmmoType)).Remove(PrimaryReserveAmmoChangedDelegateHandle);
 		}
 		WeaponToUnEquip->UnEquip();
 	}
@@ -560,10 +576,13 @@ void AFP_Character::SpawnDefaultInventory()
 	 *		TODO: Overhaul and Make this a loop to properly equip all default weapons
 	 *
 	 */
-	ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(DefaultInventoryWeapons[0], FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	NewWeapon->bSpawnWithCollision = false;
-	NewWeapon->FinishSpawning(FTransform::Identity);
-	AddWeaponToInventory(NewWeapon, true);
+	if (DefaultInventoryWeapons.Num() > 0)
+	{
+		ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(DefaultInventoryWeapons[0], FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+		NewWeapon->bSpawnWithCollision = false;
+		NewWeapon->FinishSpawning(FTransform::Identity);
+		AddWeaponToInventory(NewWeapon, true);
+	}
 }
 
 void AFP_Character::ServerSyncCurrentWeapon_Implementation()
@@ -587,6 +606,12 @@ void AFP_Character::ClientSyncCurrentWeapon_Implementation(ABWeapon* InWeapon)
 bool AFP_Character::ClientSyncCurrentWeapon_Validate(ABWeapon* InWeapon)
 {
 	return true;
+}
+
+void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeChangeData& Data)
+{
+	// TODO: Update UI with New Reserve Ammo
+	UE_LOG(LogTemp, Warning, TEXT("%s Reserve Ammo. %s Clip Ammo"), GetPrimaryReserveAmmo(), GetPrimaryClipAmmo());
 }
 
 

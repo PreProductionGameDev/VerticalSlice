@@ -114,13 +114,15 @@ public:
 	 * Have not been setup yet.
 	 */
 
-	// Return the Equipped Weapons Primary Ammo
+	// Return the Equipped Weapons PrimaryClip Ammo
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	int32 GetPrimaryClipAmmo() const;
-	// Return the Equipped Weapons Max Primary Ammo
+	// Return the Equipped Weapons Max PrimaryClip Ammo
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	int32 GetMaxPrimaryClipAmmo() const;
-
+	// Returns the Equipped Weapons Reserve Ammo from the Attribute Set
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	int32 GetPrimaryReserveAmmo();
 
 	// OLD WEAPON PLEASE REMOVE
 	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction = true))
@@ -243,10 +245,15 @@ protected:
 	void ClientSyncCurrentWeapon_Implementation(ABWeapon* InWeapon);
 	bool ClientSyncCurrentWeapon_Validate(ABWeapon* InWeapon);
 
+	// Attribute changed callbacks
+	virtual void CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeChangeData& Data);
+	
 	// Set to true when we change the weapon predicatively and flip it to false when the Server replicates to confirm.
 	// We use this if the Server refused a weapon change ability's activation to ask the Server to sync the client back up
 	// with the correct CurrentWeapon.
 	bool bChangedWeaponLocally;
+	// Attribute changed delegate handles
+	FDelegateHandle PrimaryReserveAmmoChangedDelegateHandle;
 	// Cached Weapon Tags
 	FGameplayTag CurrentWeaponTag;
 	FGameplayTag NoWeaponTag;

@@ -76,19 +76,16 @@ public:
 
 	// Network Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	// Occurs before Replicating
 	virtual void PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker) override;
 
 	// Sets the Owning Character for the weapon
 	void SetOwningCharacter(AFP_Character* InOwningCharacter);
-
 	// Overlap for Picking up the weapon
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	// Called when Player equips this weapon
 	virtual void Equip();
-
 	// Called when Player UnEquips this weapon
 	virtual void UnEquip();
 

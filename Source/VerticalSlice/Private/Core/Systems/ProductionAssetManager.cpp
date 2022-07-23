@@ -7,7 +7,7 @@
 void UProductionAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
-
+	
 	UAbilitySystemGlobals::Get().InitGlobalData();
 }
 
