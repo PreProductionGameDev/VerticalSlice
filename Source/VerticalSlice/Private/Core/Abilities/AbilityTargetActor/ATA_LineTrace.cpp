@@ -67,6 +67,7 @@ void AATA_LineTrace::DoTrace(TArray<FHitResult>& HitResults, const UWorld* World
 
 void AATA_LineTrace::ShowDebugTrace(TArray<FHitResult>& HitResults, EDrawDebugTrace::Type DrawDebugType, float Duration)
 {
+// Display Debug Line Trace
 #if ENABLE_DRAW_DEBUG
 	if (bDebug)
 	{

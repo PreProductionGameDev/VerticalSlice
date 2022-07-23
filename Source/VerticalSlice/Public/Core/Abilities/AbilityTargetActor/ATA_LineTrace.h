@@ -20,6 +20,7 @@ class VERTICALSLICE_API AATA_LineTrace : public AATA_Trace
 	GENERATED_BODY()
 
 public:
+	// Default Constructor
 	AATA_LineTrace();
 
 	/**
@@ -84,7 +85,9 @@ public:
 	);
 
 protected:
+	// Create the LineTrace
 	virtual void DoTrace(TArray<FHitResult>& HitResults, const UWorld* World, const FGameplayTargetDataFilterHandle FilterHandle, const FVector& Start, const FVector& End, FName ProfileName, const FCollisionQueryParams Params) override;
+	// Displays the Debug view of the LineTrace
 	virtual void ShowDebugTrace(TArray<FHitResult>& HitResults, EDrawDebugTrace::Type DrawDebugType, float Duration) override;
 
 #if ENABLE_DRAW_DEBUG

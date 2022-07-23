@@ -82,6 +82,7 @@ void ABWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	// Add the Replication for the required Objects
 	DOREPLIFETIME_CONDITION(ABWeapon, OwningCharacter, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, PrimaryClipAmmo, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, MaxPrimaryClipAmmo, COND_OwnerOnly);
@@ -97,17 +98,23 @@ void ABWeapon::PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker
 void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
+	// If the Owning Character is a valid character, handle ownership
+	// Otherwise disconnect from owner
 	if (OwningCharacter)
 	{
 		// Called when Added to Inventory
+		// Sets the owner and attaches to owner
 		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 		SetOwner(InOwningCharacter);
 		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		// Disable Pickup Collision sphere
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		
+
+		// If the Weapon is not equipped. Remove the shadow casting
 		if (OwningCharacter->GetCurrentWeapon() != this)
 		{
 			WeaponMesh3P->CastShadow = false;
+			// This has to be done like this otherwise a lingering shadow can be caused
 			WeaponMesh3P->SetVisibility(true, true);
 			WeaponMesh3P->SetVisibility(false, true);
 		}
@@ -115,6 +122,7 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 	}
 	else
 	{
+		// Disconnect from all ownership
 		AbilitySystemComponent = nullptr;
 		SetOwner(nullptr);
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -125,6 +133,7 @@ void ABWeapon::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	// Ensures pickup of weapon if valid and not currently owned
 	if (IsValid(this) && !OwningCharacter)
 	{
 		PickUpOnTouch(Cast<AFP_Character>(OtherActor));
@@ -140,11 +149,13 @@ void ABWeapon::Equip()
 		return;
 	}
 
-	// when updating Character. This connects to the models to the person correctly.
+	// When updating Character. This connects to the models to the person correctly.
 	FName AttachPoint = OwningCharacter->GetWeaponAttachPoint();
 
+	// Setup FirstPerson Mesh if Valid
 	if (WeaponMesh1P)
 	{
+		// Attaches and sets correct display. Might need to tweak upon applying the models
 		WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 		WeaponMesh1P->SetRelativeRotation(FRotator(0, 0, -90.0f));
@@ -152,13 +163,16 @@ void ABWeapon::Equip()
 		WeaponMesh1P->SetVisibility(true, true);
 	}
 
+	// Setup ThirdPerson Mesh if Valid
 	if (WeaponMesh3P)
 	{
+		// Attaches and sets correct display. Might need to tweak upon applying the models 
 		WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
 		WeaponMesh3P->SetRelativeRotation(FRotator(0, 0, -90.0f));
 
-		WeaponMesh3P->SetVisibility(true, true); // Without this, the weapon's 3P shadow doesn't show
+		// This has to be done like this otherwise a lingering shadow can be caused
+		WeaponMesh3P->SetVisibility(true, true);
 		WeaponMesh3P->SetVisibility(false, true);
 	}
 	
@@ -175,10 +189,12 @@ void ABWeapon::UnEquip()
 	WeaponMesh1P->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 	WeaponMesh1P->SetVisibility(false, true);
 
+	// Detach Third person view model as well
 	WeaponMesh3P->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 	WeaponMesh3P->CastShadow = false;
 	WeaponMesh3P->bCastHiddenShadow = false;
-	WeaponMesh3P->SetVisibility(true, true); // Required or 3p shadow hangs around.
+	// This has to be done like this otherwise a lingering shadow can be caused
+	WeaponMesh3P->SetVisibility(true, true);
 	WeaponMesh3P->SetVisibility(false, true);
 }
 
@@ -188,10 +204,10 @@ void ABWeapon::AddAbilities()
 	{
 		return;
 	}
-
-
+	
 	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 
+	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningCharacter->GetLocalRole())));
@@ -204,7 +220,7 @@ void ABWeapon::AddAbilities()
 		return;
 	}
 
-	
+	// Add all the abilities to the player
 	for (TSubclassOf<UPlayerGameplayAbility>& Ability : Abilities)
 	{
 		AbilitySpecHandles.Add(ASC->GiveAbility(FGameplayAbilitySpec(Ability, GetAbilityLevel(Ability.GetDefaultObject()->AbilityInputID), static_cast<int32>(Ability.GetDefaultObject()->AbilityInputID), this)));
@@ -220,6 +236,7 @@ void ABWeapon::RemoveAbilities()
 
 	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
 
+	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
 	{
 		return;
@@ -231,6 +248,7 @@ void ABWeapon::RemoveAbilities()
 		return;
 	}
 
+	// Removes all abilities that the weapon owns from the player.
 	for (FGameplayAbilitySpecHandle& SpecHandle : AbilitySpecHandles)
 	{
 		ASC->ClearAbility(SpecHandle);
@@ -251,18 +269,22 @@ void ABWeapon::ResetWeapon()
 
 void ABWeapon::OnDropped_Implementation(FVector NewLocation)
 {
+	// Removes the weapon from the Player and resets weapon
 	SetOwningCharacter(nullptr);
 	ResetWeapon();
 
+	// Sets the dropped location and enables sphere pickup collision
 	SetActorLocation(NewLocation);
 	CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
+	// Disables First person mesh
 	if (WeaponMesh1P)
 	{
 		WeaponMesh1P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		WeaponMesh1P->SetVisibility(false, true);
 	}
 
+	// Enables ThirdPersonMesh for all clients
 	if (WeaponMesh3P)
 	{
 		WeaponMesh3P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
@@ -323,19 +345,21 @@ USoundCue* ABWeapon::GetPickupSound() const
 
 AATA_LineTrace* ABWeapon::GetLineTraceTargetActor()
 {
+	// If the LineTraceTargetActor exists return otherwise create new
 	if (LineTraceTargetActor)
 	{
 		return LineTraceTargetActor;
 	}
 
+	// Create New TargetActor to return
 	LineTraceTargetActor = GetWorld()->SpawnActor<AATA_LineTrace>();
 	LineTraceTargetActor->SetOwner(this);
 	return LineTraceTargetActor;
 }
 
-// Called when the game starts or when spawned
 void ABWeapon::BeginPlay()
 {
+	// Reset the weapon values
 	ResetWeapon();
 	
 	if (!OwningCharacter && bSpawnWithCollision)
@@ -354,15 +378,16 @@ void ABWeapon::EndPlay(EEndPlayReason::Type EndPlayReason)
 
 void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 {
-	
 	if (!InCharacter || !InCharacter->IsAlive() || !InCharacter->GetAbilitySystemComponent() || InCharacter->GetAbilitySystemComponent()->HasAnyMatchingGameplayTags(RestrictedPickupTags))
 	{
 		return;
 	}
-	
+
+	// Add the weapon to the inventory and disable Meshes
 	if (InCharacter->AddWeaponToInventory(this, true))
 	{
 		WeaponMesh3P->CastShadow = false;
+		// This has to be done like this otherwise a lingering shadow can be caused
 		WeaponMesh3P->SetVisibility(true, true);
 		WeaponMesh3P->SetVisibility(false, true);
 	}

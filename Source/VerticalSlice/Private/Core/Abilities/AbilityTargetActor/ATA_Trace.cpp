@@ -28,6 +28,7 @@ AATA_Trace::AATA_Trace()
 
 void AATA_Trace::ResetSpread()
 {
+	// Resets Spread to Default Values
 	bUseAimingSpreadMod = false;
 	BaseSpread = 0.0f;
 	AimingSpreadMod = 0.0f;
@@ -38,8 +39,10 @@ void AATA_Trace::ResetSpread()
 
 float AATA_Trace::GetCurrentSpread() const
 {
+	// Calculate Spread
 	float FinalSpread = BaseSpread + CurrentTargetingSpread;
 
+	// Multiply Spread by the Aiming Multiplier if being Aimed
 	if (bUseAimingSpreadMod && AimingTag.IsValid() && AimingRemovalTag.IsValid())
 	{
 		UAbilitySystemComponent* ASC = OwningAbility->GetCurrentActorInfo()->AbilitySystemComponent.Get();
@@ -48,7 +51,6 @@ float AATA_Trace::GetCurrentSpread() const
 			FinalSpread *= AimingSpreadMod;
 		}
 	}
-
 	return FinalSpread;
 }
 
@@ -69,15 +71,16 @@ void AATA_Trace::SetDestroyOnConfirmation(bool bInDestroyOnConfirmation)
 
 void AATA_Trace::StartTargeting(UGameplayAbility* Ability)
 {
-	// Dont call super cause we can have multiple reticles
+	// Enable Tick when Starting to Target
 	SetActorTickEnabled(true);
-
+	// Cache Ability and Actor
 	OwningAbility = Ability;
 	SourceActor = Ability->GetCurrentActorInfo()->AvatarActor.Get();
 
 	// This is a Lazy way of Emptying and Repopulating the Reticle Actors
 	DestroyReticleActors();
 
+	// If Reticle class is valid, Spawn Reticles
 	if (ReticleClass)
 	{
 		for (int32 i = 0; i < MaxHitResultsPerTrace * NumberOfTraces; i++)
@@ -86,6 +89,7 @@ void AATA_Trace::StartTargeting(UGameplayAbility* Ability)
 		}
 	}
 
+	// Empty Persistent Hit Results if being used
 	if (bUsePersistentHitResults)
 	{
 		PersistentHitResults.Empty();
@@ -95,12 +99,13 @@ void AATA_Trace::StartTargeting(UGameplayAbility* Ability)
 void AATA_Trace::ConfirmTargetingAndContinue()
 {
 	check(ShouldProduceTargetData());
+	// If SourceActor is Valid. Do Trace, Make Data and broadcast the data
 	if (SourceActor)
 	{
 		TArray<FHitResult> HitResults = PerformTrace(SourceActor);
 		FGameplayAbilityTargetDataHandle Handle = MakeTargetData(HitResults);
 		TargetDataReadyDelegate.Broadcast(Handle);
-
+// Debug Draw for Trace
 #if ENABLE_DRAW_DEBUG
 		if (bDebug)
 		{
@@ -109,6 +114,7 @@ void AATA_Trace::ConfirmTargetingAndContinue()
 #endif
 	}
 
+	// Empty Persistent Hit Results if being used
 	if (bUsePersistentHitResults)
 	{
 		PersistentHitResults.Empty();
@@ -117,9 +123,9 @@ void AATA_Trace::ConfirmTargetingAndContinue()
 
 void AATA_Trace::CancelTargeting()
 {
+	// Store ActorInfo and AbilitySystemComponent
 	const FGameplayAbilityActorInfo* ActorInfo = (OwningAbility ? OwningAbility->GetCurrentActorInfo() : nullptr);
 	UAbilitySystemComponent* ASC = (ActorInfo ? ActorInfo->AbilitySystemComponent.Get() : nullptr);
-
 	if (ASC)
 	{
 		ASC->AbilityReplicatedEventDelegate(EAbilityGenericReplicatedEvent::GenericCancel, OwningAbility->GetCurrentAbilitySpecHandle(), OwningAbility->GetCurrentActivationInfo().GetActivationPredictionKey()).Remove(GenericCancelHandle);
@@ -128,11 +134,11 @@ void AATA_Trace::CancelTargeting()
 	{
 		ABILITY_LOG(Warning, TEXT("AGameplayAbilityTargetActor::CancelTargeting called with null ASC! Actor %s"), *GetName());
 	}
-
+	// Broadcast the CanceledDelegate
 	CanceledDelegate.Broadcast(FGameplayAbilityTargetDataHandle());
-
+	// Disable tick now that we are no longer targeting
 	SetActorTickEnabled(false);
-
+	// Empty Persistent Hit Results if being used
 	if (bUsePersistentHitResults)
 	{
 		PersistentHitResults.Empty();
@@ -149,6 +155,7 @@ void AATA_Trace::BeginPlay()
 
 void AATA_Trace::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	// Destroy all Reticles that created
 	DestroyReticleActors();
 	
 	Super::EndPlay(EndPlayReason);
@@ -157,14 +164,12 @@ void AATA_Trace::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AATA_Trace::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
 	TArray<FHitResult> HitResults;
 	if (bDebug || bUsePersistentHitResults)
 	{
 		// Only need to trace on tick if we're showing debug or if we use persistent hit results. Otherwise we just use the confirmation trace
 		HitResults = PerformTrace(SourceActor);
 	}
-
 #if ENABLE_DRAW_DEBUG
 	if (SourceActor && bDebug)
 	{
@@ -176,15 +181,14 @@ void AATA_Trace::Tick(float DeltaSeconds)
 void AATA_Trace::LineTraceWithFilter(TArray<FHitResult>& OutHitResults, const UWorld* World, const FGameplayTargetDataFilterHandle FilterHandle, const FVector& Start, const FVector& End, FName ProfileName, const FCollisionQueryParams Params)
 {
 	check(World);
-
+	// Get Hit Results
 	TArray<FHitResult> HitResults;
 	World->LineTraceMultiByProfile(HitResults, Start, End, ProfileName, Params);
-
 	TArray<FHitResult> FilteredHitResults;
-	
 	// Start param could be player ViewPoint. We want HitResult to always display the StartLocation.
 	FVector TraceStart = StartLocation.GetTargetingTransform().GetLocation();
 
+	// Filter all hit Results
 	for (int32 HitIdx = 0; HitIdx < HitResults.Num(); ++HitIdx)
 	{
 		FHitResult& Hit = HitResults[HitIdx];
@@ -197,19 +201,18 @@ void AATA_Trace::LineTraceWithFilter(TArray<FHitResult>& OutHitResults, const UW
 			FilteredHitResults.Add(Hit);
 		}
 	}
-
+	// Set OutHitResults
 	OutHitResults = FilteredHitResults;
-	
 	return;
 }
 
 void AATA_Trace::AimWithPlayerController(const AActor* InSourceActor, FCollisionQueryParams Params, const FVector& TraceStart, FVector& OutTraceEnd, bool bIgnorePitch)
 {
-	if (!OwningAbility) // Server and Launching Client Only
+	// Server and Launching Client Only
+	if (!OwningAbility) 
 	{
 		return;
 	}
-
 	// Default Values in case of AI controller
 	FVector ViewStart = TraceStart;
 	FRotator ViewRot = StartLocation.GetTargetingTransform().GetRotation().Rotator();
@@ -219,50 +222,49 @@ void AATA_Trace::AimWithPlayerController(const AActor* InSourceActor, FCollision
 		MasterPC->GetPlayerViewPoint(ViewStart, ViewRot);
 	}
 
+	// Calculate View and End Directions to ClipCameraRay
 	const FVector ViewDir = ViewRot.Vector();
 	FVector ViewEnd = ViewStart + (ViewDir * MaxRange);
-
 	ClipCameraRayToAbilityRange(ViewStart, ViewDir, TraceStart, MaxRange, ViewEnd);
-
-	// Use First Hit
+	// Use First hit result and filter results
 	TArray<FHitResult> HitResults;
 	LineTraceWithFilter(HitResults, InSourceActor->GetWorld(), Filter, ViewStart, ViewEnd, TraceProfile.Name, Params);
-
+	// Calculate Spread
 	CurrentTargetingSpread = FMath::Min(TargetingSpreadMax, CurrentTargetingSpread + TargetingSpreadIncrement);
-
+	// If the Hit Results exist, UseTraceResults
 	const bool bUseTraceResult = HitResults.Num() > 0 && (FVector::DistSquared(TraceStart, HitResults[0].Location) <= (MaxRange * MaxRange));
-
+	// Calculate AdjustedEnd if HitResult exists
 	const FVector AdjustedEnd = (bUseTraceResult) ? HitResults[0].Location : ViewEnd;
-
+	// Calculate AdjustedAimDirection
 	FVector AdjustedAimDir = (AdjustedEnd - TraceStart).GetSafeNormal();
 	if (AdjustedAimDir.IsZero())
 	{
 		AdjustedAimDir = ViewDir;
 	}
 
+	// Calculate Adjusted Aim Direction if UsingTraceResult
 	if (!bTraceAffectsAimPitch && bUseTraceResult)
 	{
 		FVector OriginalAimDir = (ViewEnd - TraceStart).GetSafeNormal();
-
 		if (!OriginalAimDir.IsZero())
 		{
 			// Convert to Angles and Use Original Pitch
 			const FRotator OriginalAimRot = OriginalAimDir.Rotation();
-
 			FRotator AdjustedAimRot = AdjustedAimDir.Rotation();
 			AdjustedAimRot.Pitch = OriginalAimRot.Pitch;
-
 			AdjustedAimDir = AdjustedAimRot.Vector();
 		}
 	}
 
+	// Set CurrentSpread
 	const float CurrentSpread = GetCurrentSpread();
-
+	// Calculate Random Spread range
 	const float ConeHalfAngle = FMath::DegreesToRadians(CurrentSpread * 0.5f);
 	const int32 RandomSeed = FMath::Rand();
 	FRandomStream  WeaponRandomStream(RandomSeed);
 	const FVector ShootDir = WeaponRandomStream.VRandCone(AdjustedAimDir, ConeHalfAngle, ConeHalfAngle);
 
+	// Set OutTraceEnd
 	OutTraceEnd = TraceStart + (ShootDir * MaxRange);
 }
 
@@ -270,7 +272,8 @@ bool AATA_Trace::ClipCameraRayToAbilityRange(FVector CameraLocation, FVector Cam
 {
 	FVector CameraToCenter = AbilityCenter - CameraLocation;
 	float DotToCenter = FVector::DotProduct(CameraToCenter, CameraDirection);
-	if (DotToCenter >= 0)	// If this fails, We're pointed away from center
+	// If this fails, We're pointed away from center
+	if (DotToCenter >= 0)	
 	{
 		float DistanceSquared = CameraToCenter.SizeSquared() - (DotToCenter * DotToCenter);
 		float RadiusSquared = (AbilityRange * AbilityRange);
@@ -283,20 +286,20 @@ bool AATA_Trace::ClipCameraRayToAbilityRange(FVector CameraLocation, FVector Cam
 			return true;
 		}
 	}
-
 	return false;
 }
 
 void AATA_Trace::StopTargeting()
 {
+	// Disable Tick to save Processing Speed
 	SetActorTickEnabled(false);
-
+	// Destroy All existing Reticle Actors
 	DestroyReticleActors();
-
 	// Clear added callbacks
 	TargetDataReadyDelegate.Clear();
 	CanceledDelegate.Clear();
 
+	// Remove GenericDelegates
 	if (GenericDelegateBoundASC)
 	{
 		GenericDelegateBoundASC->GenericLocalConfirmCallbacks.RemoveDynamic(this, &AGameplayAbilityTargetActor::ConfirmTargeting);
@@ -307,8 +310,10 @@ void AATA_Trace::StopTargeting()
 
 FGameplayAbilityTargetDataHandle AATA_Trace::MakeTargetData(const TArray<FHitResult>& HitResults) const
 {
+	// Create a Empty DataHandle
 	FGameplayAbilityTargetDataHandle ReturnDataHandle;
 
+	// Populate DataHandle with HitResults
 	for (int32 i = 0; i < HitResults.Num(); i++)
 	{
 		/** Note: These are cleaned up by the FGameplayAbilityTargetDataHandle (via an internal TSharedPtr) */
@@ -317,21 +322,23 @@ FGameplayAbilityTargetDataHandle AATA_Trace::MakeTargetData(const TArray<FHitRes
 		ReturnDataHandle.Add(ReturnData);
 	}
 
+	// Return PopulatedDataHandle
 	return ReturnDataHandle;
 }
 
 TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 {
+	// Disable Complex Trace
 	bool bTraceComplex = false;
+	// Ignore Source Actor
 	TArray<AActor*> ActorsToIgnore;
-
 	ActorsToIgnore.Add(InSourceActor);
-
+	// Setup Collision Query Params
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(AGSGATA_LineTrace), bTraceComplex);
 	Params.bReturnPhysicalMaterial = true;
 	Params.AddIgnoredActors(ActorsToIgnore);
 	Params.bIgnoreBlocks = bIgnoreBlockingHits;
-
+	// Set Start Location
 	FVector TraceStart = StartLocation.GetTargetingTransform().GetLocation();
 	FVector TraceEnd;
 
@@ -343,11 +350,10 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 
 		TraceStart = bTraceFromPlayerViewPoint ? ViewStart : TraceStart;
 	}
-
+	
 	if (bUsePersistentHitResults)
 	{
 		// Clear any blocking hit results, invalid Actors, or actors out of range
-		//TODO Check for visibility if we add AIPerceptionComponent in the future
 		for (int32 i = PersistentHitResults.Num() - 1; i >= 0; i--)
 		{
 			FHitResult& HitResult = PersistentHitResults[i];
@@ -358,22 +364,18 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 			}
 		}
 	}
-
+	// Create the ReturnHitResults Array
 	TArray<FHitResult> ReturnHitResults;
-
 	for (int32 TraceIndex = 0; TraceIndex < NumberOfTraces; TraceIndex++)
 	{
-		AimWithPlayerController(InSourceActor, Params, TraceStart, TraceEnd);		//Effective on server and launching client only
-
-		// ------------------------------------------------------
-
+		// Effective on server and launching client only
+		AimWithPlayerController(InSourceActor, Params, TraceStart, TraceEnd);
 		SetActorLocationAndRotation(TraceEnd, SourceActor->GetActorRotation());
-
 		CurrentTraceEnd = TraceEnd;
-
+		// Populate HitResults
 		TArray<FHitResult> TraceHitResults;
 		DoTrace(TraceHitResults, InSourceActor->GetWorld(), Filter, TraceStart, TraceEnd, TraceProfile.Name, Params);
-
+		// Cycle through All HitResults
 		for (int32 j = TraceHitResults.Num() - 1; j >= 0; j--)
 		{
 			if (MaxHitResultsPerTrace >= 0 && j + 1 > MaxHitResultsPerTrace)
@@ -393,30 +395,25 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 				if (IsValid(HitResult.GetActor()) && (!HitResult.bBlockingHit || PersistentHitResults.Num() < 1))
 				{
 					bool bActorAlreadyInPersistentHits = false;
-
 					// Make sure PersistentHitResults doesn't have this hit actor already
 					for (int32 k = 0; k < PersistentHitResults.Num(); k++)
 					{
 						FHitResult& PersistentHitResult = PersistentHitResults[k];
-
 						if (PersistentHitResult.GetActor() == HitResult.GetActor())
 						{
 							bActorAlreadyInPersistentHits = true;
 							break;
 						}
 					}
-
 					if (bActorAlreadyInPersistentHits)
 					{
 						continue;
 					}
-
 					if (PersistentHitResults.Num() >= MaxHitResultsPerTrace)
 					{
 						// Treat PersistentHitResults like a queue, remove first element
 						PersistentHitResults.RemoveAt(0);
 					}
-
 					PersistentHitResults.Add(HitResult);
 				}
 			}
@@ -446,7 +443,7 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 					}
 				}
 			}
-		} // for TraceHitResults
+		}
 
 		if (!bUsePersistentHitResults)
 		{
@@ -482,7 +479,7 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 		}
 
 		ReturnHitResults.Append(TraceHitResults);
-	} // for NumberOfTraces
+	}
 
 	// Reminder: if bUsePersistentHitResults, Number of Traces = 1
 	if (bUsePersistentHitResults && MaxHitResultsPerTrace > 0)
@@ -527,15 +524,14 @@ TArray<FHitResult> AATA_Trace::PerformTrace(AActor* InSourceActor)
 				}
 			}
 		}
-
 		return PersistentHitResults;
 	}
-
 	return ReturnHitResults;
 }
 
 AGameplayAbilityWorldReticle* AATA_Trace::SpawnReticleActor(FVector Location, FRotator Rotation)
 {
+	// If Reticle is Valid, Create the Spawned Reticle
 	if (ReticleClass)
 	{
 		AGameplayAbilityWorldReticle* SpawnedReticleActor = GetWorld()->SpawnActor<AGameplayAbilityWorldReticle>(ReticleClass, Location, Rotation);
@@ -558,12 +554,12 @@ AGameplayAbilityWorldReticle* AATA_Trace::SpawnReticleActor(FVector Location, FR
 			return SpawnedReticleActor;
 		}
 	}
-
 	return nullptr;
 }
 
 void AATA_Trace::DestroyReticleActors()
 {
+	// Destroy All Existing Reticle Actors
 	for (int32 i = ReticleActors.Num() - 1; i >= 0; i--)
 	{
 		if (ReticleActors[i].IsValid())
