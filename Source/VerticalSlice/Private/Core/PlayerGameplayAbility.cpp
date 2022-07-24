@@ -35,7 +35,7 @@ void UPlayerGameplayAbility::ExternalEndAbility()
 
 bool UPlayerGameplayAbility::CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
+	return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags) && GSCheckCost(Handle, *ActorInfo);
 }
 
 bool UPlayerGameplayAbility::GSCheckCost_Implementation(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo& ActorInfo) const

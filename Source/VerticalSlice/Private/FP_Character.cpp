@@ -489,7 +489,7 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		 */
 
 		NewWeapon->OnPrimaryClipAmmoChanged.AddDynamic(this, &AFP_Character::CurrentWeaponPrimaryClipAmmoChanged);
-
+		
 		// Setup Ammo Changed Delegates for UI changes
 		if (AbilitySystemComponent)
 		{
@@ -553,7 +553,9 @@ void AFP_Character::UnEquipCurrentWeapon()
 
 void AFP_Character::CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo)
 {
-	/*	NEED TO IMPLEMENT ONCE AMMO ATTRIBUTE SET IS CREATED
+	/*
+	 *	Used to Update Ammo UI
+	 *	Saves running off a Tick
 	 *
 	 */
 }
