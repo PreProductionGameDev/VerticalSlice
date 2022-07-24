@@ -54,7 +54,7 @@ void ABaseWeapon::OnEquip()
 	if (Owner)
 	{
 		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
-		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
+		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetPlayerAbilitySystemComponent();	
 		if (Owner->GetLocalRole() == ROLE_Authority)
 		{
 			//Grant abilities, but only on the server
@@ -75,7 +75,7 @@ void ABaseWeapon::OnUnequip_Implementation()
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TRY TO DELETE"));
 		AFP_Character* OwningPlayer = Cast<AFP_Character>(Owner);
-		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetAbilitySystemComponent();	
+		UPlayerAbilitySystemComponent* ASC = OwningPlayer->GetPlayerAbilitySystemComponent();	
 		if (Owner->GetLocalRole() == ROLE_Authority)
 		{
 			//Grant abilities, but only on the server

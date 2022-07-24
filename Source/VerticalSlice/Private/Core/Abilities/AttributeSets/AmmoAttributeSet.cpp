@@ -22,8 +22,7 @@ void UAmmoAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	// Add additional Else If for each new Ammo type here
 	if (Data.EvaluatedData.Attribute == GetSMGReserveAmmoAttribute())
 	{
-		float Ammo = GetSMGReserveAmmo();
-		UE_LOG(LogTemp, Error, TEXT("AMMO CHANGED TO %s"), *FString::FromInt(Ammo)); 
+		float Ammo = GetSMGReserveAmmo();	
 		SetSMGReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo()));
 	}	
 }
@@ -44,7 +43,6 @@ FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(FGameplayTa
 	{
 		return GetSMGReserveAmmoAttribute();
 	}
-
 	return FGameplayAttribute();
 }
 
