@@ -23,8 +23,9 @@ void UAmmoAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetSMGReserveAmmoAttribute())
 	{
 		float Ammo = GetSMGReserveAmmo();
-		SetSMGReserveAmmo((FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo())));
-	}
+		UE_LOG(LogTemp, Error, TEXT("AMMO CHANGED TO %s"), *FString::FromInt(Ammo)); 
+		SetSMGReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo()));
+	}	
 }
 
 void UAmmoAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
