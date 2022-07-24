@@ -104,7 +104,7 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 	{
 		// Called when Added to Inventory
 		// Sets the owner and attaches to owner
-		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
+		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
 		SetOwner(InOwningCharacter);
 		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		// Disable Pickup Collision sphere
@@ -200,12 +200,12 @@ void ABWeapon::UnEquip()
 
 void ABWeapon::AddAbilities()
 {
-	if (!IsValid(OwningCharacter) || !OwningCharacter->GetAbilitySystemComponent())
+	if (!IsValid(OwningCharacter) || !OwningCharacter->GetPlayerAbilitySystemComponent())
 	{
 		return;
 	}
 	
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
 
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
@@ -229,12 +229,12 @@ void ABWeapon::AddAbilities()
 
 void ABWeapon::RemoveAbilities()
 {
-	if (!IsValid(OwningCharacter) || !OwningCharacter->GetAbilitySystemComponent())
+	if (!IsValid(OwningCharacter) || !OwningCharacter->GetPlayerAbilitySystemComponent())
 	{
 		return;
 	}
 
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
 
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
@@ -378,7 +378,7 @@ void ABWeapon::EndPlay(EEndPlayReason::Type EndPlayReason)
 
 void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 {
-	if (!InCharacter || !InCharacter->IsAlive() || !InCharacter->GetAbilitySystemComponent() || InCharacter->GetAbilitySystemComponent()->HasAnyMatchingGameplayTags(RestrictedPickupTags))
+	if (!InCharacter || !InCharacter->IsAlive() || !InCharacter->GetPlayerAbilitySystemComponent() || InCharacter->GetPlayerAbilitySystemComponent()->HasAnyMatchingGameplayTags(RestrictedPickupTags))
 	{
 		return;
 	}
