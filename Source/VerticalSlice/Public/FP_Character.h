@@ -71,7 +71,7 @@ public:
 	
 	// Returns the AbilitySystemComponent
 	UFUNCTION(BlueprintCallable)
-	UPlayerAbilitySystemComponent* GetAbilitySystemComponent();
+	UPlayerAbilitySystemComponent* GetPlayerAbilitySystemComponent();
 
 	// Returns the Alive State of the Player
 	virtual bool IsAlive();
