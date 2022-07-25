@@ -298,7 +298,7 @@ int32 AFP_Character::GetMaxPrimaryClipAmmo() const
 	return 0;
 }
 
-int32 AFP_Character::GetPrimaryReserveAmmo()
+int32 AFP_Character::GetPrimaryReserveAmmo() const
 {
 	// Access the AmmoAttributeSet and return the Ammo Value related to the weapon.
 	if (CurrentWeapon && AmmoAttributes)
