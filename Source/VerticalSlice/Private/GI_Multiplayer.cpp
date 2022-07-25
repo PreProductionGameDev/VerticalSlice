@@ -3,6 +3,9 @@
 
 #include "GI_Multiplayer.h"
 
+#include "Core/Gamemodes/Lobby/LobbyActor.h"
+#include "GameFramework/PlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UGI_Multiplayer::UGI_Multiplayer()
@@ -11,6 +14,24 @@ UGI_Multiplayer::UGI_Multiplayer()
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
     }
+}
+
+void UGI_Multiplayer::StoreColors()
+{
+    TArray<AActor*> Actors;
+    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
+
+   // for(AActor* Actor: Actors)
+    //{
+      //  APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
+       // if(Controller!= nullptr)
+        //{
+         //   UE_LOG(LogTemp, Warning, TEXT("The Actor's name is %s"), *Controller->PlayerState->GetPlayerName() );
+            
+       // }
+    //}
+
+    
 }
 
 void UGI_Multiplayer::Init()
