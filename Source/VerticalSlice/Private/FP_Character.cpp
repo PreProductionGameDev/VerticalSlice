@@ -142,7 +142,7 @@ USkeletalMeshComponent* AFP_Character::GetThirdPersonMesh()
 	return GetMesh();
 }
 
-UPlayerAbilitySystemComponent* AFP_Character::GetAbilitySystemComponent()
+UPlayerAbilitySystemComponent* AFP_Character::GetPlayerAbilitySystemComponent()
 {
 	return AbilitySystemComponent;
 }
@@ -613,7 +613,7 @@ bool AFP_Character::ClientSyncCurrentWeapon_Validate(ABWeapon* InWeapon)
 void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeChangeData& Data)
 {
 	// TODO: Update UI with New Reserve Ammo
-	UE_LOG(LogTemp, Warning, TEXT("%s Reserve Ammo. %s Clip Ammo"), GetPrimaryReserveAmmo(), GetPrimaryClipAmmo());
+	//UE_LOG(LogTemp, Warning, TEXT("%s Reserve Ammo. %s Clip Ammo"), GetPrimaryReserveAmmo(), GetPrimaryClipAmmo());
 }
 
 

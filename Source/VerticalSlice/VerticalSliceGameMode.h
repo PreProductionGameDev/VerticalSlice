@@ -14,6 +14,7 @@ class AVerticalSliceGameMode : public AGameModeBase
 public:
 	AVerticalSliceGameMode();
 
+	// Function for the server to move to a new map
 	UFUNCTION(BlueprintCallable)
 	void ServerTravel(FString Map);
 
