@@ -19,6 +19,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//sets view to self
+	void ResetCamera();
+
+	//this mesh can change needs to change depending on the character and color so a reference is held
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
