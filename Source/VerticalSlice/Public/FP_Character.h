@@ -122,7 +122,7 @@ public:
 	int32 GetMaxPrimaryClipAmmo() const;
 	// Returns the Equipped Weapons Reserve Ammo from the Attribute Set
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
-	int32 GetPrimaryReserveAmmo();
+	int32 GetPrimaryReserveAmmo() const;
 
 	// OLD WEAPON PLEASE REMOVE
 	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction = true))
