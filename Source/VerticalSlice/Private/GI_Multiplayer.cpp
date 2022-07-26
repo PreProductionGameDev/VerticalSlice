@@ -18,20 +18,23 @@ UGI_Multiplayer::UGI_Multiplayer()
 
 void UGI_Multiplayer::StoreColors()
 {
+    //gets all of the lobby actors
     TArray<AActor*> Actors;
     UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
 
-   // for(AActor* Actor: Actors)
-    //{
-      //  APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
-       // if(Controller!= nullptr)
-        //{
-         //   UE_LOG(LogTemp, Warning, TEXT("The Actor's name is %s"), *Controller->PlayerState->GetPlayerName() );
-            
-       // }
-    //}
+    //map to store all of the colors and maped to the player names
+    TMap<FString, FVector> SavedColors;
 
-    
+    //go through the array and match each user name to the player color and add it to the map
+    for(AActor* Actor: Actors)
+    {
+        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
+        if(Controller!= nullptr)
+        {
+            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
+            SavedColors.Add(Controller->PlayerState->GetPlayerName(), FVector( LobbyActor->DoRep_Hue1, LobbyActor->DoRep_Hue2, LobbyActor->DoRep_Hue3));
+        }
+    }
 }
 
 void UGI_Multiplayer::Init()
