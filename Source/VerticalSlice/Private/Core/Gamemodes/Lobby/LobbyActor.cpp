@@ -33,9 +33,9 @@ void ALobbyActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(ALobbyActor,R_Hue1 ,COND_None);
-	DOREPLIFETIME_CONDITION(ALobbyActor,R_Hue2 ,COND_None);
-	DOREPLIFETIME_CONDITION(ALobbyActor,R_Hue3 ,COND_None);
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue1, COND_None );
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue2 ,COND_None );
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue3 ,COND_None );
 
 }
 
@@ -59,17 +59,6 @@ void ALobbyActor::ResetCamera()
 	Controller->SetViewTarget(this);
 }
 
-void ALobbyActor::OnRep_SetHue1()
-{
-}
-
-void ALobbyActor::OnRep_SetHue2()
-{
-}
-
-void ALobbyActor::OnRep_SetHue3()
-{
-}
 
 // Called every frame
 void ALobbyActor::Tick(float DeltaTime)

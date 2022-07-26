@@ -30,32 +30,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;
 
-	UPROPERTY()
-	bool b_MaterialsMade;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInstance* Mat1;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(ReplicatedUsing=OnRep_SetHue1, EditAnywhere, BlueprintReadWrite)
-	float R_Hue1;
+	UPROPERTY(ReplicatedUsing=OnRep_SetHue1,EditAnywhere, BlueprintReadWrite)
+	float DoRep_Hue1;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void OnRep_SetHue1();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnRep_SetHue1();
 
 	UPROPERTY(ReplicatedUsing=OnRep_SetHue2,EditAnywhere, BlueprintReadWrite)
-	float R_Hue2;
+	float DoRep_Hue2;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void OnRep_SetHue2();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable )
+	void OnRep_SetHue2();
 
 	UPROPERTY(ReplicatedUsing=OnRep_SetHue3,EditAnywhere, BlueprintReadWrite)
-	float R_Hue3;
+	float DoRep_Hue3;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void OnRep_SetHue3();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable )
+	void OnRep_SetHue3();
 
 };
