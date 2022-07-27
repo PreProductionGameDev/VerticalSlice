@@ -18,6 +18,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ServerTravel(FString Map);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<TSubclassOf<class AGameMode>> GameModes;
+
 };
 
 
