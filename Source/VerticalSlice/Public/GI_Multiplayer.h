@@ -28,6 +28,9 @@ public:
     UGI_Multiplayer();
 
     UFUNCTION(BlueprintCallable)
+    void StoreColors();
+
+    UFUNCTION(BlueprintCallable)
         void Init();
 
     UFUNCTION(BlueprintCallable)

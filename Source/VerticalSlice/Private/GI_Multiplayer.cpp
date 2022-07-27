@@ -3,6 +3,9 @@
 
 #include "GI_Multiplayer.h"
 
+#include "Core/Gamemodes/Lobby/LobbyActor.h"
+#include "GameFramework/PlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UGI_Multiplayer::UGI_Multiplayer()
@@ -10,6 +13,27 @@ UGI_Multiplayer::UGI_Multiplayer()
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+    }
+}
+
+void UGI_Multiplayer::StoreColors()
+{
+    //gets all of the lobby actors
+    TArray<AActor*> Actors;
+    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
+
+    //map to store all of the colors and maped to the player names
+    TMap<FString, FVector> SavedColors;
+
+    //go through the array and match each user name to the player color and add it to the map
+    for(AActor* Actor: Actors)
+    {
+        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
+        if(Controller!= nullptr)
+        {
+            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
+            SavedColors.Add(Controller->PlayerState->GetPlayerName(), FVector( LobbyActor->DoRep_Hue1, LobbyActor->DoRep_Hue2, LobbyActor->DoRep_Hue3));
+        }
     }
 }
 
