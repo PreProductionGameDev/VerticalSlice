@@ -17,6 +17,6 @@ AVerticalSliceGameMode::AVerticalSliceGameMode()
 void AVerticalSliceGameMode::ServerTravel(FString Map)
 {
 	UWorld* World = GetWorld();
-	bUseSeamlessTravel = true;
-	World->ServerTravel(Map );
+	bUseSeamlessTravel = false;
+	World->ServerTravel(Map);
 }
