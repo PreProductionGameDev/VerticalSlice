@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ALobbyActor::ALobbyActor()
@@ -28,6 +29,16 @@ ALobbyActor::ALobbyActor()
 
 }
 
+void ALobbyActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue1, COND_None );
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue2 ,COND_None );
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue3 ,COND_None );
+
+}
+
 // Called when the game starts or when spawned
 void ALobbyActor::BeginPlay()
 {
@@ -47,6 +58,7 @@ void ALobbyActor::ResetCamera()
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(),0);
 	Controller->SetViewTarget(this);
 }
+
 
 // Called every frame
 void ALobbyActor::Tick(float DeltaTime)

@@ -4,7 +4,6 @@
 #include "Core/Abilities/AbilityTargetActor/ATA_Trace.h"
 
 #include "AbilitySystemComponent.h"
-#include "MaterialEditor/MaterialEditorInstanceConstant.h"
 
 AATA_Trace::AATA_Trace()
 {

@@ -28,6 +28,12 @@ public:
     UGI_Multiplayer();
 
     UFUNCTION(BlueprintCallable)
+    void StoreColors();
+
+    UFUNCTION(BlueprintCallable)
+    void SetGameMode();
+
+    UFUNCTION(BlueprintCallable)
         void Init();
 
     UFUNCTION(BlueprintCallable)
@@ -44,6 +50,10 @@ public:
 
     UFUNCTION(BlueprintCallable)
     static TMap<FString, int32> SortScoreBoard(TMap<FString, int32> UnsortedMap);
+
+    //map to store all of the colors and maped to the player names
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<FString, FVector> SavedColors;
 private:
 
     IOnlineSessionPtr SessionInterface;
