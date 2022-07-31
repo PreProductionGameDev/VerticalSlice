@@ -39,7 +39,8 @@ ABWeapon::ABWeapon()
 	WeaponMesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(FName("WeaponMesh1P"));
 	WeaponMesh1P->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	WeaponMesh1P->CastShadow = false;
-	WeaponMesh1P->SetVisibility(false, true);
+	WeaponMesh1P->SetVisibility(true, true);
+	WeaponMesh1P->bOnlyOwnerSee = true;
 	WeaponMesh1P->SetupAttachment(CollisionComp);
 	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
 
@@ -53,6 +54,7 @@ ABWeapon::ABWeapon()
 	WeaponMesh3P->SetRelativeLocation(WeaponMesh3PickupRelativeLocation);
 	WeaponMesh3P->CastShadow = true;
 	WeaponMesh3P->SetVisibility(true, true);
+	WeaponMesh3P->bOwnerNoSee = true;
 	WeaponMesh3P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
 
 	// Setup Weapon Gameplay Tags
@@ -110,15 +112,6 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 		// Disable Pickup Collision sphere
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		// If the Weapon is not equipped. Remove the shadow casting
-		if (OwningCharacter->GetCurrentWeapon() != this)
-		{
-			WeaponMesh3P->CastShadow = false;
-			// This has to be done like this otherwise a lingering shadow can be caused
-			WeaponMesh3P->SetVisibility(true, true);
-			WeaponMesh3P->SetVisibility(false, true);
-		}
-		
 	}
 	else
 	{
@@ -158,22 +151,20 @@ void ABWeapon::Equip()
 		// Attaches and sets correct display. Might need to tweak upon applying the models
 		WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
-		WeaponMesh1P->SetRelativeRotation(FRotator(0, 0, -90.0f));
-
-		WeaponMesh1P->SetVisibility(true, true);
+		WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
 	}
 
 	// Setup ThirdPerson Mesh if Valid
 	if (WeaponMesh3P)
 	{
+		if (OwningCharacter->GetThirdPersonMesh())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("YES MESH IS VALID?"));
+		}
 		// Attaches and sets correct display. Might need to tweak upon applying the models 
 		WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
-		WeaponMesh3P->SetRelativeRotation(FRotator(0, 0, -90.0f));
-
-		// This has to be done like this otherwise a lingering shadow can be caused
-		WeaponMesh3P->SetVisibility(true, true);
-		WeaponMesh3P->SetVisibility(false, true);
+		WeaponMesh3P->SetRelativeRotation(WeaponMesh3PEquippedRelativeRotation);
 	}
 	
 }
@@ -281,7 +272,6 @@ void ABWeapon::OnDropped_Implementation(FVector NewLocation)
 	if (WeaponMesh1P)
 	{
 		WeaponMesh1P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		WeaponMesh1P->SetVisibility(false, true);
 	}
 
 	// Enables ThirdPersonMesh for all clients
@@ -386,10 +376,7 @@ void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 	// Add the weapon to the inventory and disable Meshes
 	if (InCharacter->AddWeaponToInventory(this, true))
 	{
-		WeaponMesh3P->CastShadow = false;
-		// This has to be done like this otherwise a lingering shadow can be caused
-		WeaponMesh3P->SetVisibility(true, true);
-		WeaponMesh3P->SetVisibility(false, true);
+		
 	}
 }
 

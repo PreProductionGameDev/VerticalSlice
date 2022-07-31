@@ -168,9 +168,13 @@ protected:
 	// Relative Location of weapon 1P Mesh when equipped
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FVector WeaponMesh1PEquippedRelativeLocation;
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
+	FRotator WeaponMesh1PEquippedRelativeRotation;
 	// Relative Location of weapon 3P Mesh when equipped
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FVector WeaponMesh3PEquippedRelativeLocation;
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
+	FRotator WeaponMesh3PEquippedRelativeRotation;
 
 	// The Character who Owns this Weapon
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ShiitakeShowdown|GASWeapon")
