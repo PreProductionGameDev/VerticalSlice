@@ -133,9 +133,6 @@ protected:
 	// The Visible FirstPerson Mesh
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	USkeletalMeshComponent* FirstPersonMesh;
-	// The ThirdPerson Mesh
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	USkeletalMeshComponent* ThirdPersonMesh;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
