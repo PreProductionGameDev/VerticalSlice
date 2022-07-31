@@ -29,6 +29,9 @@ AFP_Character::AFP_Character()
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	FirstPersonMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+	FirstPersonMesh->SetupAttachment(FirstPersonCameraComponent);
+
 	// Add the Ability System Component
 	AbilitySystemComponent = CreateDefaultSubobject<UPlayerAbilitySystemComponent>(TEXT("Ability System"));
 	AbilitySystemComponent->SetIsReplicated(true);
