@@ -340,7 +340,7 @@ void AFP_Character::PostInitializeComponents()
 
 	/*		TODO: REMOVE THE COMMENT UPON THE COMPLETION OF THE NEW SYSTEM
 	 */
-	//GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
+	GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
 
 void AFP_Character::PossessedBy(AController* NewController)
