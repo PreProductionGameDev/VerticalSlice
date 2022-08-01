@@ -393,7 +393,7 @@ void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 		return;
 	}
 
-	// Add the weapon to the inventory and disable Meshes
+	// TODO: Add the weapon to the inventory and disable Meshes
 	if (InCharacter->AddWeaponToInventory(this, true))
 	{
 		
