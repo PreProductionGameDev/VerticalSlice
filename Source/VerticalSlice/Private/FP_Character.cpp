@@ -3,6 +3,7 @@
 
 #include "FP_Character.h"
 
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Core/Data.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
@@ -155,6 +156,13 @@ bool AFP_Character::IsAlive()
 {
 	// Tiny edge case taken into account
 	return Attributes->GetHealth() > 0.001f; 
+}
+
+bool AFP_Character::ClientClearWidgets()
+{
+	APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
+
+	return IsOwnedBy(LocalController) ? true : false;
 }
 
 FName AFP_Character::GetWeaponAttachPoint()
