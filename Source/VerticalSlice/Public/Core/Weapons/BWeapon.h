@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayAbilitySpec.h"
@@ -17,6 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponAmmoChangedDelegate, int32, 
 class AATA_LineTrace;
 class AFP_Character;
 class APlayerAbilitySystemComponent;
+class UCurveFloat;
 
 /*
  *		The Default Weapon Class using the GameplayAbility System
@@ -133,8 +135,11 @@ public:
 	class USoundCue* GetPickupSound() const;
 	
 	// Getter for LineTraceTargetActor. Spawns it if it doesn't exist yet.
-	UFUNCTION(BlueprintCallable, Category = "GASShooter|Targeting")
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Targeting")
 	AATA_LineTrace* GetLineTraceTargetActor();
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Recoil")
+	UCurveFloat* GetRecoilPattern();
 protected:
 	// The AbilitySystemComponent of the owning player
 	UPROPERTY()
@@ -149,6 +154,9 @@ protected:
 	// Infinite Ammo for Specific GameModes or Testing
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Ammo")
 	bool bInfiniteAmmo;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
+	UCurveFloat* RecoilPattern;
 
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)

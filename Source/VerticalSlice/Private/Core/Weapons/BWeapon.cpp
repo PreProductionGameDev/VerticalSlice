@@ -347,6 +347,11 @@ AATA_LineTrace* ABWeapon::GetLineTraceTargetActor()
 	return LineTraceTargetActor;
 }
 
+UCurveFloat* ABWeapon::GetRecoilPattern()
+{
+	return RecoilPattern;
+}
+
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values
