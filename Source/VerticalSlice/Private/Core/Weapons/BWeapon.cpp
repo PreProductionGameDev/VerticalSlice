@@ -362,6 +362,11 @@ float ABWeapon::GetTimeBetweenShots() const
 	return TimeBetweenShots;
 }
 
+float ABWeapon::GetRecoilCooldown() const
+{
+	return RecoilCooldownRate;
+}
+
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values

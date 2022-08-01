@@ -146,6 +146,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetTimeBetweenShots() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	float GetRecoilCooldown() const;
 	
 protected:
 	// The AbilitySystemComponent of the owning player
@@ -164,6 +167,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
 	UCurveVector* RecoilPattern;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
+	float RecoilCooldownRate;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
 	int32 AmmoCost;
