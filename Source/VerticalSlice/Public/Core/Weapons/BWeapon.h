@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayAbilitySpec.h"
@@ -17,6 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponAmmoChangedDelegate, int32, 
 class AATA_LineTrace;
 class AFP_Character;
 class APlayerAbilitySystemComponent;
+class UCurveVector;
 
 /*
  *		The Default Weapon Class using the GameplayAbility System
@@ -133,8 +135,21 @@ public:
 	class USoundCue* GetPickupSound() const;
 	
 	// Getter for LineTraceTargetActor. Spawns it if it doesn't exist yet.
-	UFUNCTION(BlueprintCallable, Category = "GASShooter|Targeting")
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Targeting")
 	AATA_LineTrace* GetLineTraceTargetActor();
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Recoil")
+	UCurveVector* GetRecoilPattern() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	int32 GetAmmoCost() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	float GetTimeBetweenShots() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	float GetRecoilCooldown() const;
+	
 protected:
 	// The AbilitySystemComponent of the owning player
 	UPROPERTY()
@@ -150,6 +165,18 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Ammo")
 	bool bInfiniteAmmo;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
+	UCurveVector* RecoilPattern;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
+	float RecoilCooldownRate;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	int32 AmmoCost;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	float TimeBetweenShots;
+	
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent* CollisionComp;

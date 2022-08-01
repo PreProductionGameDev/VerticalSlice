@@ -347,6 +347,26 @@ AATA_LineTrace* ABWeapon::GetLineTraceTargetActor()
 	return LineTraceTargetActor;
 }
 
+UCurveVector* ABWeapon::GetRecoilPattern() const
+{
+	return RecoilPattern;
+}
+
+int32 ABWeapon::GetAmmoCost() const
+{
+	return AmmoCost;
+}
+
+float ABWeapon::GetTimeBetweenShots() const
+{
+	return TimeBetweenShots;
+}
+
+float ABWeapon::GetRecoilCooldown() const
+{
+	return RecoilCooldownRate;
+}
+
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values
