@@ -18,7 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponAmmoChangedDelegate, int32, 
 class AATA_LineTrace;
 class AFP_Character;
 class APlayerAbilitySystemComponent;
-class UCurveFloat;
+class UCurveVector;
 
 /*
  *		The Default Weapon Class using the GameplayAbility System
@@ -139,7 +139,14 @@ public:
 	AATA_LineTrace* GetLineTraceTargetActor();
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Recoil")
-	UCurveFloat* GetRecoilPattern();
+	UCurveVector* GetRecoilPattern() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	int32 GetAmmoCost() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	float GetTimeBetweenShots() const;
+	
 protected:
 	// The AbilitySystemComponent of the owning player
 	UPROPERTY()
@@ -156,8 +163,14 @@ protected:
 	bool bInfiniteAmmo;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
-	UCurveFloat* RecoilPattern;
+	UCurveVector* RecoilPattern;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	int32 AmmoCost;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	float TimeBetweenShots;
+	
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent* CollisionComp;
