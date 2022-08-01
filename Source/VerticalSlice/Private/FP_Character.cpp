@@ -338,7 +338,7 @@ void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	/*		TODO: REMOVE THE COMMENT UPON THE COMPLETION OF THE NEW SYSTEM
+	/*		TODO: Fix the Default Inventory
 	 */
 	GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
