@@ -15,7 +15,9 @@ enum class EPlayerAbilityInputID : uint8
 	Reload,
 	Respawn,
 	FireAbility,
-	IceAbility
+	IceAbility,
+	FireMovement,
+	IceMovement
 };
 
 UENUM(BlueprintType)

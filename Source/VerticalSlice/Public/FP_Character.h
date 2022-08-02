@@ -76,6 +76,10 @@ public:
 	// Returns the Alive State of the Player
 	virtual bool IsAlive();
 
+	//clears the viewport if the client is owned by local controller
+	UFUNCTION(BlueprintCallable)
+	bool ClientClearWidgets();
+	
 	/*
 	 *	NEW WEAPON SYSTEM
 	 *	Improved the level of GAS Orientated Design
