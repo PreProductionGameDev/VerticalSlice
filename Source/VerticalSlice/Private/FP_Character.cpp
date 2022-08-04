@@ -3,7 +3,8 @@
 
 #include "FP_Character.h"
 
-//#include "Blueprint/WidgetLayoutLibrary.h"
+
+
 #include "Core/Data.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
@@ -160,9 +161,9 @@ bool AFP_Character::IsAlive()
 
 bool AFP_Character::ClientClearWidgets()
 {
-	APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
+	const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
 
-	return IsOwnedBy(LocalController) ? true : false;
+	return IsOwnedBy(LocalController);
 }
 
 FName AFP_Character::GetWeaponAttachPoint()
@@ -339,6 +340,20 @@ void AFP_Character::BeginPlay()
 	if (GetLocalRole() == ROLE_AutonomousProxy)
 	{
 		ServerSyncCurrentWeapon();
+	}
+
+	const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
+
+	if(IsOwnedBy(LocalController))
+	{
+		UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
+		if ( World && World->IsGameWorld() )
+		{
+			if ( UGameViewportClient* ViewportClient = World->GetGameViewport() )
+			{
+				ViewportClient->RemoveAllViewportWidgets();
+			}
+		}
 	}
 }
 
