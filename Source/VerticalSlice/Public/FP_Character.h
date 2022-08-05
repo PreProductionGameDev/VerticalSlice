@@ -190,7 +190,7 @@ protected:
 	TObjectPtr<UPlayerAttributeSet> Attributes;
 	// Players Ammo Attribute Set
 	TObjectPtr<UAmmoAttributeSet> AmmoAttributes;
-		
+	
 	/*
 	 *	NEW WEAPON SYSTEM
 	 *	Improved the level of GAS Orientated Design

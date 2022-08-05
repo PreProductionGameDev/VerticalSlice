@@ -148,10 +148,14 @@ void ABWeapon::Equip()
 	// Setup FirstPerson Mesh if Valid
 	if (WeaponMesh1P)
 	{
-		// Attaches and sets correct display. Might need to tweak upon applying the models
-		WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
-		WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
-		WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
+		if (OwningCharacter->GetFirstPersonMesh())
+		{
+			// TODO: SOLVE WARNINGS THIS THROWS CAUSE NO SKELETAL MESH 
+			// Attaches and sets correct display. Might need to tweak upon applying the models
+			WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
+			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
+		}
 	}
 
 	// Setup ThirdPerson Mesh if Valid
@@ -166,7 +170,6 @@ void ABWeapon::Equip()
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
 		WeaponMesh3P->SetRelativeRotation(WeaponMesh3PEquippedRelativeRotation);
 	}
-	
 }
 
 void ABWeapon::UnEquip()
