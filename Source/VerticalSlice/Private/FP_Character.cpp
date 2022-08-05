@@ -54,7 +54,6 @@ AFP_Character::AFP_Character()
 void AFP_Character::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AFP_Character, EquipedGun);
 
 	// Only replicate CurrentWeapon to simulated clients and manually sync CurrentWeapon with Owner when we're ready.
 	// This allows us to predict weapon changing.
@@ -113,17 +112,6 @@ float AFP_Character::GetMaxHealth()
 		return Attributes->GetMaxHealth();
 	}
 	return 1.f;
-}
-
-ABaseWeapon* AFP_Character::GetEquippedGun()
-{
-	// Returns Equipped Gun
-	// Legacy Code
-	if (!EquipedGun)
-	{
-		return nullptr;
-	}
-	return EquipedGun;
 }
 
 void AFP_Character::ClientCameraRotation_Implementation()
@@ -325,13 +313,6 @@ int32 AFP_Character::GetPrimaryReserveAmmo() const
 	}
 	return 0;
 }
-
-void AFP_Character::EquipGun(ABaseWeapon* const NewGun)
-{
-	EquipedGun = NewGun;
-	EquipedGun->OnEquip();
-}
-
 
 // Called when the game starts or when spawned
 void AFP_Character::BeginPlay()
