@@ -4,12 +4,14 @@
 #include "FP_Character.h"
 
 
-
+#include "Blueprint/UserWidget.h"
 #include "Core/Data.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
 #include "Core/PlayerGameplayAbility.h"
 #include "Core/Abilities/AttributeSets/AmmoAttributeSet.h"
+#include "Core/Player/FPPlayerController.h"
+#include "Core/UI/PlayerHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 
@@ -342,25 +344,25 @@ void AFP_Character::BeginPlay()
 		ServerSyncCurrentWeapon();
 	}
 
-	const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
+	//const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
 
-	if(IsOwnedBy(LocalController))
-	{
-		UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
-		if ( World && World->IsGameWorld() )
-		{
-			if ( UGameViewportClient* ViewportClient = World->GetGameViewport() )
-			{
-				ViewportClient->RemoveAllViewportWidgets();
-			}
-		}
-	}
+	//if(IsOwnedBy(LocalController))
+	//{
+	//	UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
+	//	if ( World && World->IsGameWorld() )
+	//	{
+	//		if ( UGameViewportClient* ViewportClient = World->GetGameViewport() )
+	//		{
+	//			ViewportClient->RemoveAllViewportWidgets();
+	//		}
+	//	}
+	//}
 }
 
 void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
+	
 	/*		TODO: Fix the Default Inventory
 	 */
 	GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
@@ -375,6 +377,12 @@ void AFP_Character::PossessedBy(AController* NewController)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AddStartupGameplayAbilities();
+	}
+
+	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->CreateHUD();
 	}
 }
 
@@ -465,7 +473,6 @@ void AFP_Character::HandleHealthChanged(float DeltaValue, const FGameplayTagCont
 	}
 }
 
-
 bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const
 {
 	// Finds the specific tag in the map and returns true if it is there.
@@ -509,10 +516,12 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 			AbilitySystemComponent->AddLooseGameplayTag(CurrentWeaponTag);
 		}
 
-		/*
-		 *	ADD UI AND AMMO FUNCTIONALITY HERE
-		 *	STILL NOT IMPLEMENTED YET
-		 */
+		AFPPlayerController* PlayerController = GetController<AFPPlayerController>();
+		if (PlayerController && PlayerController->IsLocalController())
+		{
+			PlayerController->SetPrimaryClipAmmo(CurrentWeapon->GetPrimaryClipAmmo());
+			PlayerController->SetPrimaryReserveAmmo(GetPrimaryReserveAmmo());
+		}
 
 		NewWeapon->OnPrimaryClipAmmoChanged.AddDynamic(this, &AFP_Character::CurrentWeaponPrimaryClipAmmoChanged);
 		
@@ -527,7 +536,7 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		if (Equip1PMontage && GetFirstPersonMesh())
 		{
 			GetFirstPersonMesh()->GetAnimInstance()->Montage_Play(Equip1PMontage);
-		}
+		}	
 
 		// Handle ThirdPerson Equip Montage
 		UAnimMontage* Equip3PMontage = CurrentWeapon->GetEquip3PMontage();
@@ -572,18 +581,18 @@ void AFP_Character::UnEquipCurrentWeapon()
 	CurrentWeapon = nullptr;
 
 	/*
-	 *		HANDLE AMMO SETUP AND ADDITION SETUP
+	 *		TODO:  HANDLE AMMO SETUP AND ADDITION SETUP
 	 *
 	 */
 }
 
 void AFP_Character::CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo)
 {
-	/*
-	 *	Used to Update Ammo UI
-	 *	Saves running off a Tick
-	 *
-	 */
+	AFPPlayerController* PlayerController = GetController<AFPPlayerController>();
+	if (PlayerController && PlayerController->IsLocalController())
+	{
+		PlayerController->SetPrimaryClipAmmo(NewPrimaryClipAmmo);
+	}
 }
 
 void AFP_Character::OnRep_CurrentWeapon(ABWeapon* LastWeapon)
@@ -638,8 +647,11 @@ bool AFP_Character::ClientSyncCurrentWeapon_Validate(ABWeapon* InWeapon)
 
 void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeChangeData& Data)
 {
-	// TODO: Update UI with New Reserve Ammo
-	//UE_LOG(LogTemp, Warning, TEXT("%s Reserve Ammo. %s Clip Ammo"), GetPrimaryReserveAmmo(), GetPrimaryClipAmmo());
+	AFPPlayerController* PlayerController = GetController<AFPPlayerController>();
+	if (PlayerController && PlayerController->IsLocalController())
+	{
+		PlayerController->SetPrimaryReserveAmmo(GetPrimaryReserveAmmo());
+	}
 }
 
 
