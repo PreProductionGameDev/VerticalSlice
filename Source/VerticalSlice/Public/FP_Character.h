@@ -10,7 +10,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "Core/Weapons/BaseWeapon.h"
 #include "Camera/CameraComponent.h"
 #include "Core/Weapons/BWeapon.h"
 
@@ -30,9 +29,6 @@ class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystem
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
 	UCameraComponent* FirstPersonCameraComponent;
 
-	UPROPERTY(EditAnywhere, Replicated)
-	TObjectPtr<ABaseWeapon> EquipedGun;
-	
 public:
 	// Sets default values for this character's properties
 	AFP_Character();
@@ -50,11 +46,7 @@ public:
 	// Return MaxHealth from AttributeSet
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxHealth();
-
-	// OLD WEAPON GETTER
-	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction = true))
-	ABaseWeapon* GetEquippedGun();
-
+	
 	// Set the Camera Rotation for the networked Players
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ClientCameraRotation();
@@ -126,12 +118,7 @@ public:
 	int32 GetMaxPrimaryClipAmmo() const;
 	// Returns the Equipped Weapons Reserve Ammo from the Attribute Set
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
-	int32 GetPrimaryReserveAmmo() const;
-
-	// OLD WEAPON PLEASE REMOVE
-	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction = true))
-	void EquipGun(ABaseWeapon* const NewGun);
-	
+	int32 GetPrimaryReserveAmmo() const;	
 	
 protected:
 	// The Visible FirstPerson Mesh
