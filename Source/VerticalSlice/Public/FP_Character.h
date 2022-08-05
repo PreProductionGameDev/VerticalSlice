@@ -135,6 +135,10 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
+	// Get the HUD from the Player Controller
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|UI")
+	class UPlayerHUD* GetPlayerHUD() const;
+	
 	// Returns the Ability System Component
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	// Adds all the Gameplay Abilities Pre-Set on the player

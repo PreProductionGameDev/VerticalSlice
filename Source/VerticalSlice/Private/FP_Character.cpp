@@ -325,19 +325,27 @@ void AFP_Character::BeginPlay()
 		ServerSyncCurrentWeapon();
 	}
 
-	//const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
+	const APlayerController* LocalController = UGameplayStatics::GetPlayerController(this,0);
 
-	//if(IsOwnedBy(LocalController))
-	//{
-	//	UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
-	//	if ( World && World->IsGameWorld() )
-	//	{
-	//		if ( UGameViewportClient* ViewportClient = World->GetGameViewport() )
-	//		{
-	//			ViewportClient->RemoveAllViewportWidgets();
-	//		}
-	//	}
-	//}
+	if(IsOwnedBy(LocalController))
+	{
+		// Clear the HUD. Used for Server Transitions
+		UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
+		if ( World && World->IsGameWorld() )
+		{
+			if ( UGameViewportClient* ViewportClient = World->GetGameViewport() )
+			{
+				ViewportClient->RemoveAllViewportWidgets();
+			}
+		}
+	}
+	// Create the PlayerHUD onto the controller.
+	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->CreateHUD();
+	}
+	
 }
 
 void AFP_Character::PostInitializeComponents()
@@ -359,7 +367,7 @@ void AFP_Character::PossessedBy(AController* NewController)
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AddStartupGameplayAbilities();
 	}
-
+	// Create the PlayerHUD onto the controller.
 	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
 	if (PlayerController)
 	{
@@ -386,6 +394,17 @@ void AFP_Character::OnRep_PlayerState()
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, Binds);
 	}
 	
+}
+
+UPlayerHUD* AFP_Character::GetPlayerHUD() const
+{
+	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
+	if (PlayerController)
+	{
+		return PlayerController->GetPlayerHUD();
+	}
+
+	return nullptr;
 }
 
 UAbilitySystemComponent* AFP_Character::GetAbilitySystemComponent() const

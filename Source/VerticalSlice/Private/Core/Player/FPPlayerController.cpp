@@ -45,7 +45,7 @@ void AFPPlayerController::CreateHUD()
 	
 }
 
-UPlayerHUD* AFPPlayerController::GetPlayerHUD()
+UPlayerHUD* AFPPlayerController::GetPlayerHUD() const 
 {
 	return UIHUDWidget;
 }
