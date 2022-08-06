@@ -172,6 +172,18 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 	// If the weapon is in the inventory, pickup just ammo.
 	if (DoesWeaponExistInInventory(NewWeapon))
 	{
+
+		// Check if Reserve Ammo is Max
+		const FGameplayAttribute ReserveAttribute = AmmoAttributes->GetReserveAmmoAttributeFromTag(NewWeapon->PrimaryAmmoType);
+		const FGameplayAttribute MaxReserveAttribute = AmmoAttributes->GetMaxReserveAmmoAttributeFromTag(NewWeapon->PrimaryAmmoType);
+		if (ReserveAttribute.IsValid() && MaxReserveAttribute.IsValid())
+		{
+			if (AbilitySystemComponent->GetNumericAttribute(ReserveAttribute) == AbilitySystemComponent->GetNumericAttribute(MaxReserveAttribute))
+			{
+				return false;
+			}
+		}
+		
 		// Play the pickup audio if playing locally
 		USoundCue* PickupSound = NewWeapon->GetPickupSound();
 		if (PickupSound && IsLocallyControlled())
