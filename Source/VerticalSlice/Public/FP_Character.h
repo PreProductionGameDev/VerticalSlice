@@ -209,7 +209,6 @@ protected:
 	void UnEquipWeapon(ABWeapon* WeaponToUnEquip);
 	// UnEquips the current Weapon. Used for dropping.
 	void UnEquipCurrentWeapon();
-	// TODO: ADD IMPLEMENTATION UPON ADDING THE AMMO SYSTEM 
 	UFUNCTION()
 	virtual void CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo);
 

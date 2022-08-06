@@ -394,7 +394,7 @@ void AFP_Character::PossessedBy(AController* NewController)
 	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
 	if (PlayerController)
 	{
-		PlayerController->CreateHUD();
+		//PlayerController->CreateHUD();
 	}
 }
 
@@ -607,6 +607,11 @@ void AFP_Character::UnEquipCurrentWeapon()
 	 *		TODO:  HANDLE AMMO SETUP AND ADDITION SETUP
 	 *
 	 */
+	if (AFPPlayerController* PC = GetController<AFPPlayerController>(); PC && PC->IsLocalController())
+	{
+		PC->SetPrimaryClipAmmo(0);
+		PC->SetPrimaryReserveAmmo(0);
+	}
 }
 
 void AFP_Character::CurrentWeaponPrimaryClipAmmoChanged(int32 OldPrimaryClipAmmo, int32 NewPrimaryClipAmmo)
