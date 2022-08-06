@@ -27,9 +27,7 @@ void AFPPlayerController::CreateHUD()
 	// Create the HUD and apply to Player Controller
 	UIHUDWidget = CreateWidget<UPlayerHUD>(this, UIHUDWidgetClass);
 	UIHUDWidget->AddToViewport();
-
-	// TODO: Set Default Attributes for Health once setup
-
+	
 	// Get the Ammo Values from the Player
 	AFP_Character* CurrentPlayer = GetPawn<AFP_Character>();
 	if (CurrentPlayer)
@@ -45,7 +43,7 @@ void AFPPlayerController::CreateHUD()
 	
 }
 
-UPlayerHUD* AFPPlayerController::GetPlayerHUD()
+UPlayerHUD* AFPPlayerController::GetPlayerHUD() const 
 {
 	return UIHUDWidget;
 }

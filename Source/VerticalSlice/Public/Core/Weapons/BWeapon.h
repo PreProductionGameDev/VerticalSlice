@@ -149,6 +149,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetRecoilCooldown() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShodown|UI")
+	class UTexture2D* GetUITexture() const;
 	
 protected:
 	// The AbilitySystemComponent of the owning player
@@ -228,6 +231,9 @@ protected:
 	// Sound Played when Picked up
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* PickupSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|UI")
+	class UTexture2D* WeaponIcon;
 
 	// Cached Gameplay Tags
 	FGameplayTag WeaponPrimaryInstantAbilityTag;

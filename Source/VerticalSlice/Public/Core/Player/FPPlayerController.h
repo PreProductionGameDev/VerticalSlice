@@ -22,7 +22,7 @@ public:
 	void CreateHUD();
 	// Return the Created HUD
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|UI")
-	class UPlayerHUD* GetPlayerHUD();
+	class UPlayerHUD* GetPlayerHUD() const;
 
 	/*
 	 *	AMMO AND WEAPON FUNCTIONS
