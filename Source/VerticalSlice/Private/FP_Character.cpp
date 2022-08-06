@@ -26,6 +26,7 @@ AFP_Character::AFP_Character()
 	NoWeaponTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.None"));
 	WeaponAbilityTag = FGameplayTag::RequestGameplayTag(FName("Ability.Weapon"));
 	CurrentWeaponTag = NoWeaponTag;
+	WeaponAmmoNoneTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.None"));
 
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -182,12 +183,26 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 		{
 			return false;
 		}
+		
+		// Using Dynamic Instant Gameplay Effect to give the weapon ammo
+		UGameplayEffect* GEAmmoPickup = NewObject<UGameplayEffect>(GetTransientPackage(), FName(TEXT("AmmoPickup")));
+		// Create the Dynamic Instant Gameplay Effect
+		if (NewWeapon->PrimaryAmmoType != WeaponAmmoNoneTag)
+		{
+			int32 ID = GEAmmoPickup->Modifiers.Num();
+			GEAmmoPickup->Modifiers.SetNum(ID + 1);
+			FGameplayModifierInfo& InfoAmmo = GEAmmoPickup->Modifiers[ID];
+			// Add A Clip amount to the ammo pool
+			InfoAmmo.ModifierMagnitude = FScalableFloat(NewWeapon->GetPrimaryClipAmmo());
+			InfoAmmo.ModifierOp = EGameplayModOp::Additive;
+			InfoAmmo.Attribute = UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(NewWeapon->PrimaryAmmoType);
+		}
 
-		/*
-		 *	TODO: SET UP AMMO PICKUP
-		 *
-		 */
-
+		if (GEAmmoPickup->Modifiers.Num() > 0)
+		{
+			AbilitySystemComponent->ApplyGameplayEffectToSelf(GEAmmoPickup, 1.0f, AbilitySystemComponent->MakeEffectContext());
+		}
+		
 		// Destroy Entity since only ammo is collected
 		NewWeapon->Destroy();
 		return false;
@@ -340,8 +355,7 @@ void AFP_Character::BeginPlay()
 		}
 	}
 	// Create the PlayerHUD onto the controller.
-	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
-	if (PlayerController)
+	if (AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController()))
 	{
 		PlayerController->CreateHUD();
 	}
@@ -351,9 +365,6 @@ void AFP_Character::BeginPlay()
 void AFP_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	
-	/*		TODO: Fix the Default Inventory
-	 */
 	GetWorldTimerManager().SetTimerForNextTick(this, &AFP_Character::SpawnDefaultInventory);
 }
 
@@ -516,6 +527,7 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 			AbilitySystemComponent->AddLooseGameplayTag(CurrentWeaponTag);
 		}
 
+		// Set the Ammo Values onto the HUD
 		AFPPlayerController* PlayerController = GetController<AFPPlayerController>();
 		if (PlayerController && PlayerController->IsLocalController())
 		{
@@ -523,21 +535,20 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 			PlayerController->SetPrimaryReserveAmmo(GetPrimaryReserveAmmo());
 		}
 
-		NewWeapon->OnPrimaryClipAmmoChanged.AddDynamic(this, &AFP_Character::CurrentWeaponPrimaryClipAmmoChanged);
-		
 		// Setup Ammo Changed Delegates for UI changes
+		NewWeapon->OnPrimaryClipAmmoChanged.AddDynamic(this, &AFP_Character::CurrentWeaponPrimaryClipAmmoChanged);
 		if (AbilitySystemComponent)
 		{
 			PrimaryReserveAmmoChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(CurrentWeapon->PrimaryAmmoType)).AddUObject(this, &AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged);
 		}
 
 		// Handle FirstPerson Equip Montage
+		// TODO: Weapon Equip Animations
 		UAnimMontage* Equip1PMontage = CurrentWeapon->GetEquip1PMontage();
 		if (Equip1PMontage && GetFirstPersonMesh())
 		{
 			GetFirstPersonMesh()->GetAnimInstance()->Montage_Play(Equip1PMontage);
 		}	
-
 		// Handle ThirdPerson Equip Montage
 		UAnimMontage* Equip3PMontage = CurrentWeapon->GetEquip3PMontage();
 		if (Equip3PMontage && GetThirdPersonMesh())
@@ -609,16 +620,16 @@ void AFP_Character::SpawnDefaultInventory()
 		return;
 	}
 
-	/*
-	 *		TODO: Overhaul and Make this a loop to properly equip all default weapons
-	 *
-	 */
-	if (DefaultInventoryWeapons.Num() > 0)
+	// Cycle through all Weapons and add them all in
+	// Only Equip the First Weapon
+	for (auto WeaponToAdd: DefaultInventoryWeapons)
 	{
-		ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(DefaultInventoryWeapons[0], FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+		ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(WeaponToAdd, FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		NewWeapon->bSpawnWithCollision = false;
 		NewWeapon->FinishSpawning(FTransform::Identity);
-		AddWeaponToInventory(NewWeapon, true);
+
+		const bool bEquipFirstWeapon = WeaponToAdd == DefaultInventoryWeapons[0];
+		AddWeaponToInventory(NewWeapon, bEquipFirstWeapon);
 	}
 }
 

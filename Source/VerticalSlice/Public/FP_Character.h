@@ -250,6 +250,7 @@ protected:
 	FGameplayTag CurrentWeaponTag;
 	FGameplayTag NoWeaponTag;
 	FGameplayTag WeaponAbilityTag;
+	FGameplayTag WeaponAmmoNoneTag;
 
 private:
 	// Movement Functions
