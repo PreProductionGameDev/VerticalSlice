@@ -6,10 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerHUD.generated.h"
 
-/**
+/**	
  *		THE NEW PLAYER HUD CLASS (Now in C++!)
  *		Override all functions in blueprints for the UI
- *		TODO: Add Health, ability functionality 
  */
 UCLASS()
 class VERTICALSLICE_API UPlayerHUD : public UUserWidget
@@ -29,11 +28,13 @@ public:
 	void SetAbilityCooldown(FTimerHandle AbilityTimerHandle);
 	
 	// WEAPON FUNCTIONS
+	// Set the Weapon Icon
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetWeaponIcon(UTexture2D* NewTexture);
 	// Set the Primary Clip Ammo
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetPrimaryClipAmmo(int32 ClipAmmo);
 	// Set the Primary Reserve Ammo
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetPrimaryReserveAmmo(int32 ReserveAmmo);
-	
 };

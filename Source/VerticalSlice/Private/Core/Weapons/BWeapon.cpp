@@ -370,6 +370,11 @@ float ABWeapon::GetRecoilCooldown() const
 	return RecoilCooldownRate;
 }
 
+UTexture2D* ABWeapon::GetUITexture() const
+{
+	return WeaponIcon;
+}
+
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values
