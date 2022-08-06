@@ -152,7 +152,14 @@ void ABWeapon::Equip()
 		{
 			// TODO: SOLVE WARNINGS THIS THROWS CAUSE NO SKELETAL MESH 
 			// Attaches and sets correct display. Might need to tweak upon applying the models
-			WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+			if (OwningCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
+			{
+				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+			}
+			else
+			{
+				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+			}
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
 		}
@@ -161,12 +168,16 @@ void ABWeapon::Equip()
 	// Setup ThirdPerson Mesh if Valid
 	if (WeaponMesh3P)
 	{
-		if (OwningCharacter->GetThirdPersonMesh())
+		// Attaches and sets correct display. Might need to tweak upon applying the models
+		if (OwningCharacter->GetThirdPersonMesh()->DoesSocketExist(AttachPoint))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("YES MESH IS VALID?"));
+			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
 		}
-		// Attaches and sets correct display. Might need to tweak upon applying the models 
-		WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+		else
+		{
+			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		}
+			
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
 		WeaponMesh3P->SetRelativeRotation(WeaponMesh3PEquippedRelativeRotation);
 	}
@@ -368,6 +379,11 @@ float ABWeapon::GetTimeBetweenShots() const
 float ABWeapon::GetRecoilCooldown() const
 {
 	return RecoilCooldownRate;
+}
+
+UTexture2D* ABWeapon::GetUITexture() const
+{
+	return WeaponIcon;
 }
 
 void ABWeapon::BeginPlay()
