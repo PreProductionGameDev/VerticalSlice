@@ -37,4 +37,7 @@ public:
 	// Set the Primary Reserve Ammo
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetPrimaryReserveAmmo(int32 ReserveAmmo);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void MakeHitMarker(bool PlayerKilled);
 };

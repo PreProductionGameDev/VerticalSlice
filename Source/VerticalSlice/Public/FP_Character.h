@@ -110,6 +110,9 @@ public:
 	 * Have not been setup yet.
 	 */
 
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void CreateHitMarker(bool isHit);
+
 	// Return the Equipped Weapons PrimaryClip Ammo
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	int32 GetPrimaryClipAmmo() const;
