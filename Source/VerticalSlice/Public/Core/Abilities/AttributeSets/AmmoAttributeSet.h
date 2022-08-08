@@ -43,6 +43,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxSMGReserveAmmo)
 	FGameplayAttributeData MaxSMGReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSMGReserveAmmo)
+
+	// Shotgun Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_ShotgunReserveAmmo)
+	FGameplayAttributeData ShotgunReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, ShotgunReserveAmmo)
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxShotgunReserveAmmo)
+	FGameplayAttributeData MaxShotgunReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxShotgunReserveAmmo)
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
@@ -53,6 +62,7 @@ public:
 protected:
 	// Cached Gameplay Tags
 	FGameplayTag SMGAmmoTag;
+	FGameplayTag ShotgunAmmoTag;
 
 	// OnRep Functions are used to make sure the AbilitySystem Internal Representations are Synchronized properly during Replication
 	// SMG OnRep()
@@ -60,4 +70,9 @@ protected:
 	virtual void OnRep_SMGReserveAmmo(const FGameplayAttributeData& OldSMGReserveAmmo);
 	UFUNCTION()
 	virtual void OnRep_MaxSMGReserveAmmo(const FGameplayAttributeData& OldMaxSMGReserveAmmo);
+	// Shotgun OnRep()
+	UFUNCTION()
+	virtual void OnRep_ShotgunReserveAmmo(const FGameplayAttributeData& OldShotgunReserveAmmo);
+	UFUNCTION()
+	virtual void OnRep_MaxShotgunReserveAmmo(const FGameplayAttributeData& OldMaxShotgunReserveAmmo);
 };
