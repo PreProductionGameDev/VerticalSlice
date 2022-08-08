@@ -9,7 +9,7 @@
 void AFPPlayerController::CreateHUD()
 {
 	// Only need to create the HUD once
-	if (UIHUDWidget)
+	if (GetPlayerHUD())
 	{
 		return;
 	}
@@ -45,7 +45,11 @@ void AFPPlayerController::CreateHUD()
 
 UPlayerHUD* AFPPlayerController::GetPlayerHUD() const 
 {
-	return UIHUDWidget;
+	if(UIHUDWidget)
+	{
+		return UIHUDWidget->IsInViewport() ? UIHUDWidget : nullptr;
+	}
+	return nullptr;
 }
 
 void AFPPlayerController::SetPrimaryClipAmmo(int32 ClipAmmo)
@@ -72,7 +76,4 @@ void AFPPlayerController::OnPossess(APawn* InPawn)
 void AFPPlayerController::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-
-	// For Minor Edge Cases on PlayerState is Rep before possession
-	CreateHUD();
 }
