@@ -22,6 +22,7 @@ enum class EPlayerAbilityInputID : uint8
 	LightningMovement
 };
 
+
 UENUM(BlueprintType)
 enum class EElements : uint8
 {
@@ -30,3 +31,5 @@ enum class EElements : uint8
 	Elem_Ice		UMETA(DisplayName = "Ice"),
 	Elem_Earth		UMETA(DisplayName = "Earth")
 };
+
+
