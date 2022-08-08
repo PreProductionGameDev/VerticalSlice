@@ -309,6 +309,11 @@ bool AFP_Character::ServerEquipWeapon_Validate(ABWeapon* NewWeapon)
 	return true;
 }
 
+void AFP_Character::CreateHitMarker_Implementation(bool isHit)
+{
+	GetPlayerHUD()->MakeHitMarker(isHit);
+}
+
 int32 AFP_Character::GetPrimaryClipAmmo() const
 {
 	if (CurrentWeapon)
