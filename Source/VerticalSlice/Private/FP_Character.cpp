@@ -399,7 +399,7 @@ void AFP_Character::PossessedBy(AController* NewController)
 	AFPPlayerController* PlayerController = Cast<AFPPlayerController>(GetController());
 	if (PlayerController)
 	{
-		//PlayerController->CreateHUD();
+		PlayerController->CreateHUD();
 	}
 }
 
