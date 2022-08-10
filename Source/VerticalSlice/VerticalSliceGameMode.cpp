@@ -16,6 +16,7 @@ AVerticalSliceGameMode::AVerticalSliceGameMode()
 
 void AVerticalSliceGameMode::ServerTravel(FString Map)
 {
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *Map);
 	UWorld* World = GetWorld();
 	bUseSeamlessTravel = true;
 	World->ServerTravel(Map);
