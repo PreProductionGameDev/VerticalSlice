@@ -502,6 +502,21 @@ void AFP_Character::HandleHealthChanged(float DeltaValue, const FGameplayTagCont
 	}
 }
 
+void AFP_Character::SwapToWeaponOnTag(FGameplayTag WeaponTag)
+{
+	if (!WeaponInventory.Contains(WeaponTag))
+	{
+		return;
+	}
+
+	if (CurrentWeapon == WeaponInventory.FindRef(WeaponTag))
+	{
+		return;
+	}
+
+	SetCurrentWeapon(WeaponInventory.FindRef(WeaponTag), CurrentWeapon);
+}
+
 bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const
 {
 	// Finds the specific tag in the map and returns true if it is there.
