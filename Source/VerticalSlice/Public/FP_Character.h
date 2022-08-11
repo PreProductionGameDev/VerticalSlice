@@ -84,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	ABWeapon* GetCurrentWeapon() const;
 
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void EquipWeaponTag(FGameplayTag WeaponToEquip);
+	
 	// Adds a new weapon to the inventory.
 	// Will return false if weapon already exists in inventory
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
@@ -105,6 +108,9 @@ public:
 	void ServerEquipWeapon_Implementation(ABWeapon* NewWeapon);
 	bool ServerEquipWeapon_Validate(ABWeapon* NewWeapon);
 
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void DefaultInventory();
+	
 	/*
 	 * TODO: Cycling Between Weapons requires additional logic
 	 * Have not been setup yet.

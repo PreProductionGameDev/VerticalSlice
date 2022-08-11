@@ -253,9 +253,7 @@ bool AFP_Character::RemoveWeaponFromInventory(ABWeapon* WeaponToRemove)
 
 		// Remove the Weapon and Reset Weapon information
 		WeaponInventory.Remove(WeaponToRemove->WeaponTag);
-		WeaponToRemove->RemoveAbilities();
-		WeaponToRemove->SetOwningCharacter(nullptr);
-		WeaponToRemove->ResetWeapon();
+		WeaponToRemove->DeleteWeapon();
 
 		// Currently Does not handle drop
 		// TODO: Discuss and possibly setup Functionality for Drop
@@ -276,11 +274,14 @@ void AFP_Character::RemoveAllWeaponsFromInventory()
 	// UnEquips Current Weapon
 	UnEquipCurrentWeapon();
 
-	// Cycles through and removes all weapons from inventory. Might not work as intended
-	for (auto It = WeaponInventory.end(); It == WeaponInventory.begin();)
+	TArray<FGameplayTag> WeaponKeys;
+	WeaponInventory.GetKeys(WeaponKeys);
+
+	for (FGameplayTag WeaponKey : WeaponKeys)
 	{
-		RemoveWeaponFromInventory(It.Value());
+		RemoveWeaponFromInventory(WeaponInventory.FindRef(WeaponKey));
 	}
+	WeaponInventory.Empty();
 }
 
 void AFP_Character::EquipWeapon(ABWeapon* NewWeapon)
