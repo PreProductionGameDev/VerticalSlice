@@ -109,6 +109,8 @@ public:
 	virtual void OnDropped_Implementation(FVector NewLocation);
 	virtual bool OnDropped_Validate(FVector NewLocation);
 
+	void DeleteWeapon();
+	
 	// Primary AmmoClip Functions
 	// Getters and Setters
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|GASWeapon")

@@ -303,6 +303,14 @@ bool ABWeapon::OnDropped_Validate(FVector NewLocation)
 	return true;
 }
 
+void ABWeapon::DeleteWeapon()
+{
+	RemoveAbilities();
+	SetOwningCharacter(nullptr);
+	ResetWeapon();
+	Destroy();
+}
+
 int32 ABWeapon::GetPrimaryClipAmmo() const
 {
 	return PrimaryClipAmmo;
