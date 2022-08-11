@@ -25,6 +25,6 @@ struct FElementInfo
 
  //Ability HUD component
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
- UTexture* Texture;
+ UTexture2D* Texture;
  
 };

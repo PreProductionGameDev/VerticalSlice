@@ -26,6 +26,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetAbilityCooldown(FTimerHandle AbilityTimerHandle);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetElementIcons(UTexture2D* ElementOne, UTexture2D* ElementTwo);
 	
 	// WEAPON FUNCTIONS
 	// Set the Weapon Icon
