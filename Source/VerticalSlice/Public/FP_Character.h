@@ -196,7 +196,10 @@ protected:
 	// The Players Weapons Inventory.
 	// Access each weapon by its Gameplay Tag
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|Weapon")
-	TMap<FGameplayTag, ABWeapon*> WeaponInventory;
+	TMap<FGameplayTag, ABWeapon*> WeaponInventory;	
+	// Array of Weapon order
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowDown|Weapon")
+	TArray<FGameplayTag> WeaponOrder;
 	// The Currently Equipped Weapon
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeapon)
 	ABWeapon* CurrentWeapon = nullptr;
@@ -204,6 +207,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName WeaponAttachPoint;
 
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void SwapToWeaponOnTag(FGameplayTag WeaponTag);
 	// Returns true if the weapon exists in the inventory.
 	bool DoesWeaponExistInInventory(const ABWeapon* InWeapon) const;
 	// Swap Between weapons
