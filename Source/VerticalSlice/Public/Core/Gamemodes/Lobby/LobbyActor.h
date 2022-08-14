@@ -52,4 +52,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable )
 	void OnRep_SetHue3();
 
+	UPROPERTY(ReplicatedUsing=OnRep_SetCurrentMesh, EditAnywhere, BlueprintReadWrite)
+	int DoRep_CurrentMesh;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnRep_SetCurrentMesh();
+
 };

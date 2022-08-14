@@ -35,6 +35,24 @@ void UGI_Multiplayer::StoreColors()
     }
 }
 
+void UGI_Multiplayer::StoreModels()
+{
+    //gets all of the lobby actors
+    TArray<AActor*> Actors;
+    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
+    
+    //go through the array and match each user name to the player color and add it to the map
+    for(AActor* Actor: Actors)
+    {
+        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
+        if(Controller!= nullptr)
+        {
+            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
+            SavedModels.Add(Controller->PlayerState->GetPlayerName(), LobbyActor->DoRep_CurrentMesh);
+        }
+    }
+}
+
 void UGI_Multiplayer::SetGameMode()
 {
     
