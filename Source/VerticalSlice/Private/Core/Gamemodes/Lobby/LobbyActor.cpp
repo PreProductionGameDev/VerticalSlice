@@ -36,6 +36,7 @@ void ALobbyActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue1, COND_None );
 	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue2 ,COND_None );
 	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_Hue3 ,COND_None );
+	DOREPLIFETIME_CONDITION(ALobbyActor,DoRep_CurrentMesh ,COND_None );
 
 }
 

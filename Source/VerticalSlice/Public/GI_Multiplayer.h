@@ -31,6 +31,9 @@ public:
     void StoreColors();
 
     UFUNCTION(BlueprintCallable)
+    void StoreModels();
+
+    UFUNCTION(BlueprintCallable)
     void SetGameMode();
 
     UFUNCTION(BlueprintCallable)
@@ -54,6 +57,9 @@ public:
     //map to store all of the colors and maped to the player names
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, FVector> SavedColors;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<FString, int32> SavedModels;
 private:
 
     IOnlineSessionPtr SessionInterface;
