@@ -3,6 +3,7 @@
 
 #include "Core/PlayerGameplayAbility.h"
 
+#include "FP_Character.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 
 UPlayerGameplayAbility::UPlayerGameplayAbility()
@@ -23,6 +24,23 @@ bool UPlayerGameplayAbility::BatchRPCTryActivateAbility(FGameplayAbilitySpecHand
 	}
 
 	return false;
+}
+
+bool UPlayerGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (bSourceObjectMustBeCurrentWeaponToActivate)
+	{
+		AFP_Character* Player = Cast<AFP_Character>(ActorInfo->AvatarActor);
+		if (Player && Player->GetCurrentWeapon() && Cast<UObject>(Player->GetCurrentWeapon()) == GetSourceObject(Handle, ActorInfo))
+		{
+			return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 void UPlayerGameplayAbility::ExternalEndAbility()

@@ -38,9 +38,9 @@ ABWeapon::ABWeapon()
 	// First Person Mesh Setup
 	WeaponMesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(FName("WeaponMesh1P"));
 	WeaponMesh1P->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	WeaponMesh1P->CastShadow = false;
-	WeaponMesh1P->SetVisibility(true, true);
 	WeaponMesh1P->bOnlyOwnerSee = true;
+	WeaponMesh1P->CastShadow = false;
+	WeaponMesh1P->SetVisibility(false, true);
 	WeaponMesh1P->SetupAttachment(CollisionComp);
 	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
 
@@ -111,7 +111,6 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		// Disable Pickup Collision sphere
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 	}
 	else
 	{
@@ -148,6 +147,7 @@ void ABWeapon::Equip()
 	// Setup FirstPerson Mesh if Valid
 	if (WeaponMesh1P)
 	{
+		WeaponMesh1P->SetVisibility(true, true);
 		if (OwningCharacter->GetFirstPersonMesh())
 		{
 			// TODO: SOLVE WARNINGS THIS THROWS CAUSE NO SKELETAL MESH 
@@ -168,6 +168,7 @@ void ABWeapon::Equip()
 	// Setup ThirdPerson Mesh if Valid
 	if (WeaponMesh3P)
 	{
+		WeaponMesh3P->SetVisibility(true, true);
 		// Attaches and sets correct display. Might need to tweak upon applying the models
 		if (OwningCharacter->GetThirdPersonMesh()->DoesSocketExist(AttachPoint))
 		{
