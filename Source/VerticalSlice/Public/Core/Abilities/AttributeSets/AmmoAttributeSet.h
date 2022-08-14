@@ -33,25 +33,36 @@ class VERTICALSLICE_API UAmmoAttributeSet : public UAttributeSet
 
 public:
 	UAmmoAttributeSet();
-
+#pragma region SMG_Values
 	// SMG Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_SMGReserveAmmo)
 	FGameplayAttributeData SMGReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, SMGReserveAmmo)
-
 	// SMG Max Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxSMGReserveAmmo)
 	FGameplayAttributeData MaxSMGReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSMGReserveAmmo)
-
+#pragma endregion SMG_Values
+#pragma region Shotgun_Values
 	// Shotgun Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_ShotgunReserveAmmo)
 	FGameplayAttributeData ShotgunReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, ShotgunReserveAmmo)
-
+	// Shotgun Max Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxShotgunReserveAmmo)
 	FGameplayAttributeData MaxShotgunReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxShotgunReserveAmmo)
+#pragma endregion Shotgun_Values
+#pragma region Sniper_Values
+	// Sniper Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_SniperReserveAmmo)
+	FGameplayAttributeData SniperReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, SniperReserveAmmo)
+	// Sniper Max Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxSniperReserveAmmo)
+	FGameplayAttributeData MaxSniperReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSniperReserveAmmo)
+#pragma endregion Sniper_Values
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
@@ -63,6 +74,7 @@ protected:
 	// Cached Gameplay Tags
 	FGameplayTag SMGAmmoTag;
 	FGameplayTag ShotgunAmmoTag;
+	FGameplayTag SniperAmmoTag;
 
 	// OnRep Functions are used to make sure the AbilitySystem Internal Representations are Synchronized properly during Replication
 	// SMG OnRep()
@@ -75,4 +87,9 @@ protected:
 	virtual void OnRep_ShotgunReserveAmmo(const FGameplayAttributeData& OldShotgunReserveAmmo);
 	UFUNCTION()
 	virtual void OnRep_MaxShotgunReserveAmmo(const FGameplayAttributeData& OldMaxShotgunReserveAmmo);
+	// Sniper OnRep()
+	UFUNCTION()
+	virtual void OnRep_SniperReserveAmmo(const FGameplayAttributeData& OldSniperReserveAmmo);
+	UFUNCTION()
+	virtual void OnRep_MaxSniperReserveAmmo(const FGameplayAttributeData& OldMaxSniperReserveAmmo);
 };
