@@ -502,19 +502,38 @@ void AFP_Character::HandleHealthChanged(float DeltaValue, const FGameplayTagCont
 	}
 }
 
+void AFP_Character::ServerSetWeaponOnTag_Implementation(FGameplayTag WeaponTag)
+{
+	SwapToWeaponOnTag(WeaponTag);
+}
+
+bool AFP_Character::ServerSetWeaponOnTag_Validate()
+{
+	return true;
+}
+
+void AFP_Character::ClientSetWeapon_Implementation(ABWeapon* WeaponToEquip)
+{
+	EquipWeapon(WeaponToEquip);
+}
+
 void AFP_Character::SwapToWeaponOnTag(FGameplayTag WeaponTag)
 {
 	if (!WeaponInventory.Contains(WeaponTag))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("NO WEAPON TAG"));
 		return;
 	}
 
 	if (CurrentWeapon == WeaponInventory.FindRef(WeaponTag))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("WEAPON IS CURRENT WEAPON"));
 		return;
 	}
 
-	SetCurrentWeapon(WeaponInventory.FindRef(WeaponTag), CurrentWeapon);
+	UE_LOG(LogTemp, Warning, TEXT("CALLED EQUIP WEAPON. ISSUE MUST BE HERE"));
+	ClientSetWeapon(WeaponInventory.FindRef(WeaponTag));
+	//SetCurrentWeapon(WeaponInventory.FindRef(WeaponTag), CurrentWeapon);
 }
 
 bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const

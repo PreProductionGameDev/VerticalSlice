@@ -207,6 +207,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName WeaponAttachPoint;
 
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void ServerSetWeaponOnTag(FGameplayTag WeaponTag);
+	void ServerSetWeaponOnTag_Implementation(FGameplayTag WeaponTag);
+	bool ServerSetWeaponOnTag_Validate();
+
+	UFUNCTION(Client, Reliable)
+	void ClientSetWeapon(ABWeapon* WeaponToEquip);
+	void ClientSetWeapon_Implementation(ABWeapon* WeaponToEquip);
+	
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	void SwapToWeaponOnTag(FGameplayTag WeaponTag);
 	// Returns true if the weapon exists in the inventory.

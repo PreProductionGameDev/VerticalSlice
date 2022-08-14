@@ -54,6 +54,7 @@ ABWeapon::ABWeapon()
 	WeaponMesh3P->SetRelativeLocation(WeaponMesh3PickupRelativeLocation);
 	WeaponMesh3P->CastShadow = true;
 	WeaponMesh3P->SetVisibility(true, true);
+	WeaponMesh3P->SetVisibility(false, true);
 	WeaponMesh3P->bOwnerNoSee = true;
 	WeaponMesh3P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
 
@@ -111,6 +112,16 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		// Disable Pickup Collision sphere
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (OwningCharacter->GetCurrentWeapon() != this)
+		{
+			WeaponMesh1P->SetVisibility(false, true);
+
+			// Shadows can often appear with a set straight to false. This ensures no shadows 
+			WeaponMesh3P->CastShadow = false;
+			WeaponMesh3P->SetVisibility(true, true);
+			WeaponMesh3P->SetVisibility(false, true);
+		}
 	}
 	else
 	{
@@ -404,6 +415,8 @@ void ABWeapon::BeginPlay()
 	{
 		// Spawned into the world without an owner, enable collision as we are in pickup mode
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		WeaponMesh3P->CastShadow = true;
+		WeaponMesh3P->SetVisibility(true, true);
 	}
 	
 	Super::BeginPlay();
