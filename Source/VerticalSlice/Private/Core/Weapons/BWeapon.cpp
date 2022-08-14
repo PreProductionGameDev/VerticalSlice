@@ -367,6 +367,11 @@ USoundCue* ABWeapon::GetPickupSound() const
 	return PickupSound;
 }
 
+USoundCue* ABWeapon::GetGunShotSound() const
+{
+	return GunshotSound;
+}
+
 AATA_LineTrace* ABWeapon::GetLineTraceTargetActor()
 {
 	// If the LineTraceTargetActor exists return otherwise create new
@@ -399,6 +404,11 @@ float ABWeapon::GetTimeBetweenShots() const
 float ABWeapon::GetRecoilCooldown() const
 {
 	return RecoilCooldownRate;
+}
+
+int32 ABWeapon::GetDamage() const
+{
+	return Damage;
 }
 
 UTexture2D* ABWeapon::GetUITexture() const
