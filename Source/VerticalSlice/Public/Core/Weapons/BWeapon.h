@@ -135,6 +135,9 @@ public:
 	// Audio Cue for picking up the weapon
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* GetPickupSound() const;
+	// Audio Cue for shooting
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Audio")
+	class USoundCue* GetGunShotSound() const;
 	
 	// Getter for LineTraceTargetActor. Spawns it if it doesn't exist yet.
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Targeting")
@@ -142,16 +145,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Recoil")
 	UCurveVector* GetRecoilPattern() const;
-
+	
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetAmmoCost() const;
-
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetTimeBetweenShots() const;
-
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetRecoilCooldown() const;
-
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	int32 GetDamage() const;
+	
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShodown|UI")
 	class UTexture2D* GetUITexture() const;
 	
@@ -169,18 +172,21 @@ protected:
 	// Infinite Ammo for Specific GameModes or Testing
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Ammo")
 	bool bInfiniteAmmo;
-
+	// The Vector Curve for Recoil Pattern
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
 	UCurveVector* RecoilPattern;
-
+	// The rate at which the recoil subsides
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Recoil")
 	float RecoilCooldownRate;
-
+	// The Ammo Cost per Shot
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
 	int32 AmmoCost;
-
+	// The Time for each shot
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
 	float TimeBetweenShots;
+	// The Damage per shot
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	int32 Damage;
 	
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
@@ -233,7 +239,10 @@ protected:
 	// Sound Played when Picked up
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* PickupSound;
-
+	// Sound when Shooting
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|Audio")
+	class USoundCue* GunshotSound;
+	// UI Icon
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|UI")
 	class UTexture2D* WeaponIcon;
 
