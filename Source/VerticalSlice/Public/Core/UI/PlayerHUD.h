@@ -43,4 +43,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MakeHitMarker(bool PlayerKilled);
+
+	// Kill Feed
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void AddKillFeedMessage(const FString& KillerName, const FString& VictimName, UTexture2D* KillIcon);
 };
