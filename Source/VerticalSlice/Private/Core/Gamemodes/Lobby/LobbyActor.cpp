@@ -18,7 +18,7 @@ ALobbyActor::ALobbyActor()
 
 	USpringArmComponent* ArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
 	ArmComponent->SetupAttachment(RootComponent);
-	ArmComponent->SetRelativeLocationAndRotation(FVector(0.0f,0.0f,50.0f), FRotator(-30.0f,-90.0f,0.0f));
+	ArmComponent->SetRelativeLocationAndRotation(FVector(0.0f,0.0f,140.0f), FRotator(-20.0f,-90.0f,0.0f));
 	ArmComponent->TargetArmLength = 400.0f;
 
 	UCameraComponent* Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
