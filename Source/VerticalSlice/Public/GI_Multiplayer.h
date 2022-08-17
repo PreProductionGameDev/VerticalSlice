@@ -7,7 +7,6 @@
 
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
-#include "../../../Plugins/Developer/RiderLink/Source/RD/src/rd_core_cpp/src/main/types/Void.h"
 #include "Core/Player/SettingsSaveGame.h"
 
 #include "Kismet/GameplayStatics.h"
