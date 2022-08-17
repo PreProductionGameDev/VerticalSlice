@@ -7,7 +7,10 @@
 
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
+#include "../../../Plugins/Developer/RiderLink/Source/RD/src/rd_core_cpp/src/main/types/Void.h"
+#include "Core/Player/SettingsSaveGame.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "Templates/SharedPointer.h"
 
@@ -26,7 +29,14 @@ class UGI_Multiplayer : public UGameInstance
 
 public:
     UGI_Multiplayer();
+    
+    
+    UFUNCTION(BlueprintCallable)
+    void SaveSettings();
 
+    UFUNCTION(BlueprintCallable)
+    void LoadSettings();
+    
     UFUNCTION(BlueprintCallable)
     void StoreColors();
 
@@ -34,22 +44,19 @@ public:
     void StoreModels();
 
     UFUNCTION(BlueprintCallable)
-    void SetGameMode();
+    virtual void Init() override;
 
     UFUNCTION(BlueprintCallable)
-        void Init();
+    virtual void Shutdown() override;
 
     UFUNCTION(BlueprintCallable)
-        void Host(const FString& Location);
+    void Host(const FString& Location);
 
     UFUNCTION(BlueprintCallable)
-        void Search();
+    void Search();
 
     UFUNCTION(BlueprintCallable)
-        void Join(const FString& Address);
-
-    UFUNCTION(BlueprintCallable)
-        virtual void LoadMainMenu();
+    void Join(const FString& Address);
 
     UFUNCTION(BlueprintCallable)
     static TMap<FString, int32> SortScoreBoard(TMap<FString, int32> UnsortedMap);
@@ -60,6 +67,11 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, int32> SavedModels;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    USettingsSaveGame* Settings;
+
+    
 private:
 
     IOnlineSessionPtr SessionInterface;

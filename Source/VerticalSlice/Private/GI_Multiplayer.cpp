@@ -6,7 +6,6 @@
 #include "Core/Gamemodes/Lobby/LobbyActor.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/PlayerState.h"
-#include "Kismet/GameplayStatics.h"
 
 
 UGI_Multiplayer::UGI_Multiplayer()
@@ -14,6 +13,32 @@ UGI_Multiplayer::UGI_Multiplayer()
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+    }
+}
+
+void UGI_Multiplayer::SaveSettings()
+{
+    if(!UGameplayStatics::SaveGameToSlot(Settings, "Settings", 0 ))
+    {
+        //warns the client that saving failed
+        UE_LOG(LogTemp, Warning, TEXT("Settings have failed to save"));
+    }
+}
+
+void UGI_Multiplayer::LoadSettings()
+{
+    //Attempts to load settings
+    Settings = Cast<USettingsSaveGame>(UGameplayStatics::LoadGameFromSlot("Settings",0));
+    if(!IsValid(Settings))
+    {
+        //Creates new settings if it failed to load
+        UE_LOG(LogTemp, Warning, TEXT("Settings have failed to load"));
+        Settings = NewObject<USettingsSaveGame>();
+        if(!UGameplayStatics::SaveGameToSlot(Settings, "Settings", 0 ))
+        {
+            //crashes if game failed to create default settings
+            UE_LOG(LogTemp, Fatal, TEXT("Settings have failed to initalize"));
+        }
     }
 }
 
@@ -53,11 +78,6 @@ void UGI_Multiplayer::StoreModels()
     }
 }
 
-void UGI_Multiplayer::SetGameMode()
-{
-    
-}
-
 void UGI_Multiplayer::Init()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -65,6 +85,13 @@ void UGI_Multiplayer::Init()
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
         SessionInterface = Subsystem->GetSessionInterface();
     }
+    LoadSettings();
+    Super::Init();
+}
+
+void UGI_Multiplayer::Shutdown()
+{
+    Super::Shutdown();
 }
 
 void UGI_Multiplayer::Host(const FString& Location)
@@ -111,14 +138,6 @@ void UGI_Multiplayer::Join(const FString& Address)
     if (!ensure(PlayerController != nullptr)) return;
 
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-}
-
-void UGI_Multiplayer::LoadMainMenu()
-{
-    APlayerController* PlayerController = GetFirstLocalPlayerController();
-    if (!ensure(PlayerController != nullptr)) return;
-
-    PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }
 
 TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> UnsortedMap)
