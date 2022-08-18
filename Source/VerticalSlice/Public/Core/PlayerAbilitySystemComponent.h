@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "PlayerAbilitySystemComponent.generated.h"
 
 /**
- * 
+ *	Custom Ability System Component
  */
 UCLASS()
 class VERTICALSLICE_API UPlayerAbilitySystemComponent : public UAbilitySystemComponent

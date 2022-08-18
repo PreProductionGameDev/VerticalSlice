@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -41,27 +41,23 @@ public:
 	// Set to false when spawning directly into a player's inventory or true when spawning into the world in pickup mode.
 	UPROPERTY(BlueprintReadWrite)
 	bool bSpawnWithCollision;
-
 	// Tag used for the FP Anim blueprint
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FGameplayTag WeaponTag;
-
 	// Tags used to limit pickups. Would be Death or Spectator
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FGameplayTagContainer RestrictedPickupTags;
-
 	// Tag used for Firing Mode
 	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FGameplayTag FireMode;
-
 	// Primary Ammo Type
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FGameplayTag PrimaryAmmoType;
 
-	// Delegate for the Change of Ammo Clip
+	// Delegate for the Change of Ammo Clip. Updates UI
 	UPROPERTY(BlueprintAssignable, Category = "ShiitakeShowdown|GASWeapon")
 	FWeaponAmmoChangedDelegate OnPrimaryClipAmmoChanged;
-	// Delegate for the change of Max Ammo Clip
+	// Delegate for the change of Max Ammo Clip. Updates UI
 	UPROPERTY(BlueprintAssignable, Category = "ShiitakeShowdown|GASWeapon")
 	FWeaponAmmoChangedDelegate OnMaxPrimaryClipAmmoChanged;
 
@@ -71,7 +67,6 @@ public:
 	// Return First Person Mesh
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ShiitakeShowdown|GASWeapon")
 	virtual USkeletalMeshComponent* GetWeaponMesh1P() const;
-
 	// Return Third Person Mesh
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ShiitakeShowdown|GASWeapon")
 	virtual USkeletalMeshComponent* GetWeaponMesh3P() const;
@@ -80,7 +75,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	// Occurs before Replicating
 	virtual void PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker) override;
-
+	
 	// Sets the Owning Character for the weapon
 	void SetOwningCharacter(AFP_Character* InOwningCharacter);
 	// Overlap for Picking up the weapon
@@ -95,7 +90,6 @@ public:
 	virtual void AddAbilities();
 	// Removing the GAS Abilities
 	virtual void RemoveAbilities();
-
 	// Returns the GAS Ability Level. Default is 1
 	virtual int32 GetAbilityLevel(EPlayerAbilityInputID AbilityID);
 
@@ -109,6 +103,7 @@ public:
 	virtual void OnDropped_Implementation(FVector NewLocation);
 	virtual bool OnDropped_Validate(FVector NewLocation);
 
+	// Removes the Weapon from the Inventory
 	void DeleteWeapon();
 	
 	// Primary AmmoClip Functions
@@ -121,7 +116,6 @@ public:
 	virtual void SetPrimaryClipAmmo(int32 NewPrimaryClipAmmo);
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|GASWeapon")
 	virtual void SetMaxPrimaryClipAmmo(int32 NewMaxPrimaryClipAmmo);
-
 	// Variable to Enable Infinite Ammo
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|GASWeapon")
 	virtual bool HasInfiniteAmmo() const;
@@ -139,13 +133,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* GetGunShotSound() const;
 	
-	// Getter for LineTraceTargetActor. Spawns it if it doesn't exist yet.
+	// Variable Getters
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Targeting")
 	AATA_LineTrace* GetLineTraceTargetActor();
-
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Recoil")
 	UCurveVector* GetRecoilPattern() const;
-	
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetAmmoCost() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
@@ -154,7 +146,6 @@ public:
 	float GetRecoilCooldown() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetDamage() const;
-	
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShodown|UI")
 	class UTexture2D* GetUITexture() const;
 	
@@ -187,7 +178,6 @@ protected:
 	// The Damage per shot
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
 	int32 Damage;
-	
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent* CollisionComp;
@@ -198,7 +188,6 @@ protected:
 	// Mesh for Third Person
 	UPROPERTY(VisibleAnywhere, Category = "ShiitakeShowdown|GASWeapon")
 	USkeletalMeshComponent* WeaponMesh3P;
-
 	// Relative Location of weapon 3P Mesh when in pickup mode
 	// 1P weapon mesh is invisible so it doesn't need one
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
@@ -221,7 +210,6 @@ protected:
 	// The Array of Abilities for the weapon
 	UPROPERTY(EditAnywhere, Category = "ShiitakeShowdown|GASWeapon")
 	TArray<TSubclassOf<UPlayerGameplayAbility>> Abilities;
-
 	// AbilitySpecHandles for the applied abilities
 	UPROPERTY(BlueprintReadOnly, Category = "ShiitakeShowdown|GASWeapon")
 	TArray<FGameplayAbilitySpecHandle> AbilitySpecHandles;
@@ -258,8 +246,7 @@ protected:
 	virtual void BeginPlay() override;
 	// Called at teh End of the Game
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
-
-
+	
 	// Called when Player Picks up the weapon
 	virtual void PickUpOnTouch(AFP_Character* InCharacter);
 

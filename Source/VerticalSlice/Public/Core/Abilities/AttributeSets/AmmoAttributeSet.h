@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -7,13 +7,12 @@
 #include "AttributeSet.h"
 #include "AmmoAttributeSet.generated.h"
 
-//uses macros from Attributes.h
+// Uses Macros from Attributes.h
 #define ATTRIBUTER_ACCESSORS(ClassName, PropertyName)\
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName)\
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName)\
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName)\
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 
 /**
  *	 An Attribute Set used for storing Ammo of the players
@@ -33,6 +32,8 @@ class VERTICALSLICE_API UAmmoAttributeSet : public UAttributeSet
 
 public:
 	UAmmoAttributeSet();
+// Ammo Property Values
+// SMG Ammo
 #pragma region SMG_Values
 	// SMG Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_SMGReserveAmmo)
@@ -43,6 +44,7 @@ public:
 	FGameplayAttributeData MaxSMGReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSMGReserveAmmo)
 #pragma endregion SMG_Values
+// Shotgun Ammo
 #pragma region Shotgun_Values
 	// Shotgun Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_ShotgunReserveAmmo)
@@ -53,6 +55,7 @@ public:
 	FGameplayAttributeData MaxShotgunReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxShotgunReserveAmmo)
 #pragma endregion Shotgun_Values
+// Sniper Ammo
 #pragma region Sniper_Values
 	// Sniper Reserve Ammo
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_SniperReserveAmmo)
@@ -63,12 +66,17 @@ public:
 	FGameplayAttributeData MaxSniperReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSniperReserveAmmo)
 #pragma endregion Sniper_Values
-	
+
+	// Occurs when an attribute is about to be changed. Just calls Super
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	// Post Gameplay Effect. Used for adding ammo
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	// Variable Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
+
+	// Returns the Reserve Ammo Attribute from a specified Tag 
 	static FGameplayAttribute GetReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag);
+	// Returns the Max Reserve Ammo Attribute from a specified Tag
 	static FGameplayAttribute GetMaxReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag);
 protected:
 	// Cached Gameplay Tags

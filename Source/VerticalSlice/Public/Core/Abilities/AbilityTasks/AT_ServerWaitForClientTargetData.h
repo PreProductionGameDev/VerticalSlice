@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -8,7 +8,8 @@
 #include "AT_ServerWaitForClientTargetData.generated.h"
 
 /**
- *  The server waits for TargetData from the CLient
+ *	The server will waits for TargetData from the Client
+ *	Uses the received data for further processing specifically on the Server
  */
 UCLASS()
 class VERTICALSLICE_API UAT_ServerWaitForClientTargetData : public UAbilityTask

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -15,7 +15,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 /**
- * 
+ *	Attribute Class for Players Health
  */
 UCLASS()
 class VERTICALSLICE_API UPlayerAttributeSet : public UAttributeSet
@@ -25,8 +25,11 @@ class VERTICALSLICE_API UPlayerAttributeSet : public UAttributeSet
 public:
 	UPlayerAttributeSet();
 
+	// Set Replication of Variables
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	// Occurs when an attribute is about to be changed. Adjusts the Health relative to Max health
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	// Adjusting the players Health primarily
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Attributes")
@@ -41,6 +44,7 @@ public:
 	FGameplayAttributeData Damage;
 	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, Damage);
 
+	// Adjusts the Players health relatively to the Max Health change
 	void AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute,
 		const FGameplayAttributeData& MaxAttribute,
 		float NewMaxValue,
@@ -48,10 +52,8 @@ public:
 	
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
-
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
-
 	UFUNCTION()
 	virtual void OnRep_Damage(const FGameplayAttributeData& OldValue);
 };

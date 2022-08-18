@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -8,7 +8,7 @@
 
 /**
  *	Child Class of UAbilitySystemGlobals
- *	Needed to stop a crash
+ *	Required to stop a crash when using the Ability System Tags
  */
 UCLASS()
 class VERTICALSLICE_API UProductionAbilitySystemGlobals : public UAbilitySystemGlobals
@@ -17,7 +17,8 @@ class VERTICALSLICE_API UProductionAbilitySystemGlobals : public UAbilitySystemG
 
 public:
 	UProductionAbilitySystemGlobals();
-	
+
+	// Returns the Existing GAS Global class
 	static UProductionAbilitySystemGlobals& GSGet()
 	{
 		return dynamic_cast<UProductionAbilitySystemGlobals&>(Get());

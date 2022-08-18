@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -10,7 +10,6 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWaitTargetDataUsingActorDelegate, const FGameplayAbilityTargetDataHandle&, Data);
 
-
 /**
  *	Wait for TargetData from an existing TargetActor and will not destroy upon recieving data
  */
@@ -19,9 +18,11 @@ class VERTICALSLICE_API UAT_WaitTargetDataUsingActor : public UAbilityTask
 {
 	GENERATED_BODY()
 
+	// Delegates used for the Blueprints
+	// Validated Data Received
 	UPROPERTY(BlueprintAssignable)
 	FWaitTargetDataUsingActorDelegate ValidData;
-
+	// Wait was Cancelled
 	UPROPERTY(BlueprintAssignable)
 	FWaitTargetDataUsingActorDelegate Cancelled;
 
@@ -29,7 +30,7 @@ class VERTICALSLICE_API UAT_WaitTargetDataUsingActor : public UAbilityTask
 	* Uses specified spawned TargetActor and waits for it to return valid data or to be canceled. The TargetActor is *NOT* destroyed.
 	*
 	* @param OwningAbility The Ability which is using this function
-	* @param TaskInstanceName The Name set for the task to make it easy to aqcuire again
+	* @param TaskInstanceName The Name set for the task to make it easy to acquire again
 	* @param ConfirmationType The Enum for Confirmation
 	* @param InTargetActor The GAS AbilityTargetActor being passed in to wait for Valid data from 
 	* @param bCreateKeyIfNotValidForMorePredicting Will create a new scoped prediction key if the current scoped prediction key is not valid for more predicting.

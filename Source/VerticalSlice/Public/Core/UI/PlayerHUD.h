@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -20,13 +20,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetHealthBarValues(float oldHealthValue,float newHealthValue);
 
-	// ELEMENT ICONS
+	// ELEMENT FUNCTIONS
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SwapElementIcons(bool IsPrimaryAbility);
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetAbilityCooldown(FTimerHandle AbilityTimerHandle);
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetElementIcons(UTexture2D* ElementOne, UTexture2D* ElementTwo);
 	
@@ -40,7 +38,7 @@ public:
 	// Set the Primary Reserve Ammo
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetPrimaryReserveAmmo(int32 ReserveAmmo);
-
+	// Hit Markers
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MakeHitMarker(bool PlayerKilled);
 

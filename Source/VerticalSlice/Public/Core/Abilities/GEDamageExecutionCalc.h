@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "GEDamageExecutionCalc.generated.h"
 
 /**
- * 
+ *	A Gameplay Effect Calculation class used for Calculating the amount of Damage to apply to the player
  */
 UCLASS()
 class VERTICALSLICE_API UGEDamageExecutionCalc : public UGameplayEffectExecutionCalculation
@@ -17,5 +17,6 @@ class VERTICALSLICE_API UGEDamageExecutionCalc : public UGameplayEffectExecution
 public:
 	UGEDamageExecutionCalc();
 
+	// Calculates exactly how much damage the player should take, and applies that affect
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;	
 };

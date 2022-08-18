@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -21,6 +21,9 @@ class UPlayerAbilitySystemComponent;
 class UPlayerAttributeSet;
 class UAmmoAttributeSet;
 
+/**
+ *	The Primary Gameplay Character
+ */
 UCLASS()
 class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystemInterface
 {

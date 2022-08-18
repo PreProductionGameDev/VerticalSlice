@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -7,11 +7,10 @@
 #include "Core/PlayerGameplayAbility.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
-
 #include "GASBlueprintFunctionLibrary.generated.h"
 
 /**
- * 
+ *	Useful Functions used for GAS classes
  */
 UCLASS()
 class VERTICALSLICE_API UGASBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
@@ -19,20 +18,13 @@ class VERTICALSLICE_API UGASBlueprintFunctionLibrary : public UBlueprintFunction
 	GENERATED_BODY()
 	
 public:
-	/**
-	* GameplayAbility
-	*/
+	// Locate Primary AbilityInstances
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	static UPlayerGameplayAbility* GetPrimaryAbilityInstanceFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle);
-
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	static UPlayerGameplayAbility* GetPrimaryAbilityInstanceFromClass(UAbilitySystemComponent* AbilitySystemComponent, TSubclassOf<UGameplayAbility> InAbilityClass);
-
-	
-	/**
-	 *	FGameplayAbilitySpecHandle
-	 */
+		
+	// Identifies if SpecHandle is valid
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ability")
 	static bool IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle);
-	
 };

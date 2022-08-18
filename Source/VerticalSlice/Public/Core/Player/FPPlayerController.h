@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -23,10 +23,7 @@ public:
 	// Return the Created HUD
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|UI")
 	class UPlayerHUD* GetPlayerHUD() const;
-
-	/*
-	 *	AMMO AND WEAPON FUNCTIONS
-	 */
+	
 	// Set the Primary Clip Ammo Values for the HUD
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|UI")
 	void SetPrimaryClipAmmo(int32 ClipAmmo);
@@ -45,5 +42,4 @@ protected:
 	// Server Only
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnRep_PlayerState() override;
-	
 };

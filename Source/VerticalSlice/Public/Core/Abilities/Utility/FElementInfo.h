@@ -14,17 +14,14 @@ USTRUCT(BlueprintType)
 struct FElementInfo
 {
  GENERATED_BODY()
-
- //Primary ability 
+ 
+ // Primary ability 
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
  EPlayerAbilityInputID Primary;
-
- //Primary ability 
+ // Primary ability 
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
  EPlayerAbilityInputID Movement;
-
- //Ability HUD component
+ // Ability HUD component
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
  UTexture2D* Texture;
- 
 };

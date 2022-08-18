@@ -9,20 +9,17 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLerpChangeFOVDelegate);
 
 /**
- *		Ability Task for Changing the FOV over a lerp or float curve
+ *	Ability Task for Changing the FOV for an inputted Camera over a linear lerp or float curve
  */
 UCLASS()
 class VERTICALSLICE_API UAT_LerpChangeFOV : public UAbilityTask
 {
 	GENERATED_BODY()
-
 	// Default Constructor
 	UAT_LerpChangeFOV(const FObjectInitializer& ObjectInitializer);
-
 	// Delegate Set in Blueprints
 	UPROPERTY(BlueprintAssignable)
 	FLerpChangeFOVDelegate OnTargetFOVReached;
-
 	// Change the FOV to a specified value over time. Float curve can be used (Between 0-1) or uses default linear interpolation
 	UFUNCTION(BlueprintCallable, Category = "Ability|Tasks", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
 	static UAT_LerpChangeFOV* WaitChangeFOV(UGameplayAbility* OwningAbility, FName TaskInstanceName, class UCameraComponent* CameraComponent, float TargetFOV, float Duration, UCurveFloat* OptionalInterpolationCurve);

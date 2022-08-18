@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "GEReloadExecutionCalc.generated.h"
 
 /**
- * 
+ *	Reload Calculation by taking in a Gameplay Effect data
  */
 UCLASS()
 class VERTICALSLICE_API UGEReloadExecutionCalc : public UGameplayEffectExecutionCalculation

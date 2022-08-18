@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 #pragma once
 
@@ -12,6 +12,7 @@
 
 /**
  *	Reusable, Configurable Line Trace TargetActor
+ *	Extends the ATA_Trace class for specific line trace functionality
  *	Used with the AT_WaitTargetDataUsingActor instead of Default WaitTargetData AbilityTask as default destroys TargetActor
  */
 UCLASS()
