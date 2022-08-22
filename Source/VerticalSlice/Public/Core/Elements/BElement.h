@@ -34,6 +34,7 @@ public:
 	virtual void AddAbilities();
 	
 	// Removing the GAS Abilities
+	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAbilities();
 
 	// Ability HUD component
