@@ -45,6 +45,9 @@ bool UPlayerGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle
 		AFP_Character* Player = Cast<AFP_Character>(ActorInfo->AvatarActor);
 		if (!(Player && Player->ActiveElement() && Cast<UObject>(Player->ActiveElement()) == GetSourceObject(Handle, ActorInfo)))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("%s"), Player->bIsPrimaryElement ? TEXT("True") : TEXT("False"));
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *Player->ActiveElement()->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("UHOH"));
 			return false;
 		}
 	}

@@ -278,12 +278,12 @@ public:
 	UFUNCTION()
 	ABElement* ActiveElement();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
 	ABElement* PrimaryElement;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
 	ABElement* SecondaryElement;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool bIsPrimaryElement;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
+	bool bIsPrimaryElement = true;
 
 private:
 	// Movement Functions

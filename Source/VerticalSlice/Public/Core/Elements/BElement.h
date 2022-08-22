@@ -19,11 +19,13 @@ public:
 	// Sets default values for this actor's properties
 	ABElement();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Replicated)
 	AFP_Character* OwningPlayer;
 
 public:	

@@ -59,6 +59,10 @@ void AFP_Character::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & Out
 	// Only replicate CurrentWeapon to simulated clients and manually sync CurrentWeapon with Owner when we're ready.
 	// This allows us to predict weapon changing.
 	DOREPLIFETIME_CONDITION(AFP_Character, CurrentWeapon, COND_SimulatedOnly);
+	DOREPLIFETIME_CONDITION(AFP_Character, PrimaryElement, COND_None);
+	DOREPLIFETIME_CONDITION(AFP_Character, SecondaryElement, COND_None);
+	DOREPLIFETIME_CONDITION(AFP_Character, bIsPrimaryElement, COND_None);
+	
 }
 
 void AFP_Character::Tick(float DeltaTime)

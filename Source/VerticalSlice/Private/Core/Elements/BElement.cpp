@@ -9,14 +9,22 @@ ABElement::ABElement()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
 
+}
+
+void ABElement::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION(ABElement, OwningPlayer, COND_OwnerOnly);
 }
 
 // Called when the game starts or when spawned
 void ABElement::BeginPlay()
 {
 	Super::BeginPlay();
-	OwningPlayer = Cast<AFP_Character>(GetInstigator());
+	OwningPlayer = Cast<AFP_Character>(GetOwner());
+	UE_LOG(LogTemp, Warning, TEXT("Adding Abilities"));
 	AddAbilities();
 }
 
@@ -24,6 +32,7 @@ void ABElement::AddAbilities()
 {
 	if (!IsValid(OwningPlayer) || !OwningPlayer->GetPlayerAbilitySystemComponent())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("NOT VALID"));
 		return;
 	}
 	
@@ -39,9 +48,11 @@ void ABElement::AddAbilities()
 	// Grant Abilities but only on the server
 	if (GetLocalRole() != ROLE_Authority)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("IS CLIENT"));
 		return;
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("SUCCESSFULLY TRYING TO ADD"));
 	//adds the abilities and stores the handles
 	UtilityAbilityHandle =  ASC->GiveAbility(FGameplayAbilitySpec(UtilityAbility, 1,static_cast<int32>(UtilityAbility.GetDefaultObject()->AbilityInputID), this));
 	MovementAbilityHandle =  ASC->GiveAbility(FGameplayAbilitySpec(MovementAbility, 1,static_cast<int32>(MovementAbility.GetDefaultObject()->AbilityInputID), this));
