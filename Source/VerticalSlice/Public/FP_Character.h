@@ -11,6 +11,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Camera/CameraComponent.h"
+#include "Core/Elements/BElement.h"
 #include "Core/Weapons/BWeapon.h"
 
 
@@ -270,6 +271,19 @@ protected:
 	FGameplayTag NoWeaponTag;
 	FGameplayTag WeaponAbilityTag;
 	FGameplayTag WeaponAmmoNoneTag;
+
+public:
+	
+	//Equiped element functionality
+	UFUNCTION()
+	ABElement* ActiveElement();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ABElement* PrimaryElement;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ABElement* SecondaryElement;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bIsPrimaryElement;
 
 private:
 	// Movement Functions

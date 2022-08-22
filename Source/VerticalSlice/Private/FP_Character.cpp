@@ -724,6 +724,18 @@ void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeCha
 }
 
 
+ABElement* AFP_Character::ActiveElement()
+{
+	if(bIsPrimaryElement)
+	{
+		return PrimaryElement;
+	}
+	else
+	{
+		return SecondaryElement;
+	}
+}
+
 void AFP_Character::MoveForward(float value)
 {
 	if (value != 0.0f)
