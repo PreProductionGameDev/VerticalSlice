@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BElement.generated.h"
 
+//Forward declarations to prevent circular includes
 class AFP_Character;
 class UPlayerGameplayAbility;
 
@@ -19,12 +20,14 @@ public:
 	// Sets default values for this actor's properties
 	ABElement();
 
+	//variable replication override
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+	// the owning player
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	AFP_Character* OwningPlayer;
 
