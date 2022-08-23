@@ -12,6 +12,8 @@
 #include "Templates/SharedPointer.h"
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
+
+#include "Core/Networking/NetworkInterface.h"
 #include "GI_Multiplayer.generated.h"
 
 /**
@@ -19,7 +21,7 @@
  *  Handles Saving, Networking and More
  */
 UCLASS()
-class UGI_Multiplayer : public UGameInstance
+class UGI_Multiplayer : public UGameInstance, public INetworkInterface
 {
     GENERATED_BODY()
 
@@ -38,6 +40,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void StoreModels();
 
+    // Menu Creation
+    UFUNCTION(BlueprintCallable)
+    void CreateMainMenuUI();
     
     UFUNCTION(BlueprintCallable)
     virtual void Init() override;
@@ -45,10 +50,10 @@ public:
     virtual void Shutdown() override;
 
     // Networking
-    UFUNCTION(BlueprintCallable)
-    void Host(const FString& Location);
+    virtual void Host() override;
     UFUNCTION(BlueprintCallable)
     void Search();
+    virtual void Join() override{};
     UFUNCTION(BlueprintCallable)
     void Join(const FString& Address);
 
@@ -67,4 +72,20 @@ public:
     
 private:
     IOnlineSessionPtr SessionInterface;
+    TSharedPtr<class FOnlineSessionSearch> SessionSearch;
+    
+    FString MapLocation;
+    // Creation of a Session
+    void CreateSession();
+
+    // Delegate for the Async Server creation 
+    void OnCreateSessionComplete(FName SessionName, bool bSuccess);
+    // Delegate for the Async Server Destruction
+    void OnDestroySessionComplete(FName SessionName, bool bSuccess);
+    // Delegate for the Async Server Search
+    void OnFindSessionsComplete(bool bSuccess);
+
+
+    // Menu System
+    TSubclassOf<UUserWidget> MenuClass;
 };
