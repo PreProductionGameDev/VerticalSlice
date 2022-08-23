@@ -26,7 +26,7 @@ class UGI_Multiplayer : public UGameInstance, public INetworkInterface
     GENERATED_BODY()
 
 public:
-    UGI_Multiplayer();
+    UGI_Multiplayer(const FObjectInitializer& ObjectInitializer);
     
     // Settings
     UFUNCTION(BlueprintCallable)
@@ -56,6 +56,9 @@ public:
     virtual void Join() override{};
     UFUNCTION(BlueprintCallable)
     void Join(const FString& Address);
+
+    virtual void RefreshServerList() override;
+
 
     // Scoreboard Sorting
     UFUNCTION(BlueprintCallable)
@@ -87,5 +90,8 @@ private:
 
 
     // Menu System
+    // The WidgetClass
     TSubclassOf<UUserWidget> MenuClass;
+    // The Menu Instance
+    class UMainMenu* Menu;
 };

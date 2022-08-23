@@ -6,14 +6,14 @@
 #include "Core/Gamemodes/Lobby/LobbyActor.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/PlayerState.h"
-
+#include "Core/Networking/FServerData.h"
 #include "Core/UI/Menus/MainMenu.h"   
 
 const static FName SESSION_NAME = TEXT("HUHWHAT");
 
-UGI_Multiplayer::UGI_Multiplayer()
+UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    const IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
     }
@@ -96,7 +96,7 @@ void UGI_Multiplayer::CreateMainMenuUI()
         return;
     }
     // Create and Add the Widget to the Viewport
-    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
+    Menu = CreateWidget<UMainMenu>(this, MenuClass);
     if (!ensure(Menu != nullptr))
     {
         return;
@@ -177,7 +177,8 @@ void UGI_Multiplayer::OnCreateSessionComplete(FName SessionName, bool bSuccess)
         UE_LOG(LogTemp, Warning, TEXT("Failure to Create Session"));
         return;
     }
-    
+
+    // Engine Check
     UEngine* Engine = GetEngine();
     if (!ensure(Engine != nullptr))
     {
@@ -185,6 +186,7 @@ void UGI_Multiplayer::OnCreateSessionComplete(FName SessionName, bool bSuccess)
     }
     UE_LOG(LogTemp, Warning, TEXT("Got Engine"));
 
+    // World Check
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr))
     {
@@ -192,6 +194,7 @@ void UGI_Multiplayer::OnCreateSessionComplete(FName SessionName, bool bSuccess)
     }
     UE_LOG(LogTemp, Warning, TEXT("Got World"));
 
+    // Server Travel
     UE_LOG(LogTemp, Warning, TEXT("%s"), *MapLocation);
     World->ServerTravel(MapLocation);
 }
@@ -207,15 +210,21 @@ void UGI_Multiplayer::OnDestroySessionComplete(FName SessionName, bool bSuccess)
 
 void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
 {
-    if (bSuccess && SessionSearch.IsValid())
+    if (bSuccess && SessionSearch.IsValid() && Menu != nullptr)
     {
         UE_LOG(LogTemp, Warning, TEXT("SessionSearch Completed"));
-        UE_LOG(LogTemp, Warning, TEXT("COUNT: %d"), SessionSearch->SearchResults.Num());
+
+        TArray<FServerData> ServerNames;
         for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Found Session Named: %s"), *SearchResult.GetSessionIdStr());
-            UE_LOG(LogTemp, Warning, TEXT("PING: %d"), SearchResult.PingInMs);
+            FServerData Data;
+            Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
+            Data.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
+            Data.Name = SearchResult.Session.OwningUserName;
+            ServerNames.Add(Data);
         }
+
+        Menu->SetServerList(ServerNames);
     }
 }
 
@@ -271,6 +280,19 @@ void UGI_Multiplayer::Join(const FString& Address)
     if (!ensure(PlayerController != nullptr)) return;
 
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+}
+
+void UGI_Multiplayer::RefreshServerList()
+{
+    SessionSearch = MakeShareable(new FOnlineSessionSearch());
+    if (SessionSearch.IsValid())
+    {
+        //SessionSearch->bIsLanQuery = true;
+        SessionSearch->MaxSearchResults = 100;
+        SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+        UE_LOG(LogTemp, Warning, TEXT("Starting Find Session"));
+        SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+    }
 }
 
 TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> UnsortedMap)
