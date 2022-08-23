@@ -39,6 +39,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Attributes")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, MaxHealth);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Stamina, Category = "Attributes")
+	FGameplayAttributeData Stamina;
+	ATTRIBUTER_ACCESSORS(UPlayerAttributeSet, Stamina);
 		
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Damage, Category = "Attributes")
 	FGameplayAttributeData Damage;
@@ -55,5 +59,8 @@ public:
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
 	UFUNCTION()
+	virtual void OnRep_Stamina(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
 	virtual void OnRep_Damage(const FGameplayAttributeData& OldValue);
+	
 };

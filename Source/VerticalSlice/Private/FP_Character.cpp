@@ -119,6 +119,24 @@ float AFP_Character::GetMaxHealth()
 	return 1.f;
 }
 
+float AFP_Character::GetStamina()
+{
+	// Returns Max Health if Health Attributes Exist
+	if(Attributes)
+	{
+		return Attributes->GetStamina();
+	}
+	return 1.f;
+}
+
+void AFP_Character::SetStamina(float Stamina)
+{
+	if(Attributes)
+	{
+		Attributes->SetStamina(Stamina);
+	}
+}
+
 void AFP_Character::ClientCameraRotation_Implementation()
 {
 	// Sets the Camera Rotation on the server to that of the local client
