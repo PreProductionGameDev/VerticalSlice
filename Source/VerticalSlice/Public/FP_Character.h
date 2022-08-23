@@ -50,6 +50,13 @@ public:
 	// Return MaxHealth from AttributeSet
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxHealth();
+	// Return Stamina from AttributeSet
+	UFUNCTION(BlueprintCallable)
+	virtual float GetStamina();
+
+	// Set Stamina from AttributeSet
+	UFUNCTION(BlueprintCallable)
+	virtual void SetStamina(float Stamina);
 	
 	// Set the Camera Rotation for the networked Players
 	UFUNCTION(BlueprintCallable, Client, Reliable)
@@ -284,6 +291,10 @@ public:
 	ABElement* SecondaryElement;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
 	bool bIsPrimaryElement = true;
+
+	//Uses the input stamina and returns true or false based on result
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	bool UseStamina(float Cost);
 
 private:
 	// Movement Functions
