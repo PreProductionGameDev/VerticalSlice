@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 
 #include "Core/Elements/Fire/TrailHitbox.h"
@@ -8,7 +9,10 @@
 #include "Core/PlayerAttributeSet.h"
 
 
-// Sets default values
+/**
+ * @name Jacob
+ * @brief Sets default values
+ */
 ATrailHitbox::ATrailHitbox()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -25,7 +29,10 @@ ATrailHitbox::ATrailHitbox()
 	}
 }
 
-// Called when the game starts or when spawned
+/**
+ * @name Jacob
+ * @brief Called when the game starts or when spawned
+ */
 void ATrailHitbox::BeginPlay()
 {
 	//ensure the hitbox despawns after 2 and a half seconds
@@ -44,6 +51,10 @@ void ATrailHitbox::BeginPlay()
 	
 }
 
+/**
+ * @name Jacob
+ * @brief Checks for overlapping actors and for each one creates and applies a burn effect
+ */
 void ATrailHitbox::BurnCheck()
 {
 	//gets all of the overlapping AFP_Character actors

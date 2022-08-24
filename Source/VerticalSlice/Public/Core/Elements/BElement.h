@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 #pragma once
 
@@ -20,7 +21,7 @@ public:
 	// Sets default values for this actor's properties
 	ABElement();
 
-	//variable replication override
+	// Variable replication override
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
@@ -44,12 +45,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UTexture2D* Texture;
 
-	//Ability Data for adding and removing utility ability
+	// Ability Data for adding and removing utility ability
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UPlayerGameplayAbility> UtilityAbility;
 	FGameplayAbilitySpecHandle UtilityAbilityHandle;
 
-	//Ability Data for adding and removing ability
+	// Ability Data for adding and removing ability
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UPlayerGameplayAbility> MovementAbility;
 	FGameplayAbilitySpecHandle MovementAbilityHandle;

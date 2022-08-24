@@ -1,4 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+// Jacob
 
 
 #include "Core/Gamemodes/Lobby/LobbyActor.h"
@@ -8,7 +9,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
-// Sets default values
+/**
+ * @name Jacob
+ * @brief creates the camera and skeletal mesh 
+ */
 ALobbyActor::ALobbyActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -29,6 +33,11 @@ ALobbyActor::ALobbyActor()
 
 }
 
+/**
+ * @name Jacob
+ * @brief Replicates all of the needed parts with notifies
+ * @param OutLifetimeProps 
+ */
 void ALobbyActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -40,7 +49,10 @@ void ALobbyActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 }
 
-// Called when the game starts or when spawned
+/**
+ * @name Jacob
+ * @brief Shows the mouse cursor on the owning player and resets the camera
+ */
 void ALobbyActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -54,6 +66,10 @@ void ALobbyActor::BeginPlay()
 	}
 }
 
+/**
+ * @name Jacob
+ * @brief Sets the owning players camera to the camera
+ */
 void ALobbyActor::ResetCamera()
 {
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(),0);

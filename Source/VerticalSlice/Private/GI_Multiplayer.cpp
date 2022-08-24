@@ -10,6 +10,7 @@
 
 UGI_Multiplayer::UGI_Multiplayer()
 {
+    // ensures we can find out what subsystem we are using while testing
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem != nullptr) {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());

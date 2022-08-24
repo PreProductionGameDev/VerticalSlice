@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 #pragma once
 
@@ -17,27 +18,29 @@ class VERTICALSLICE_API UGA_FireMovement : public UPlayerGameplayAbility
 	GENERATED_BODY()
 public:
 	
-	//constructor
+	// constructor
 	UGA_FireMovement();
 
+	// Logic to do on activation
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+	// Logic to perform on ability end
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	
-	//Timer to control the fire spawning
+	// Timer to control the fire spawning
 	FTimerHandle SpawnTimer;
 
+	// Async timer that waits for activation key to be released
 	UPROPERTY()
 	UAbilityTask_WaitInputRelease* InputRelease;
 
-	UPROPERTY()
-	UAbilityTask_WaitGameplayEvent* GameplayEvent;
-
+	// Spawns fire actor
 	UFUNCTION()
 	void SpawnFire();
 
+	// stops the spawn timer
 	UFUNCTION()
 	void StopSpawning(float TimeHeld);
 };
