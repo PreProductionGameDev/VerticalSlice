@@ -51,12 +51,9 @@ public:
 
     // Networking
     virtual void Host() override;
-    UFUNCTION(BlueprintCallable)
-    void Search();
-    virtual void Join() override{};
-    UFUNCTION(BlueprintCallable)
-    void Join(const FString& Address);
-
+    
+    virtual void Join(uint32 Index) override;
+    
     virtual void RefreshServerList() override;
 
 
@@ -87,6 +84,8 @@ private:
     void OnDestroySessionComplete(FName SessionName, bool bSuccess);
     // Delegate for the Async Server Search
     void OnFindSessionsComplete(bool bSuccess);
+    // Delegate for the Async Server Join
+    void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 
     // Menu System

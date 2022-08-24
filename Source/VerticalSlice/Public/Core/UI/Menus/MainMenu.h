@@ -25,6 +25,8 @@ public:
 	void SetNetworkInterface(INetworkInterface* InNetworkInterface);
 
 	void SetServerList(TArray<FServerData> ServerNames);
+
+	void RemoveUI();
 	
 protected:
 	// Initialize All components

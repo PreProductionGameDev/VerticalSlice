@@ -12,14 +12,35 @@ UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : UUserWidget(
 
 void UMainMenu::SetNetworkInterface(INetworkInterface* InNetworkInterface)
 {
+	// Set the Networking Interface for the Main Menu and the Server List
 	this->NetworkingInterface = InNetworkInterface;
+	if (WB_ServerList != nullptr)
+	{
+		WB_ServerList->SetNetworkInterface(NetworkingInterface);
+	}
 }
 
 void UMainMenu::SetServerList(TArray<FServerData> ServerNames)
 {
+	// Send the Server Data to the Server List
 	if (!ensure(WB_ServerList != nullptr)) return;
-
 	WB_ServerList->SetServerList(ServerNames);
+}
+
+void UMainMenu::RemoveUI()
+{
+	// Clear the UI
+	this->RemoveFromViewport();
+
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+
+	// Re-enable User Input
+	FInputModeGameOnly InputModeData;
+	PlayerController->SetInputMode(InputModeData);
+	PlayerController->bShowMouseCursor = false;
 }
 
 bool UMainMenu::Initialize()
@@ -29,7 +50,7 @@ bool UMainMenu::Initialize()
 		return false;
 	}
 
-	// TODO: SETUP
+	// TODO: SETUP THE REST OF THE MAIN MENU
 	if (!ensure(B_Host != nullptr)) return false;
 	B_Host->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
 

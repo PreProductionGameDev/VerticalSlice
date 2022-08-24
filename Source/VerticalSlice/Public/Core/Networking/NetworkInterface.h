@@ -25,7 +25,7 @@ class VERTICALSLICE_API INetworkInterface
 public:
 	virtual void Host() = 0;
 
-	virtual void Join() = 0;
+	virtual void Join(uint32 Index) = 0;
 
 	virtual void RefreshServerList() = 0;
 };

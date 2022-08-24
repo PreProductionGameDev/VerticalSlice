@@ -4,8 +4,25 @@
 #include "Core/UI/Menus/ServerResult.h"
 
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
+#include "Core/UI/Menus/ServerFinder.h"
+
+void UServerResult::Setup(UServerFinder* InParent, uint32 InIndex)
+{
+	RowButton->OnClicked.AddDynamic(this, &UServerResult::OnClicked);
+
+	Parent = InParent;
+	Index = InIndex;
+	
+}
 
 void UServerResult::PopulateServerData(FServerData& ServerData)
 {
 	this->ServerName->SetText(FText::FromString(ServerData.HostUsername));
+}
+
+void UServerResult::OnClicked()
+{
+	UE_LOG(LogTemp, Warning, TEXT("YES %d"), Index);
+	Parent->SelectIndex(Index);
 }
