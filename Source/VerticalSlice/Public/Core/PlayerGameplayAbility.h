@@ -30,6 +30,9 @@ public:
 	// Only Activate this Ability if is the current Weapon Equipped
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Abilities")
 	bool bSourceObjectMustBeCurrentWeaponToActivate;
+	// Only Activate this Ability if is the current element Equipped
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Abilities")
+	bool bSourceObjectMustBeCurrentElementToActivate;
 		
 	// Ability Utility Functions
 	// Expose GetSourceObject to Blueprint. Retrieves the SourceObject associated with this ability. Callable on non instanced abilities.

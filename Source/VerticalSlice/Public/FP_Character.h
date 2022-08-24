@@ -11,6 +11,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Camera/CameraComponent.h"
+#include "Core/Elements/BElement.h"
 #include "Core/Weapons/BWeapon.h"
 
 
@@ -49,6 +50,13 @@ public:
 	// Return MaxHealth from AttributeSet
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxHealth();
+	// Return Stamina from AttributeSet
+	UFUNCTION(BlueprintCallable)
+	virtual float GetStamina();
+
+	// Set Stamina from AttributeSet
+	UFUNCTION(BlueprintCallable)
+	virtual void SetStamina(float Stamina);
 	
 	// Set the Camera Rotation for the networked Players
 	UFUNCTION(BlueprintCallable, Client, Reliable)
@@ -270,6 +278,23 @@ protected:
 	FGameplayTag NoWeaponTag;
 	FGameplayTag WeaponAbilityTag;
 	FGameplayTag WeaponAmmoNoneTag;
+
+public:
+	
+	//Equiped element functionality
+	UFUNCTION()
+	ABElement* ActiveElement();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
+	ABElement* PrimaryElement;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
+	ABElement* SecondaryElement;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated)
+	bool bIsPrimaryElement = true;
+
+	//Uses the input stamina and returns true or false based on result
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	bool UseStamina(float Cost);
 
 private:
 	// Movement Functions

@@ -17,12 +17,8 @@ enum class EPlayerAbilityInputID : uint8
 	Heal,
 	Reload,
 	Respawn,
-	FireAbility,
-	IceAbility,
-	LightningAbility,
-	FireMovement,
-	IceMovement,
-	LightningMovement
+	UtilityAbility,
+	MovementAbility,
 };
 
 // TODO: Figure out if we use this or not. Legacy code?

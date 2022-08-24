@@ -165,11 +165,11 @@ void ABWeapon::Equip()
 			// Attaches and sets correct display. Might need to tweak upon applying the models
 			if (OwningCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
 			{
-				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
 			}
 			else
 			{
-				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
@@ -183,11 +183,11 @@ void ABWeapon::Equip()
 		// Attaches and sets correct display. Might need to tweak upon applying the models
 		if (OwningCharacter->GetThirdPersonMesh()->DoesSocketExist(AttachPoint))
 		{
-			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, AttachPoint);
+			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
 		}
 		else
 		{
-			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		}
 			
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
@@ -297,13 +297,13 @@ void ABWeapon::OnDropped_Implementation(FVector NewLocation)
 	// Disables First person mesh
 	if (WeaponMesh1P)
 	{
-		WeaponMesh1P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		WeaponMesh1P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 
 	// Enables ThirdPersonMesh for all clients
 	if (WeaponMesh3P)
 	{
-		WeaponMesh3P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		WeaponMesh3P->AttachToComponent(CollisionComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PickupRelativeLocation);
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);

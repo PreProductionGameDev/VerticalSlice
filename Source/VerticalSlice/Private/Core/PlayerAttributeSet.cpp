@@ -17,6 +17,7 @@ void UPlayerAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 	DOREPLIFETIME(UPlayerAttributeSet, Health);
 	DOREPLIFETIME(UPlayerAttributeSet, MaxHealth);
+	DOREPLIFETIME(UPlayerAttributeSet, Stamina);
 	DOREPLIFETIME(UPlayerAttributeSet, Damage);
 }
 
@@ -152,6 +153,11 @@ void UPlayerAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 void UPlayerAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, MaxHealth, OldValue);
+}
+
+void UPlayerAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPlayerAttributeSet, Stamina, OldValue);
 }
 
 void UPlayerAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldValue)

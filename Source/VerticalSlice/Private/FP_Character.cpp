@@ -59,6 +59,10 @@ void AFP_Character::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & Out
 	// Only replicate CurrentWeapon to simulated clients and manually sync CurrentWeapon with Owner when we're ready.
 	// This allows us to predict weapon changing.
 	DOREPLIFETIME_CONDITION(AFP_Character, CurrentWeapon, COND_SimulatedOnly);
+	DOREPLIFETIME_CONDITION(AFP_Character, PrimaryElement, COND_None);
+	DOREPLIFETIME_CONDITION(AFP_Character, SecondaryElement, COND_None);
+	DOREPLIFETIME_CONDITION(AFP_Character, bIsPrimaryElement, COND_None);
+	
 }
 
 void AFP_Character::Tick(float DeltaTime)
@@ -113,6 +117,24 @@ float AFP_Character::GetMaxHealth()
 		return Attributes->GetMaxHealth();
 	}
 	return 1.f;
+}
+
+float AFP_Character::GetStamina()
+{
+	// Returns Max Health if Health Attributes Exist
+	if(Attributes)
+	{
+		return Attributes->GetStamina();
+	}
+	return 1.f;
+}
+
+void AFP_Character::SetStamina(float Stamina)
+{
+	if(Attributes)
+	{
+		Attributes->SetStamina(Stamina);
+	}
 }
 
 void AFP_Character::ClientCameraRotation_Implementation()
@@ -723,6 +745,18 @@ void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeCha
 	}
 }
 
+
+ABElement* AFP_Character::ActiveElement()
+{
+	if(bIsPrimaryElement)
+	{
+		return PrimaryElement;
+	}
+	else
+	{
+		return SecondaryElement;
+	}
+}
 
 void AFP_Character::MoveForward(float value)
 {
