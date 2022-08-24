@@ -32,9 +32,10 @@ public:
     UFUNCTION(BlueprintCallable)
     void LoadSettings();
 
-    // Colors
+    // Gets and saves the colors to the map 
     UFUNCTION(BlueprintCallable)
     void StoreColors();
+    // Gets and saves the models to the map
     UFUNCTION(BlueprintCallable)
     void StoreModels();
 
@@ -45,10 +46,14 @@ public:
     virtual void Shutdown() override;
 
     // Networking
+    ///Hosts a listen server
+    ///Uses Location as the server command for game mode and map
     UFUNCTION(BlueprintCallable)
     void Host(const FString& Location);
     UFUNCTION(BlueprintCallable)
     void Search();
+    /// connects a player to a server
+    /// Uses Address as the server location
     UFUNCTION(BlueprintCallable)
     void Join(const FString& Address);
 
@@ -59,6 +64,7 @@ public:
     // Map to store all of the colors and mapped to the player names
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, FVector> SavedColors;
+    // Map to store all of the players selected models
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, int32> SavedModels;
     // Settings Saved Game Asset
