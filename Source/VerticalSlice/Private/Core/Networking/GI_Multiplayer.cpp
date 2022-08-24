@@ -10,7 +10,7 @@
 #include "Core/Player/FPPlayerController.h"
 #include "Core/UI/Menus/MainMenu.h"   
 
-const static FName SESSION_NAME = TEXT("HUHWHAT");
+const static FName SESSION_NAME = TEXT("ShiitakeShowdownServer");
 
 UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
@@ -170,7 +170,7 @@ void UGI_Multiplayer::Host()
     MapLocation = TEXT("/Game/ShiitakeSorcerers/Maps/LobbyScreenMockUp_P?listen");
     if (SessionInterface.IsValid())
     {
-        auto ExistingSession = SessionInterface->GetNamedSession(TEXT("HUHWHAT"));
+        auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
         if (ExistingSession != nullptr)
         {
             SessionInterface->DestroySession(SESSION_NAME);
@@ -195,7 +195,7 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bAllowJoinInProgress = true;
         SessionSettings.bAllowInvites = true;
         
-        SessionInterface->CreateSession(0, TEXT("HUHWHAT"), SessionSettings);
+        SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
     }    
 }
 
@@ -260,6 +260,7 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
 {
     if (bSuccess && SessionSearch.IsValid() && Menu != nullptr)
     {
+        UE_LOG(LogTemp, Warning, TEXT("%d"), SessionSearch->SearchResults.Num());
         UE_LOG(LogTemp, Warning, TEXT("SessionSearch Completed"));
 
         TArray<FServerData> ServerNames;
@@ -267,7 +268,7 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
         {
             FServerData Data;
             Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
-            Data.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
+            Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;
             Data.Name = SearchResult.Session.OwningUserName;
             ServerNames.Add(Data);
         }

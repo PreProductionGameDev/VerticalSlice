@@ -29,6 +29,10 @@ private:
 	// The ServerName displayed
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ServerName;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* PlayerCount;
+	
 	// The Button of the Server Widget
 	UPROPERTY(meta = (BindWidget))
 	class UButton* RowButton;
