@@ -187,7 +187,7 @@ void UGI_Multiplayer::CreateSession()
     if (SessionInterface.IsValid())
     {
         FOnlineSessionSettings SessionSettings;
-        SessionSettings.bIsLANMatch = true;
+        SessionSettings.bIsLANMatch = false;
         SessionSettings.NumPublicConnections = 8;
         SessionSettings.bShouldAdvertise = true;
         SessionSettings.bUsesPresence = true;
