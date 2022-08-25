@@ -24,7 +24,7 @@ public:
 	void SetServerList(TArray<FServerData> ServerNames);
 
 	void SelectIndex(uint32 Index);
-private:
+protected:
 	INetworkInterface* NetworkInterface;
 	
 	UPROPERTY(meta = (BindWidget))
@@ -33,10 +33,20 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* JoinButton;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* RefreshButton;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<UUserWidget> ServerRowClass;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSubclassOf<UUserWidget> ServerFailureMessage;
+	
 	TOptional<uint32> SelectedIndex;
 	
 	UFUNCTION()
 	void JoinServer();
+
+	UFUNCTION()
+	void RefreshServerList();
 };

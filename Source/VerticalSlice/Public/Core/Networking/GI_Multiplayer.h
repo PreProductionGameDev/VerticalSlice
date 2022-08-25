@@ -70,7 +70,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
     
-private:
+protected:
     IOnlineSessionPtr SessionInterface;
     TSharedPtr<class FOnlineSessionSearch> SessionSearch;
     
@@ -90,6 +90,7 @@ private:
 
     // Menu System
     // The WidgetClass
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
     TSubclassOf<UUserWidget> MenuClass;
     // The Menu Instance
     class UMainMenu* Menu;

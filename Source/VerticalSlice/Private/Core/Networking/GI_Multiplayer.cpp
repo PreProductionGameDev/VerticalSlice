@@ -10,22 +10,15 @@
 #include "Core/Player/FPPlayerController.h"
 #include "Core/UI/Menus/MainMenu.h"   
 
-const static FName SESSION_NAME = TEXT("ShiitakeShowdownServer");
+const static FName SESSION_NAME = TEXT("GameSession");
 
 UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
     const IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem != nullptr) {
+    if (Subsystem != nullptr)
+    {
         UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
     }
-
-    const ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/ShiitakeSorcerers/UI/Networking/WB_MainMenu"));
-    if (!ensure(MenuBPClass.Class != nullptr))
-    {
-        return;
-    }
-
-    MenuClass = MenuBPClass.Class;
 }
 
 void UGI_Multiplayer::SaveSettings()
@@ -193,7 +186,6 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bUsesPresence = true;
         SessionSettings.bUseLobbiesIfAvailable = true;
         SessionSettings.bAllowJoinInProgress = true;
-        SessionSettings.bAllowInvites = true;
         
         SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
     }    

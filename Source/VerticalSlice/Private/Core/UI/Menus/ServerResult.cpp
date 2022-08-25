@@ -18,7 +18,7 @@ void UServerResult::Setup(UServerFinder* InParent, uint32 InIndex)
 
 void UServerResult::PopulateServerData(FServerData& ServerData)
 {
-	this->ServerName->SetText(FText::FromString(ServerData.HostUsername));
+	this->ServerName->SetText(FText::FromString(ServerData.Name));
 
 	const FString PlayerCountText = FString::Printf(TEXT("%d/%d"), ServerData.CurrentPlayers, ServerData.MaxPlayers);
 	this->PlayerCount->SetText(FText::FromString(PlayerCountText));
