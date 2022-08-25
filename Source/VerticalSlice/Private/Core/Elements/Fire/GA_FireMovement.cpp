@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 
 #include "Core/Elements/Fire/GA_FireMovement.h"
@@ -9,6 +10,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+/**
+ * @name Jacob
+ * @brief overites the parents defaults
+ */
 UGA_FireMovement::UGA_FireMovement()
 {
 	//Changing defaults from parent
@@ -17,9 +22,17 @@ UGA_FireMovement::UGA_FireMovement()
 	bSourceObjectMustBeCurrentElementToActivate = true;
 }
 
+/**
+ * @name Jacob
+ * @brief Sets the player speed and acceleration and starts the timers?
+ * @param Handle 
+ * @param ActorInfo 
+ * @param ActivationInfo 
+ * @param TriggerEventData 
+ */
 void UGA_FireMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData* TriggerEventData)
+                                       const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+                                       const FGameplayEventData* TriggerEventData)
 {
 	//activate parent so ability works
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
@@ -43,12 +56,26 @@ void UGA_FireMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	InputRelease->ReadyForActivation();
 }
 
+
+/**
+ * @name Jacob
+ * @brief handles cleanup of the ability
+ * @param Handle 
+ * @param ActorInfo 
+ * @param ActivationInfo 
+ * @param bReplicateEndAbility 
+ * @param bWasCancelled 
+ */
 void UGA_FireMovement::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+                                  const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+/**
+ * @name Jacob
+ * @brief Spawns Fire actor at player location
+ */
 void UGA_FireMovement::SpawnFire()
 {
 	if(!Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor)->UseStamina(0.0125))
@@ -63,6 +90,11 @@ void UGA_FireMovement::SpawnFire()
 	GetWorld()->SpawnActor(ATrailHitbox::StaticClass(), &SpawnLocation, &SpawnRotation, SpawnParameters);
 }
 
+/**
+ * @name Jacob
+ * @brief Stops spawning fire and resets the character movement speed
+ * @param TimeHeld not used variable required for input release
+ */
 void UGA_FireMovement::StopSpawning(float TimeHeld)
 {
 	UE_LOG(LogTemp, Warning, TEXT("keyReleased"));

@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 #pragma once
 
@@ -22,15 +23,19 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	// Checks if it needs to burn overlapping players
 	UFUNCTION()
 	void BurnCheck();
 
+	// Capsule collision component
 	UPROPERTY()
 	UCapsuleComponent* Capsule;
 
+	// Handle to trigger burn check
 	UPROPERTY()
 	FTimerHandle BurnTimer;
 
+	//Particle system to show fire
 	UPROPERTY()
 	UNiagaraSystem* FireSystem;
 

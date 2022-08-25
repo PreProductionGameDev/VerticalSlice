@@ -18,11 +18,13 @@ class VERTICALSLICE_API ALobbyActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ALobbyActor();
+	
 	// Setting Replication Variables
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 	// Sets view to self
 	void ResetCamera();
 
