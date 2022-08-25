@@ -28,6 +28,10 @@ public:
 	UFUNCTION()
 	void MoveIndicator();
 
+	// Moves the indicator in front of the player
+	UFUNCTION()
+	void SyncCamera();
+
 	// Clears timers and telports player
 	UFUNCTION()
 	void KeyReleased(float TimePressed);

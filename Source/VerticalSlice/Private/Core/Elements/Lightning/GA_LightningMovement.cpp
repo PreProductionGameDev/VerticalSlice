@@ -3,7 +3,7 @@
 
 
 #include "Core/Elements/Lightning/GA_LightningMovement.h"
-
+#include "Abilities/Tasks/AbilityTask_NetworkSyncPoint.h"
 #include "FP_Character.h"
 
 
@@ -35,8 +35,14 @@ void UGA_LightningMovement::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	// Activates parent logic so ability works
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	if(GIsServer)
+	if(Cast<AFP_Character>(GetOwningActorFromActorInfo())->GetStamina() < StaminaCost)
 	{
+		EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+		return;
+	}
+	
+	if(GIsServer)
+	{		
 		// Spawn Parameters
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
@@ -48,7 +54,7 @@ void UGA_LightningMovement::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	
 		// Start moving indicator
 		FTimerDynamicDelegate DynamicDelegate;
-		DynamicDelegate.BindUFunction(this, "MoveIndicator");
+		DynamicDelegate.BindUFunction(this, "SyncCamera");
 
 		FTimerManager& TimerManager= GetWorld()->GetTimerManager();
 		IndicatorUpdateTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
@@ -99,8 +105,21 @@ void UGA_LightningMovement::MoveIndicator()
 	if(GetWorld()->LineTraceSingleByChannel(OutHit, Begin, End, CollisionChannel, Params))
 	{
 		Indicator->SetActorLocation(OutHit.Location - Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentRotation().Vector() * 44 );
+		return;
 	}
 	Indicator->SetActorLocation(End);
+}
+
+/**
+ * @name Jacob
+ * @brief Syncs the camera before moving the indicator 
+ */
+void UGA_LightningMovement::SyncCamera()
+{
+	Cast<AFP_Character>(GetOwningActorFromActorInfo())->ClientCameraRotation();
+	UAbilityTask_NetworkSyncPoint* NetworkSync = UAbilityTask_NetworkSyncPoint::WaitNetSync(this, EAbilityTaskNetSyncType::BothWait);
+	NetworkSync->OnSync.AddDynamic(this, &UGA_LightningMovement::MoveIndicator);
+	NetworkSync->ReadyForActivation();
 }
 
 /**
@@ -110,6 +129,8 @@ void UGA_LightningMovement::MoveIndicator()
  */
 void UGA_LightningMovement::KeyReleased(float TimePressed)
 {
+	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(StaminaCost);
+	
 	// Clean up timer
 	GetWorld()->GetTimerManager().ClearTimer(IndicatorUpdateTimer);
 	IndicatorUpdateTimer.Invalidate();
