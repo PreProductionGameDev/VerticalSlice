@@ -34,9 +34,10 @@ public:
     UFUNCTION(BlueprintCallable)
     void LoadSettings();
 
-    // Colors
+    // Gets and saves the colors to the map 
     UFUNCTION(BlueprintCallable)
     void StoreColors();
+    // Gets and saves the models to the map
     UFUNCTION(BlueprintCallable)
     void StoreModels();
 
@@ -50,12 +51,12 @@ public:
     virtual void Shutdown() override;
 
     // Networking
+    // Host a new Session
     virtual void Host() override;
-    
+    // Join the Server from the index
     virtual void Join(uint32 Index) override;
-    
+    // Refresh the Server List
     virtual void RefreshServerList() override;
-
 
     // Scoreboard Sorting
     UFUNCTION(BlueprintCallable)
@@ -86,8 +87,7 @@ protected:
     void OnFindSessionsComplete(bool bSuccess);
     // Delegate for the Async Server Join
     void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-
-
+    
     // Menu System
     // The WidgetClass
     UPROPERTY(BlueprintReadOnly, EditAnywhere)

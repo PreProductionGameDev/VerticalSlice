@@ -180,7 +180,15 @@ void UGI_Multiplayer::CreateSession()
     if (SessionInterface.IsValid())
     {
         FOnlineSessionSettings SessionSettings;
-        SessionSettings.bIsLANMatch = false;
+
+        if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+        {
+            SessionSettings.bIsLANMatch = true;
+        }
+        else
+        {
+            SessionSettings.bIsLANMatch = false;
+        }
         SessionSettings.NumPublicConnections = 8;
         SessionSettings.bShouldAdvertise = true;
         SessionSettings.bUsesPresence = true;

@@ -15,5 +15,4 @@ struct FServerData
 	FString Name;
 	uint16 CurrentPlayers;
 	uint16 MaxPlayers;
-	FString HostUsername;
 };
