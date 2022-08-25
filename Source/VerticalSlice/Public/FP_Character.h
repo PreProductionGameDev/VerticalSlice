@@ -29,11 +29,12 @@ UCLASS()
 class VERTICALSLICE_API AFP_Character : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
-	UCameraComponent* FirstPersonCameraComponent;
-
 public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true", DisplayName = "FPCamera"));
+	TObjectPtr<UCameraComponent> FirstPersonCameraComponent;
+
+
 	// Sets default values for this character's properties
 	AFP_Character();
 

@@ -6,7 +6,6 @@
 #include "CoreMinimal.h"
 #include "Core/PlayerGameplayAbility.h"
 #include "GameplayAbilities/Public/Abilities/Tasks/AbilityTask_WaitInputRelease.h"
-#include "GameplayAbilities/Public/Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "GA_FireMovement.generated.h"
 
 /**
