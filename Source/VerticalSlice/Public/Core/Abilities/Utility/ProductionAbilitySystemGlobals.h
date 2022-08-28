@@ -23,4 +23,7 @@ public:
 	{
 		return dynamic_cast<UProductionAbilitySystemGlobals&>(Get());
 	}
+
+	/** Should allocate a project specific GameplayEffectContext struct. Caller is responsible for deallocation */
+	virtual FGameplayEffectContext* AllocGameplayEffectContext() const override;
 };

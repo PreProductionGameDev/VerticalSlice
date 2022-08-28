@@ -7,6 +7,7 @@
 #include "Core/PlayerGameplayAbility.h"
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
+#include "Core/Abilities/GameplayEffects/GameplayEffectContext.h"
 #include "GASBlueprintFunctionLibrary.generated.h"
 
 /**
@@ -27,4 +28,16 @@ public:
 	// Identifies if SpecHandle is valid
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ability")
 	static bool IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle);
+	
+	// Gameplay Effect Context
+	// Returns TargetData
+	UFUNCTION(BlueprintCallable, Category = "Ability|EffectContext", Meta = (DisplayName = "GetTargetData"))
+	static FGameplayAbilityTargetDataHandle EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle);
+
+	// Adds TargetData
+	UFUNCTION(BlueprintCallable, Category = "Ability|EffectContext", Meta = (DisplayName = "AddTargetData"))
+	static void EffectContextAddTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetData);
+	
+	UFUNCTION(BlueprintCallable, Category = "Ability|TargetData")
+	static void ClearTargetData(UPARAM(ref) FGameplayAbilityTargetDataHandle& TargetData);
 };

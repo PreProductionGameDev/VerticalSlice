@@ -20,8 +20,7 @@ UPlayerGameplayAbility* UGASBlueprintFunctionLibrary::GetPrimaryAbilityInstanceF
 {
 	if (AbilitySystemComponent)
 	{
-		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(InAbilityClass);
-		if (AbilitySpec)
+		if (FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(InAbilityClass))
 		{
 			return Cast<UPlayerGameplayAbility>(AbilitySpec->GetPrimaryInstance());
 		}
@@ -32,4 +31,27 @@ UPlayerGameplayAbility* UGASBlueprintFunctionLibrary::GetPrimaryAbilityInstanceF
 bool UGASBlueprintFunctionLibrary::IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle)
 {
 	return Handle.IsValid();
+}
+
+FGameplayAbilityTargetDataHandle UGASBlueprintFunctionLibrary::EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle)
+{
+	if (FGEContext* EffectContext = static_cast<FGEContext*>(EffectContextHandle.Get()))
+	{
+		return EffectContext->GetTargetData();
+	}
+
+	return FGameplayAbilityTargetDataHandle();
+}
+
+void UGASBlueprintFunctionLibrary::EffectContextAddTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetData)
+{
+	if (FGEContext* EffectContext = static_cast<FGEContext*>(EffectContextHandle.Get()))
+	{
+		EffectContext->AddTargetData(TargetData);
+	}
+}
+
+void UGASBlueprintFunctionLibrary::ClearTargetData(FGameplayAbilityTargetDataHandle& TargetData)
+{
+	TargetData.Clear();
 }
