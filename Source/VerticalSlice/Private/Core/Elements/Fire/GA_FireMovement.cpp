@@ -42,27 +42,25 @@ void UGA_FireMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 		return;
 	}
+	
+	//start spawning fire
+	FTimerDynamicDelegate DynamicDelegate;
+	DynamicDelegate.BindUFunction(this, "SpawnFire");
 
-	if(GIsServer)
-	{
-		//start spawning fire
-		FTimerDynamicDelegate DynamicDelegate;
-		DynamicDelegate.BindUFunction(this, "SpawnFire");
+	FTimerManager& TimerManager= GetWorld()->GetTimerManager();
+	SpawnTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
+	TimerManager.SetTimer(SpawnTimer, DynamicDelegate, 0.04f, true,0);
 
-		FTimerManager& TimerManager= GetWorld()->GetTimerManager();
-		SpawnTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
-		TimerManager.SetTimer(SpawnTimer, DynamicDelegate, 0.04f, true,0);
+	//changes the player movement
+	UCharacterMovementComponent* CharacterMovementComponent= Cast<AFP_Character>(GetActorInfo().OwnerActor)->GetCharacterMovement();
+	CharacterMovementComponent->MaxWalkSpeed = 2000;
+	CharacterMovementComponent->MaxAcceleration = 3040;
 
-		//changes the player movement
-		UCharacterMovementComponent* CharacterMovementComponent= Cast<AFP_Character>(GetActorInfo().OwnerActor)->GetCharacterMovement();
-		CharacterMovementComponent->MaxWalkSpeed = 2000;
-		CharacterMovementComponent->MaxAcceleration = 3040;
-
-		//reset on input release
-		InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
-		InputRelease->OnRelease.AddDynamic(this, &UGA_FireMovement::StopSpawning);
-		InputRelease->ReadyForActivation();
-	}
+	//reset on input release
+	InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
+	InputRelease->OnRelease.AddDynamic(this, &UGA_FireMovement::StopSpawning);
+	InputRelease->ReadyForActivation();
+	
 }
 
 
@@ -116,7 +114,7 @@ void UGA_FireMovement::StopSpawning(float TimeHeld)
 	CharacterMovementComponent->MaxWalkSpeed = 1200;
 	CharacterMovementComponent->MaxAcceleration = 2048;
 	
-	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);
 }
 
 

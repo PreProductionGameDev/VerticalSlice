@@ -32,9 +32,9 @@ public:
 	UFUNCTION()
 	void SyncCamera();
 
-	// Clears timers and telports player
+	// Clears timers and teleports player
 	UFUNCTION()
-	void KeyReleased(float TimePressed);
+	void OnKeyReleased(float TimePressed);
 
 	// Blueprint function to move the player
 	UFUNCTION(BlueprintImplementableEvent)

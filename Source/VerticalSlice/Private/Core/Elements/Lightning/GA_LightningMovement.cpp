@@ -41,30 +41,28 @@ void UGA_LightningMovement::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		return;
 	}
 	
-	if(GIsServer)
-	{		
-		// Spawn Parameters
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
-		const FVector SpawnLocation = GetCurrentActorInfo()->OwnerActor->GetActorLocation();
-		const FRotator SpawnRotation = GetCurrentActorInfo()->OwnerActor->GetActorRotation();
+	// Spawn Parameters
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
+	const FVector SpawnLocation = GetCurrentActorInfo()->OwnerActor->GetActorLocation();
+	const FRotator SpawnRotation = GetCurrentActorInfo()->OwnerActor->GetActorRotation();
 
-		// Spawns the Indicator
-		Indicator = GetWorld()->SpawnActor(IndicatorClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
+	// Spawns the Indicator
+	Indicator = GetWorld()->SpawnActor(IndicatorClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
 	
-		// Start moving indicator
-		FTimerDynamicDelegate DynamicDelegate;
-		DynamicDelegate.BindUFunction(this, "SyncCamera");
+	// Start moving indicator
+	FTimerDynamicDelegate DynamicDelegate;
+	DynamicDelegate.BindUFunction(this, "SyncCamera");
 
-		FTimerManager& TimerManager= GetWorld()->GetTimerManager();
-		IndicatorUpdateTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
-		TimerManager.SetTimer(IndicatorUpdateTimer, DynamicDelegate, 0.04f, true,0);
+	FTimerManager& TimerManager= GetWorld()->GetTimerManager();
+	IndicatorUpdateTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
+	TimerManager.SetTimer(IndicatorUpdateTimer, DynamicDelegate, 0.02f, true,0);
+	
+	// Execute teleport on input release
+	InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
+	InputRelease->OnRelease.AddDynamic(this, &UGA_LightningMovement::OnKeyReleased);
+	InputRelease->ReadyForActivation();
 
-		// Execute teleport on input release
-		InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
-		InputRelease->OnRelease.AddDynamic(this, &UGA_LightningMovement::KeyReleased);
-		InputRelease->ReadyForActivation();
-	}
 }
 
 /**
@@ -127,8 +125,9 @@ void UGA_LightningMovement::SyncCamera()
  * @brief Teleports the player  to the indicator
  * @param TimePressed needed for the key released
  */
-void UGA_LightningMovement::KeyReleased(float TimePressed)
+void UGA_LightningMovement::OnKeyReleased(float TimePressed)
 {
+	UE_LOG(LogTemp, Warning, TEXT("release"));
 	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(StaminaCost);
 	
 	// Clean up timer
@@ -139,5 +138,5 @@ void UGA_LightningMovement::KeyReleased(float TimePressed)
 	TeleportPlayer();
 	Indicator = nullptr;
 	
-	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);
 }
