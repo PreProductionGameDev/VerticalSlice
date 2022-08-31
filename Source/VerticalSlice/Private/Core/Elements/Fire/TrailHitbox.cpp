@@ -86,6 +86,16 @@ void ATrailHitbox::BurnCheck()
 			GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
 			GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 
+			//checks for team to ignore
+			if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
+			{
+				GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue")));
+			}
+			else if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
+			{
+				GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Team.Red")));
+			}
+
 			//apply the created effect
 			AbilitySystemComponent->ApplyGameplayEffectToTarget(GameplayEffect,TargetAbilitySystemComponent);
 		}
