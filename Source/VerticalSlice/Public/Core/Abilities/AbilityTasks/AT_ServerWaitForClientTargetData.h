@@ -15,7 +15,8 @@ UCLASS()
 class VERTICALSLICE_API UAT_ServerWaitForClientTargetData : public UAbilityTask
 {
 	GENERATED_BODY()
-
+	
+public:
 	// Object Initializer
 	UAT_ServerWaitForClientTargetData(const FObjectInitializer& ObjectInitializer);
 	// The ValidData Delegate

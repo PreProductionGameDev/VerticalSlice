@@ -396,6 +396,11 @@ int32 ABWeapon::GetAmmoCost() const
 	return AmmoCost;
 }
 
+int32 ABWeapon::GetNumberOfShots() const
+{
+	return ShotCount;
+}
+
 float ABWeapon::GetTimeBetweenShots() const
 {
 	return TimeBetweenShots;

@@ -141,6 +141,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetAmmoCost() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
+	int32 GetNumberOfShots() const;
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetTimeBetweenShots() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	float GetRecoilCooldown() const;
@@ -178,6 +180,9 @@ protected:
 	// The Damage per shot
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
 	int32 Damage;
+	// Number of Shots fired
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
+	int32 ShotCount;
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent* CollisionComp;

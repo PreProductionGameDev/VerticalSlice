@@ -17,7 +17,8 @@ UCLASS()
 class VERTICALSLICE_API UAT_WaitTargetDataUsingActor : public UAbilityTask
 {
 	GENERATED_BODY()
-
+	
+public:
 	// Delegates used for the Blueprints
 	// Validated Data Received
 	UPROPERTY(BlueprintAssignable)
