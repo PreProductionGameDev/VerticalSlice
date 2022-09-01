@@ -39,8 +39,11 @@ public:
 	// Wait until the next Valid Shot
 	UFUNCTION()
 	void WaitForValidShot();
-
 	
+	// Recoil Time
+	float RecoilTime = 0.0f;
+	// The Frame before the recoil time
+	float StepBeforeRecoilTime = 0.0f;
 protected:
 	// The Source Weapon Class
 	UPROPERTY()
@@ -66,4 +69,13 @@ protected:
 
 	// Setup and Store all the variables
 	void SetupCacheables();
+
+	// Reset Recoil time to 0
+	UFUNCTION()
+	void ResetRecoilTime();
+	// Check the recoil state
+	UFUNCTION()
+	void CheckRecoilStopped();
+	FTimerHandle RecoilResetHandle;
+	
 };

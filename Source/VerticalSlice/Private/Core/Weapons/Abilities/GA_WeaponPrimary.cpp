@@ -138,6 +138,7 @@ void UGA_WeaponPrimary::FireShot()
 	// Check If we can shoot and fire the Bullet and repeat loop
 	if (CheckCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), new FGameplayTagContainer()))
 	{
+		CheckRecoilStopped();
 		InstantAbility->FireBullet();
 		FireLoop();
 		return;
@@ -158,6 +159,8 @@ void UGA_WeaponPrimary::FiringCancelled(float TimePressed)
 	InstantAbility->ExternalEndAbility();
 	// Cancel this Ability
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, true);
+
+	GetWorld()->GetTimerManager().SetTimer(RecoilResetHandle, this, &UGA_WeaponPrimary::ResetRecoilTime, SourceWeapon->GetRecoilCooldown());
 }
 
 /**
@@ -211,4 +214,24 @@ void UGA_WeaponPrimary::SetupCacheables()
 
 	// Set the Time Between shots
 	TimeBetweenShots = SourceWeapon->GetTimeBetweenShots();
+}
+
+void UGA_WeaponPrimary::ResetRecoilTime()
+{
+	RecoilTime = 0.0f;
+}
+
+void UGA_WeaponPrimary::CheckRecoilStopped()
+{
+	const UWorld* World = GetWorld();
+	if (!World)
+	{
+		return;
+	}
+	
+	if (World->GetTimerManager().TimerExists(RecoilResetHandle))
+	{
+		RecoilTime = World->GetTimerManager().GetTimerElapsed(RecoilResetHandle) / RecoilTime;
+		World->GetTimerManager().ClearTimer(RecoilResetHandle);
+	}
 }

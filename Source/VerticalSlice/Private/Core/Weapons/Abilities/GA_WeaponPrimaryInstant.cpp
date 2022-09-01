@@ -45,11 +45,20 @@ void UGA_WeaponPrimaryInstant::HandleTargetData(const FGameplayAbilityTargetData
 
 /**
  * @name Stefan Petrie
+ * @brief Handles Weapon Recoil. OVERRIDE IN CHILDREN IS REQUIRED
+ */
+void UGA_WeaponPrimaryInstant::HandleRecoil()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Not Using Primary Instant Child for Recoil"))
+}
+
+/**
+ * @name Stefan Petrie
  * @brief Setup all Variables. OVERRIDE IN CHILDREN IS REQUIRED
  */
 void UGA_WeaponPrimaryInstant::SetupCacheables()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Not Using Primary Instant Child ClassClass"));
+	UE_LOG(LogTemp, Warning, TEXT("Not Using Primary Instant Child for Cacheables"));
 }
 
 /**
@@ -58,5 +67,5 @@ void UGA_WeaponPrimaryInstant::SetupCacheables()
  */
 void UGA_WeaponPrimaryInstant::PlayAnimations()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Not Using Primary Instant Child Class For ANimations"));
+	UE_LOG(LogTemp, Warning, TEXT("Not Using Primary Instant Child Class For Animations"));
 }

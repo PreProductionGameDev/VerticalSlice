@@ -93,6 +93,8 @@ protected:
 	UPROPERTY()
 	FGameplayAbilityTargetingLocationInfo TraceStartLocation;
 
+	// Handles the weapons recoil patter
+	virtual void HandleRecoil() override;
 	// Store all runtime Variables
 	virtual void SetupCacheables() override;
 	// Play Animations

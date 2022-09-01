@@ -12,6 +12,7 @@
 #include "Core/Weapons/BWeapon.h"
 #include "Core/Weapons/WeaponUtilityFunctionLibrary.h"
 #include "Core/Weapons/Abilities/GA_WeaponPrimary.h"
+#include "Curves/CurveVector.h"
 
 /**
  * @name Stefan Petrie
@@ -170,6 +171,8 @@ void UGA_WeaponPrimaryInstant_HitScan::FireBullet()
 					
 					// Set Last Shot Time
 					TimeOfLastShot = GetWorld()->GetTimeSeconds();
+					// Process Weapon Recoil
+					HandleRecoil();
 				}
 			}
 			else
@@ -218,6 +221,25 @@ void UGA_WeaponPrimaryInstant_HitScan::HandleTargetData(const FGameplayAbilityTa
 		UWeaponUtilityFunctionLibrary::CheckHitMarker(TargetData, OwningPlayer);
 	}
 	
+}
+
+void UGA_WeaponPrimaryInstant_HitScan::HandleRecoil()
+{
+	// Dont Process Recoil if not pattern
+	if (!SourceWeapon->GetRecoilPattern())
+	{
+		return;
+	}
+	// Cache the recoil time frame
+	GA_Primary->StepBeforeRecoilTime = GA_Primary->RecoilTime - SourceWeapon->GetTimeBetweenShots();
+	// Get the Recoil Vectors
+	const FVector CurrentRecoilTimeVector = SourceWeapon->GetRecoilPattern()->GetVectorValue(GA_Primary->RecoilTime);
+	const FVector PrevRecoilTimeVector = SourceWeapon->GetRecoilPattern()->GetVectorValue(GA_Primary->StepBeforeRecoilTime);
+	// Add the Offset to the players Camera
+	OwningPlayer->AddControllerPitchInput(PrevRecoilTimeVector.Y - CurrentRecoilTimeVector.Y);
+	OwningPlayer->AddControllerYawInput(PrevRecoilTimeVector.X - CurrentRecoilTimeVector.X);
+	// Update the Recoil time
+	GA_Primary->RecoilTime = GA_Primary->RecoilTime + SourceWeapon->GetTimeBetweenShots();
 }
 
 /**

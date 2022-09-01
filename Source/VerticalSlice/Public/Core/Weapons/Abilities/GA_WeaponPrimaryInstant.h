@@ -30,6 +30,8 @@ public:
 	float TimeOfLastShot = -99999.9f;
 	
 protected:
+	// Weapon Recoil
+	virtual void HandleRecoil();
 	// Store all Cacheable Variables
 	virtual void SetupCacheables();
 	// Play the Animations
