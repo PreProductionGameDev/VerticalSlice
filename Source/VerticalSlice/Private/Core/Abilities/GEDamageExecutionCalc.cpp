@@ -48,6 +48,16 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 	EvaluateParameters.TargetTags = TargetTags;
 	EvaluateParameters.SourceTags = SourceTags;
 
+	// Ignore Team Damage
+	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
+	{
+		return;
+	}
+	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
+	{
+		return;
+	}
+	
 	float Damage = 0.0f;
 	// Capture Optional damage value set on the Damage GE as a Calculation modifier under the Execution Calculation
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().DamageDef, EvaluateParameters, Damage);
@@ -56,7 +66,7 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 
 	if (Damage > 0.0f)
 	{
-		// Set the Target's Damage meta attirbute
+		// Set the Target's Damage meta attribute
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().DamageProperty, EGameplayModOp::Additive, Damage));
 	}
 }
