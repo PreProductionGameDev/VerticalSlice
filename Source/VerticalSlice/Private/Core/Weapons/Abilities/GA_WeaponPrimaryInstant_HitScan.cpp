@@ -45,7 +45,6 @@ UGA_WeaponPrimaryInstant_HitScan::UGA_WeaponPrimaryInstant_HitScan()
  */
 void UGA_WeaponPrimaryInstant_HitScan::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	// Setup Variables
 	SetupCacheables();
 	// Reset the Weapon Spread
@@ -130,7 +129,7 @@ bool UGA_WeaponPrimaryInstant_HitScan::CheckCost(const FGameplayAbilitySpecHandl
  */
 void UGA_WeaponPrimaryInstant_HitScan::ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
 {
-	Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
+	//Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
 
 	// Get the Current Weapon and Apply the Cost if not Infinite Ammo
 	if (ABWeapon* CurrentWeapon = Cast<ABWeapon>(GetSourceObject(Handle, ActorInfo)))
@@ -139,6 +138,7 @@ void UGA_WeaponPrimaryInstant_HitScan::ApplyCost(const FGameplayAbilitySpecHandl
 		{
 			return;
 		}
+		UE_LOG(LogTemp, Warning, TEXT("COST APPLIED"));
 		// Apply the Cost
 		CurrentWeapon->SetPrimaryClipAmmo(CurrentWeapon->GetPrimaryClipAmmo() - CurrentWeapon->GetAmmoCost());
 	}
@@ -191,6 +191,7 @@ void UGA_WeaponPrimaryInstant_HitScan::FireBullet()
  */
 void UGA_WeaponPrimaryInstant_HitScan::HandleTargetData(const FGameplayAbilityTargetDataHandle& TargetData)
 {
+	UE_LOG(LogTemp, Warning, TEXT("START OF TARGET DATA"));
 	// If We cannot apply the cost, Cancel the ability
 	if (!CommitAbilityCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo()))
 	{

@@ -182,7 +182,7 @@ protected:
 	int32 Damage;
 	// Number of Shots fired
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Stats")
-	int32 ShotCount;
+	int32 ShotCount = 1;
 	// Collision capsule for when weapon is in pickup mode
 	UPROPERTY(VisibleAnywhere)
 	class UCapsuleComponent* CollisionComp;

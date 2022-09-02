@@ -191,6 +191,7 @@ void UGA_WeaponPrimary::SetupCacheables()
 		SourceWeapon = Cast<ABWeapon>(GetCurrentSourceObject());
 		if(!SourceWeapon)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("NO SOURCE WEAPON"));
 			return;
 		}
 	}
@@ -208,6 +209,7 @@ void UGA_WeaponPrimary::SetupCacheables()
 		InstantAbility = Cast<UGA_WeaponPrimaryInstant>(UGASBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromHandle(PlayerASC, InstantAbilityHandle));
 		if (!InstantAbility)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("NO INSTANT ABILITY"));
 			return;
 		}
 	}
