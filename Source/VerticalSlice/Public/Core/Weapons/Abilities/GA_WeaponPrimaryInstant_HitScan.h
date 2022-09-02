@@ -67,8 +67,10 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	// Tag for when player is Aiming
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FGameplayTag AimingTag;
 	// Tag for End of player Aiming
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FGameplayTag AimingRemovalTag;
 
 	// Gameplay Cue Tag for Firing the Weapon
