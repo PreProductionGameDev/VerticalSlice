@@ -218,11 +218,19 @@ void UGA_WeaponPrimary::SetupCacheables()
 	TimeBetweenShots = SourceWeapon->GetTimeBetweenShots();
 }
 
+/**
+ * @name Stefan Petrie
+ * @brief Set the Recoil time to 0
+ */
 void UGA_WeaponPrimary::ResetRecoilTime()
 {
 	RecoilTime = 0.0f;
 }
 
+/**
+ * @name Stefan Petrie
+ * @brief Lower Recoil time based on the time elapsed
+ */
 void UGA_WeaponPrimary::CheckRecoilStopped()
 {
 	const UWorld* World = GetWorld();

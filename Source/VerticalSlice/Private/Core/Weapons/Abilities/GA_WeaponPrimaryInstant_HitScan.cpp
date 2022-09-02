@@ -149,36 +149,43 @@ void UGA_WeaponPrimaryInstant_HitScan::ApplyCost(const FGameplayAbilitySpecHandl
  */
 void UGA_WeaponPrimaryInstant_HitScan::FireBullet()
 {
-	if (GetActorInfo().PlayerController->IsLocalController())
+	// Ensure the Player is locally controlled
+	if (!GetActorInfo().PlayerController->IsLocalController())
 	{
-		if (GetWorld()->GetTimeSeconds() - TimeOfLastShot >= SourceWeapon->GetTimeBetweenShots() - 0.01)
-		{
-			if (CheckCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), new FGameplayTagContainer()))
-			{
-				if (SourceWeapon)
-				{
-					// Setup Line Trace Target Actor
-					TraceStartLocation.SourceComponent = Weapon1PMesh;
-					TraceStartLocation.SourceSocketName = FName("MuzzlePos");
-					const FCollisionProfileName ProfileName = FName("ProjectileCollision");
-					LineTraceTargetActor->Configure(TraceStartLocation, AimingTag, AimingRemovalTag, ProfileName, FGameplayTargetDataFilterHandle(), nullptr, FWorldReticleParameters(), false, false, false, true, true, true, true, 9999999.0, WeaponSpread, AimingSpreadMod, FiringSpreadIncrement, FiringSpreadMax, 1, SourceWeapon->GetNumberOfShots());
+		return;
+	}
 
-					// Wait for Target Data
-					UAT_WaitTargetDataUsingActor* TargetDataWait = UAT_WaitTargetDataUsingActor::WaitTargetDataWithReusableActor(this, FName("DataWait"), EGameplayTargetingConfirmation::Instant, LineTraceTargetActor, true);
-					TargetDataWait->ValidData.AddDynamic(this, &UGA_WeaponPrimaryInstant_HitScan::HandleTargetData);
-					TargetDataWait->ReadyForActivation();
-					
-					// Set Last Shot Time
-					TimeOfLastShot = GetWorld()->GetTimeSeconds();
-					// Process Weapon Recoil
-					HandleRecoil();
-				}
-			}
-			else
-			{
-				CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
-			}
+	// Check that the Player can Shoot
+	if (!(GetWorld()->GetTimeSeconds() - TimeOfLastShot >= SourceWeapon->GetTimeBetweenShots() - 0.01))
+	{
+		return;
+	}
+
+	// Check the Cost and handle the Weapon Firing
+	if (CheckCost(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), new FGameplayTagContainer()))
+	{
+		if (SourceWeapon)
+		{
+			// Setup Line Trace Target Actor
+			TraceStartLocation.SourceComponent = Weapon1PMesh;
+			TraceStartLocation.SourceSocketName = FName("MuzzlePos");
+			const FCollisionProfileName ProfileName = FName("ProjectileCollision");
+			LineTraceTargetActor->Configure(TraceStartLocation, AimingTag, AimingRemovalTag, ProfileName, FGameplayTargetDataFilterHandle(), nullptr, FWorldReticleParameters(), false, false, false, true, true, true, true, 9999999.0, WeaponSpread, AimingSpreadMod, FiringSpreadIncrement, FiringSpreadMax, 1, SourceWeapon->GetNumberOfShots());
+
+			// Wait for Target Data
+			UAT_WaitTargetDataUsingActor* TargetDataWait = UAT_WaitTargetDataUsingActor::WaitTargetDataWithReusableActor(this, FName("DataWait"), EGameplayTargetingConfirmation::Instant, LineTraceTargetActor, true);
+			TargetDataWait->ValidData.AddDynamic(this, &UGA_WeaponPrimaryInstant_HitScan::HandleTargetData);
+			TargetDataWait->ReadyForActivation();
+			
+			// Set Last Shot Time
+			TimeOfLastShot = GetWorld()->GetTimeSeconds();
+			// Process Weapon Recoil
+			HandleRecoil();
 		}
+	}
+	else
+	{
+		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
 	}
 }
 
@@ -222,6 +229,10 @@ void UGA_WeaponPrimaryInstant_HitScan::HandleTargetData(const FGameplayAbilityTa
 	
 }
 
+/**
+ * @name Stefan Petrie
+ * @brief Process the Recoil and apply it to the player
+ */
 void UGA_WeaponPrimaryInstant_HitScan::HandleRecoil()
 {
 	// Dont Process Recoil if not pattern
@@ -288,9 +299,15 @@ void UGA_WeaponPrimaryInstant_HitScan::SetupCacheables()
  */
 void UGA_WeaponPrimaryInstant_HitScan::PlayAnimations()
 {
-	Weapon1PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
-	Weapon1PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	if (Weapon1PMesh)
+	{
+		Weapon1PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
+		Weapon1PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
 
-	Weapon3PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
-	Weapon3PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	if (Weapon3PMesh)
+	{
+		Weapon3PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
+		Weapon3PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
 }
