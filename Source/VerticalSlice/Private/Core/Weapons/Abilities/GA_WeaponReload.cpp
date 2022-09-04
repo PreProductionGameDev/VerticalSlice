@@ -1,5 +1,5 @@
 // 2022 ChronoOwl Studios
-
+// Stefan Petrie
 
 #include "Core/Weapons/Abilities/GA_WeaponReload.h"
 #include "AbilitySystemBlueprintLibrary.h"

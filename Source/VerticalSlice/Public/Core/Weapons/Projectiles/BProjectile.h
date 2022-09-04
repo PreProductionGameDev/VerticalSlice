@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Stefan Petrie
 
 #pragma once
 
@@ -6,6 +7,10 @@
 #include "GameFramework/Actor.h"
 #include "BProjectile.generated.h"
 
+/**
+ *  The Projectile Class
+ *  Currently Solely used for the Rocket Weapon
+ */
 UCLASS()
 class VERTICALSLICE_API ABProjectile : public AActor
 {
@@ -22,10 +27,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Projectile Movement Component
 	UPROPERTY(VisibleDefaultsOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
+	// Component for Projectile Collision
 	UPROPERTY(VisibleDefaultsOnly)
 	class USphereComponent* CollisionComponent;
+	// The Projectile Mesh
 	UPROPERTY(VisibleDefaultsOnly)
 	UStaticMeshComponent* ProjectileMesh;
 };

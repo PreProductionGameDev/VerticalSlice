@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Stefan Petrie
 
 #pragma once
 

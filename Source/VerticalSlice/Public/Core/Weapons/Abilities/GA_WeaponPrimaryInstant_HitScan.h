@@ -94,7 +94,7 @@ protected:
 	// Trace Start location for TraceTargetActor
 	UPROPERTY()
 	FGameplayAbilityTargetingLocationInfo TraceStartLocation;
-
+	// Server Wait Task
 	UPROPERTY()
 	class UAT_ServerWaitForClientTargetData* ServerWaitForClientData;
 

@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Stefan Petrie
 
 #pragma once
 
@@ -7,7 +8,8 @@
 #include "GA_WeaponPrimaryInstantRocket.generated.h"
 
 /**
- * 
+ *	The Primary Instant Ability for a Rocket Weapon.
+ *	Overrides the Parent class.
  */
 UCLASS()
 class VERTICALSLICE_API UGA_WeaponPrimaryInstantRocket : public UGA_WeaponPrimaryInstant
@@ -34,7 +36,6 @@ public:
 	// Handles the Data and spawns the bullet
 	virtual void HandleTargetData(const FGameplayAbilityTargetDataHandle& TargetData) override;
 
-
 protected:
 	// Weapon First Person Mesh
 	UPROPERTY(EditAnywhere, Category = "ShiitakeShowdown|WeaponComponents")
@@ -45,8 +46,7 @@ protected:
 	// Weapon Animation Montage
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|WeaponComponents")
 	UAnimMontage* WeaponAnimationMontage;
-
-
+	
 	// Weapon for the Ability
 	UPROPERTY()
 	class ABWeapon* SourceWeapon;
@@ -73,14 +73,14 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FGameplayTag AimingRemovalTag;
 
-
+	// Class for the Projectile 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<class ABProjectile> ProjectileClass;
 
 	// Trace Start location for TraceTargetActor
 	UPROPERTY()
 	FGameplayAbilityTargetingLocationInfo TraceStartLocation;
-
+	// Server Wait Task
 	UPROPERTY()
 	class UAT_ServerWaitForClientTargetData* ServerWaitForClientData;
 

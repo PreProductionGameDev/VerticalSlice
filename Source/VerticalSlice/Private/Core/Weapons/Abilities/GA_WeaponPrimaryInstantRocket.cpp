@@ -1,7 +1,6 @@
 // 2022 ChronoOwl Studios
 // Stefan Petrie
 
-
 #include "Core/Weapons/Abilities/GA_WeaponPrimaryInstantRocket.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "FP_Character.h"

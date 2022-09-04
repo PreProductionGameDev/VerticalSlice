@@ -1,24 +1,26 @@
 // 2022 ChronoOwl Studios
-
+// Stefan Petrie
 
 #include "Core/Weapons/Projectiles/BProjectile.h"
-
-#include <complex>
-
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-// Sets default values
+/**
+ * @name Stefan Petrie
+ * @brief Set ups the Defaults for the Projectile
+ */
 ABProjectile::ABProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create the Root Component
 	if (!RootComponent)
 	{
 		RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileRootComponent"));
 	}
 
+	// Make the Sphere Collider
 	if (!CollisionComponent)
 	{
 		CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -26,13 +28,17 @@ ABProjectile::ABProjectile()
 		RootComponent = CollisionComponent;
 	}
 
+	// Create the Default Projectile Mesh
+	// Mesh has No Collision
 	if (!ProjectileMesh)
 	{
 		ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 		ProjectileMesh->SetMobility(EComponentMobility::Movable);
+		ProjectileMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ProjectileMesh->SetupAttachment(RootComponent);
 	}
 
+	// Create the Default Projectile Movement Component
 	if (!ProjectileMovement)
 	{
 		ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
@@ -43,20 +49,25 @@ ABProjectile::ABProjectile()
 		ProjectileMovement->ProjectileGravityScale = 0.0f;
 	}
 
+	// Enable Component Replication
 	bReplicates = true;
 }
 
-// Called when the game starts or when spawned
+/**
+ * @name Stefan Petrie
+ * @brief Begin Play
+ */
 void ABProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
+/**
+ * @name Stefan Petrie
+ * @brief On Tick Event. Can Remove
+ */
 void ABProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
