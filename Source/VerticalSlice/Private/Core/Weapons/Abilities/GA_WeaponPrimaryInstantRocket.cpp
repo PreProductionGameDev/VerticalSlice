@@ -231,8 +231,13 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 	
 }
 
+/**
+ * @name Stefan Petrie
+ * @brief Process the Recoil and apply it to the player
+ */
 void UGA_WeaponPrimaryInstantRocket::HandleRecoil()
 {
+	// TODO: PROCESS RECOIL
 	Super::HandleRecoil();
 }
 
@@ -277,7 +282,12 @@ void UGA_WeaponPrimaryInstantRocket::SetupCacheables()
 	}
 }
 
+/**
+ * @name Stefan Petrie
+ * @brief Play the Weapon Animations
+ */
 void UGA_WeaponPrimaryInstantRocket::PlayAnimations()
 {
+	// TODO: PLAY ANIMATIONS
 	Super::PlayAnimations();
 }

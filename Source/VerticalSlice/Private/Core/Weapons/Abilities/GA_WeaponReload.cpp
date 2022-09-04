@@ -112,6 +112,11 @@ void UGA_WeaponReload::SetupCacheables()
  */
 void UGA_WeaponReload::ReloadAmmo()
 {
+	if (!ReloadEffect || !SourceWeapon)
+	{
+		return;
+	}
+	
 	// Find out how much Ammo to Reload
 	const int AmmoToReload = SourceWeapon->GetMaxPrimaryClipAmmo() - SourceWeapon->GetPrimaryClipAmmo();
 
@@ -141,7 +146,7 @@ void UGA_WeaponReload::ReloadAmmo()
  */
 void UGA_WeaponReload::PlayAnimations()
 {
-	if (SourceWeapon)
+	if (SourceWeapon && WeaponAnimationMontage)
 	{	
 		SourceWeapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0, true);
 		SourceWeapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection(FName("Reload"));
