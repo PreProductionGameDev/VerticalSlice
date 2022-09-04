@@ -222,11 +222,11 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 
 		const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
-		auto* Projectile = GetWorld()->SpawnActor(ProjectileClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
+		//auto* Projectile = GetWorld()->SpawnActor(ProjectileClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
 		
-		//ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
-//
-		//Projectile->FinishSpawning(SpawnTransform);
+		ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
+
+		Projectile->FinishSpawning(SpawnTransform);
 	}
 	
 }
