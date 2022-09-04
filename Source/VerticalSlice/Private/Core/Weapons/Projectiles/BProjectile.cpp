@@ -3,6 +3,8 @@
 
 #include "Core/Weapons/Projectiles/BProjectile.h"
 
+#include <complex>
+
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -28,7 +30,7 @@ ABProjectile::ABProjectile()
 	{
 		ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 		ProjectileMesh->SetMobility(EComponentMobility::Movable);
-		ProjectileMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+		ProjectileMesh->SetupAttachment(RootComponent);
 	}
 
 	if (!ProjectileMovement)

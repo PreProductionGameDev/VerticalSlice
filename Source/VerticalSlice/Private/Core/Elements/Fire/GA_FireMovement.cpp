@@ -20,6 +20,9 @@ UGA_FireMovement::UGA_FireMovement()
 	AbilityInputID = EPlayerAbilityInputID::MovementAbility;
 	bSourceObjectMustBeCurrentWeaponToActivate = false;
 	bSourceObjectMustBeCurrentElementToActivate = true;
+	
+	// Ability Tags
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 }
 
 /**

@@ -17,6 +17,9 @@ UGA_LightningMovement::UGA_LightningMovement()
 	AbilityInputID = EPlayerAbilityInputID::MovementAbility;
 	bSourceObjectMustBeCurrentWeaponToActivate = false;
 	bSourceObjectMustBeCurrentElementToActivate = true;
+
+	// Ability Tags
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 }
 
 /**
