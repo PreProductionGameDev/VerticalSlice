@@ -10,6 +10,7 @@ UAmmoAttributeSet::UAmmoAttributeSet()
 	SMGAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.SMG"));
 	ShotgunAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Shotgun"));
 	SniperAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Sniper"));
+	RocketAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket"));
 }
 
 void UAmmoAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -24,18 +25,23 @@ void UAmmoAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	// Add additional Else If for each new Ammo type here
 	if (Data.EvaluatedData.Attribute == GetSMGReserveAmmoAttribute())
 	{
-		float Ammo = GetSMGReserveAmmo();	
+		const float Ammo = GetSMGReserveAmmo();	
 		SetSMGReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo()));
 	}
 	else if (Data.EvaluatedData.Attribute == GetShotgunReserveAmmoAttribute())
 	{
-		float Ammo = GetShotgunReserveAmmo();
+		const float Ammo = GetShotgunReserveAmmo();
 		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo()));
 	}
 	else if (Data.EvaluatedData.Attribute == GetSniperReserveAmmoAttribute())
 	{
-		float Ammo = GetSniperReserveAmmo();
+		const float Ammo = GetSniperReserveAmmo();
 		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSniperReserveAmmo()));
+	}
+	else if (Data.EvaluatedData.Attribute == GetRocketReserveAmmoAttribute())
+	{
+		const float Ammo = GetRocketReserveAmmo();
+		SetRocketReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxRocketReserveAmmo()));
 	}
 }
 
@@ -50,9 +56,11 @@ void UAmmoAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxShotgunReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, SniperReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxSniperReserveAmmo, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, RocketReserveAmmo, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxRocketReserveAmmo, COND_None, REPNOTIFY_Always);
 }
 
-FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag)
+FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(const FGameplayTag& PrimaryAmmoTag)
 {
 	// Add additional Else If for each new ammo type here
 	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.SMG")))
@@ -67,19 +75,31 @@ FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(FGameplayTa
 	{
 		return GetSniperReserveAmmoAttribute();
 	}
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket")))
+	{
+		return  GetRocketReserveAmmoAttribute();
+	}
 	return FGameplayAttribute();
 }
 
-FGameplayAttribute UAmmoAttributeSet::GetMaxReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag)
+FGameplayAttribute UAmmoAttributeSet::GetMaxReserveAmmoAttributeFromTag(const FGameplayTag& PrimaryAmmoTag)
 {
 	// Add additional Else If for each new ammo type here
 	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.SMG")))
 	{
 		return GetMaxSMGReserveAmmoAttribute();
 	}
-	else if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Shotgun")))
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Shotgun")))
 	{
 		return GetMaxShotgunReserveAmmoAttribute();
+	}
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Sniper")))
+	{
+		return GetMaxSniperReserveAmmoAttribute();
+	}
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket")))
+	{
+		return GetMaxRocketReserveAmmoAttribute();
 	}
 
 	return FGameplayAttribute();
@@ -113,4 +133,14 @@ void UAmmoAttributeSet::OnRep_SniperReserveAmmo(const FGameplayAttributeData& Ol
 void UAmmoAttributeSet::OnRep_MaxSniperReserveAmmo(const FGameplayAttributeData& OldMaxSniperReserveAmmo)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, MaxSniperReserveAmmo, OldMaxSniperReserveAmmo);
+}
+
+void UAmmoAttributeSet::OnRep_RocketReserveAmmo(const FGameplayAttributeData& OldRocketReserveAmmo)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, RocketReserveAmmo, OldRocketReserveAmmo);
+}
+
+void UAmmoAttributeSet::OnRep_MaxRocketReserveAmmo(const FGameplayAttributeData& OldMaxRocketReserveAmmo)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, MaxRocketReserveAmmo, OldMaxRocketReserveAmmo);
 }

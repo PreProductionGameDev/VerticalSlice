@@ -66,6 +66,17 @@ public:
 	FGameplayAttributeData MaxSniperReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSniperReserveAmmo)
 #pragma endregion Sniper_Values
+// Rocket Launcher Ammo
+#pragma region Rocket_Values
+	// Rocket Launcher Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_RocketReserveAmmo)
+	FGameplayAttributeData RocketReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, RocketReserveAmmo)
+	// Rocket Launcher Max Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxRocketReserveAmmo)
+	FGameplayAttributeData MaxRocketReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxRocketReserveAmmo)
+#pragma endregion Rocket_Values
 
 	// Occurs when an attribute is about to be changed. Just calls Super
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
@@ -75,14 +86,15 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Returns the Reserve Ammo Attribute from a specified Tag 
-	static FGameplayAttribute GetReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag);
+	static FGameplayAttribute GetReserveAmmoAttributeFromTag(const FGameplayTag& PrimaryAmmoTag);
 	// Returns the Max Reserve Ammo Attribute from a specified Tag
-	static FGameplayAttribute GetMaxReserveAmmoAttributeFromTag(FGameplayTag& PrimaryAmmoTag);
+	static FGameplayAttribute GetMaxReserveAmmoAttributeFromTag(const FGameplayTag& PrimaryAmmoTag);
 protected:
 	// Cached Gameplay Tags
 	FGameplayTag SMGAmmoTag;
 	FGameplayTag ShotgunAmmoTag;
 	FGameplayTag SniperAmmoTag;
+	FGameplayTag RocketAmmoTag;
 
 	// OnRep Functions are used to make sure the AbilitySystem Internal Representations are Synchronized properly during Replication
 	// SMG OnRep()
@@ -100,4 +112,9 @@ protected:
 	virtual void OnRep_SniperReserveAmmo(const FGameplayAttributeData& OldSniperReserveAmmo);
 	UFUNCTION()
 	virtual void OnRep_MaxSniperReserveAmmo(const FGameplayAttributeData& OldMaxSniperReserveAmmo);
+	// Rocket OnRep()
+	UFUNCTION()
+	virtual void OnRep_RocketReserveAmmo(const FGameplayAttributeData& OldRocketReserveAmmo);
+	UFUNCTION()
+	virtual void OnRep_MaxRocketReserveAmmo(const FGameplayAttributeData& OldMaxRocketReserveAmmo);
 };
