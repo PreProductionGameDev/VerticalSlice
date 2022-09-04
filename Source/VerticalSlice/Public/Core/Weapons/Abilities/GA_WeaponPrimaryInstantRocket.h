@@ -1,40 +1,39 @@
 // 2022 ChronoOwl Studios
-// Stefan Petrie
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Core/Weapons/Abilities/GA_WeaponPrimaryInstant.h"
-#include "GA_WeaponPrimaryInstant_HitScan.generated.h"
+#include "GA_WeaponPrimaryInstantRocket.generated.h"
 
 /**
- *	The Primary Instant Ability for a Hit Scan weapon.
- *	Overrides the Parent class.
+ * 
  */
 UCLASS()
-class VERTICALSLICE_API UGA_WeaponPrimaryInstant_HitScan : public UGA_WeaponPrimaryInstant
+class VERTICALSLICE_API UGA_WeaponPrimaryInstantRocket : public UGA_WeaponPrimaryInstant
 {
 	GENERATED_BODY()
 
 public:
-	UGA_WeaponPrimaryInstant_HitScan();
+	UGA_WeaponPrimaryInstantRocket();
 
 	// Activation for the Ability
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-	// End the Ability. Just calls super
+	// End the Ability. Ends Server Wait Task and Calss super
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
-	// Checks if Ability Can Activate
+	// Checks if the Ability can Activate
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
-	// Checks the Cost for the Ability
+	// Checks the cost for the Ability
 	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, FGameplayTagContainer* OptionalRelevantTags) const override;
-	// Apply the Cost for the Ability
+	// Applies the Cost for the Ability
 	virtual void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
 
-	// Create the Bullet. HitScan for this Class 
+	// Create the Bullet. Projectile for this Class
 	virtual void FireBullet() override;
-	// Handles the Data and deals the damage
+	// Handles the Data and spawns the bullet
 	virtual void HandleTargetData(const FGameplayAbilityTargetDataHandle& TargetData) override;
+
 
 protected:
 	// Weapon First Person Mesh
@@ -46,6 +45,7 @@ protected:
 	// Weapon Animation Montage
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|WeaponComponents")
 	UAnimMontage* WeaponAnimationMontage;
+
 
 	// Weapon for the Ability
 	UPROPERTY()
@@ -73,23 +73,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FGameplayTag AimingRemovalTag;
 
-	// Gameplay Cue Tag for Firing the Weapon
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FGameplayTag GameplayCueWeaponFire;
 
-	// Weapon Stats
-	// Weapon Spread
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float WeaponSpread = 0.0f;
-	// Aiming Spread Modifier
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AimingSpreadMod = 0.0f;
-	// Increase in spread when firing
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float FiringSpreadIncrement = 0.0f;
-	// Max Firing Spread
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float FiringSpreadMax = 0.0f;
+	TSubclassOf<class ABProjectile> ProjectileClass;
 
 	// Trace Start location for TraceTargetActor
 	UPROPERTY()
