@@ -224,6 +224,7 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 		//auto* Projectile = GetWorld()->SpawnActor(ProjectileClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
 		
 		ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
+		Projectile->SetOwner(OwningPlayer);
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}
