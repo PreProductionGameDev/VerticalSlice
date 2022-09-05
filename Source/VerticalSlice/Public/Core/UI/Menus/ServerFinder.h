@@ -20,6 +20,7 @@ public:
 	UServerFinder(const FObjectInitializer& ObjectInitializer);
 	void SetNetworkInterface(INetworkInterface* InNetworkInterface);
 
+	virtual void NativeConstruct() override;
 	
 	void SetServerList(TArray<FServerData> ServerNames);
 
@@ -43,10 +44,12 @@ protected:
 	TSubclassOf<UUserWidget> ServerFailureMessage;
 	
 	TOptional<uint32> SelectedIndex;
+
+public:
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void JoinServer();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void RefreshServerList();
 };

@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Core/Networking/FServerData.h"
 #include "Core/Player/FPPlayerController.h"
+#include "Core/UI/Menus/ServerFinder.h"
 #include "Core/UI/Menus/MainMenu.h"   
 
 const static FName SESSION_NAME = TEXT("GameSession");
@@ -243,11 +244,16 @@ void UGI_Multiplayer::OnDestroySessionComplete(FName SessionName, bool bSuccess)
     }
 }
 
-void UGI_Multiplayer::RefreshServerList()
+void UGI_Multiplayer::RefreshServerList(UServerFinder* InServerFinder)
 {
+    if (!InServerFinder)
+    {
+        return;
+    }
     SessionSearch = MakeShareable(new FOnlineSessionSearch());
     if (SessionSearch.IsValid())
     {
+        this->ServerFinder = InServerFinder;
         //SessionSearch->bIsLanQuery = true;
         SessionSearch->MaxSearchResults = 100;
         SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
@@ -273,7 +279,7 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
             ServerNames.Add(Data);
         }
 
-        Menu->SetServerList(ServerNames);
+        ServerFinder->SetServerList(ServerNames);
     }
 }
 

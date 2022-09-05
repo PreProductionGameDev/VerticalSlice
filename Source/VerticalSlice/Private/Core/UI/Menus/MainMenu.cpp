@@ -63,8 +63,8 @@ void UMainMenu::HostServer()
 
 void UMainMenu::JoinServer()
 {
-	if (NetworkingInterface != nullptr)
-	{
-		NetworkingInterface->RefreshServerList();
-	}
+	//if (NetworkingInterface != nullptr)
+	//{
+	//	NetworkingInterface->RefreshServerList();
+	//}
 }
