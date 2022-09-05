@@ -20,6 +20,9 @@ UGA_FireMovement::UGA_FireMovement()
 	AbilityInputID = EPlayerAbilityInputID::MovementAbility;
 	bSourceObjectMustBeCurrentWeaponToActivate = false;
 	bSourceObjectMustBeCurrentElementToActivate = true;
+	
+	// Ability Tags
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 }
 
 /**
@@ -76,6 +79,13 @@ void UGA_FireMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UGA_FireMovement::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                   const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+
+	//changes the player movement
+	UCharacterMovementComponent* CharacterMovementComponent= Cast<AFP_Character>(GetActorInfo().OwnerActor)->GetCharacterMovement();
+	CharacterMovementComponent->MaxWalkSpeed = 1200;
+	CharacterMovementComponent->MaxAcceleration = 2048;
+	
+	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -108,11 +118,6 @@ void UGA_FireMovement::StopSpawning(float TimeHeld)
 	
 	GetWorld()->GetTimerManager().ClearTimer(SpawnTimer);
 	SpawnTimer.Invalidate();
-
-	//changes the player movement
-	UCharacterMovementComponent* CharacterMovementComponent= Cast<AFP_Character>(GetActorInfo().OwnerActor)->GetCharacterMovement();
-	CharacterMovementComponent->MaxWalkSpeed = 1200;
-	CharacterMovementComponent->MaxAcceleration = 2048;
 	
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);
 }

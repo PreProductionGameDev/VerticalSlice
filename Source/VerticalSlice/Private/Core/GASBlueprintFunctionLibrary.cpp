@@ -55,3 +55,8 @@ void UGASBlueprintFunctionLibrary::ClearTargetData(FGameplayAbilityTargetDataHan
 {
 	TargetData.Clear();
 }
+
+void UGASBlueprintFunctionLibrary::CancelAbilitiesWithTags(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTagContainer& WithTags, const FGameplayTagContainer& WithoutTags, UGameplayAbility* Ignore)
+{
+	AbilitySystemComponent->CancelAbilities(&WithTags, &WithoutTags, Ignore);
+}

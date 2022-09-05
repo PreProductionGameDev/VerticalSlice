@@ -8,6 +8,7 @@
 #include "Core/PlayerAbilitySystemComponent.h"
 #include "Core/PlayerAttributeSet.h"
 #include "Core/Abilities/GameplayEffects/GameplayEffectContext.h"
+#include "GameplayTagContainer.h"
 #include "GASBlueprintFunctionLibrary.generated.h"
 
 /**
@@ -40,4 +41,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Ability|TargetData")
 	static void ClearTargetData(UPARAM(ref) FGameplayAbilityTargetDataHandle& TargetData);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability|Tags")
+	static void CancelAbilitiesWithTags(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTagContainer& WithTags, const FGameplayTagContainer& WithoutTags, UGameplayAbility* Ignore);
+	
 };

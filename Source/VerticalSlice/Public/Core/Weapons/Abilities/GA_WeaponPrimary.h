@@ -69,7 +69,6 @@ protected:
 
 	// Setup and Store all the variables
 	void SetupCacheables();
-
 	// Reset Recoil time to 0
 	UFUNCTION()
 	void ResetRecoilTime();
