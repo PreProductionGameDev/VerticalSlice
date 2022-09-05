@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Core/Gamemodes/Lobby/LobbyInfoStructs.h"
 #include "FServerData.generated.h"
 
 /**
@@ -15,4 +16,8 @@ struct FServerData
 	FString Name;
 	uint16 CurrentPlayers;
 	uint16 MaxPlayers;
+
+	FGameModeInfo CurrentGameModeInfo;
+	FMapInfo CurrentMapInfo;
+	
 };

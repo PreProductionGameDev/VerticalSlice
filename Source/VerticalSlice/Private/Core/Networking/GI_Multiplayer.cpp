@@ -11,6 +11,8 @@
 #include "Core/UI/Menus/MainMenu.h"   
 
 const static FName SESSION_NAME = TEXT("GameSession");
+const static FName SERVER_GAME_MODE_SETTINGS_KEY = TEXT("ServerGameMode");
+const static FName SERVER_MAP_SETTINGS_KEY = TEXT("ServerMap");
 
 UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
@@ -194,6 +196,9 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bUsesPresence = true;
         SessionSettings.bUseLobbiesIfAvailable = true;
         SessionSettings.bAllowJoinInProgress = true;
+        SessionSettings.Set(SERVER_GAME_MODE_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+        SessionSettings.Set(SERVER_MAP_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
         
         SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
     }    
@@ -270,6 +275,27 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
             Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
             Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;
             Data.Name = SearchResult.Session.OwningUserName;
+
+            //FGameModeInfo GameModeInfo;
+            //if (SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY, GameModeInfo))
+            //{
+            //    Data.CurrentGameModeInfo = GameModeInfo;
+            //}
+            //else
+            //{
+            //    Data.CurrentGameModeInfo = FGameModeInfo();
+            //}
+//
+            //FMapInfo MapInfo;
+            //if (SearchResult.Session.SessionSettings.Get(SERVER_MAP_SETTINGS_KEY, MapInfo))
+            //{
+            //    Data.CurrentMapInfo = MapInfo;
+            //}
+            //else
+            //{
+            //    Data.CurrentMapInfo = MapInfo;
+            //}
+            
             ServerNames.Add(Data);
         }
 
