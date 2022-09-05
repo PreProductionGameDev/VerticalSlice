@@ -60,6 +60,8 @@ ABProjectile::ABProjectile()
 void ABProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CollisionComponent->IgnoreActorWhenMoving(Owner, true);
 }
 
 /**
