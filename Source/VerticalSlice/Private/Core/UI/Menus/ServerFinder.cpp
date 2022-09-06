@@ -26,7 +26,16 @@ void UServerFinder::SetNetworkInterface(INetworkInterface* InNetworkInterface)
 		return;
 	}
 	NetworkInterface = InNetworkInterface;
+	if(!JoinButton)
+	{
+		return;
+	}
 	JoinButton->OnClicked.AddDynamic(this, &UServerFinder::JoinServer);
+	if(!RefreshButton)
+	{
+
+		return;
+	}
 	RefreshButton->OnClicked.AddDynamic(this, &UServerFinder::RefreshServerList);
 }
 
