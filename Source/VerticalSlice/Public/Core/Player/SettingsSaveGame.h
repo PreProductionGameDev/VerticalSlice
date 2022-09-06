@@ -33,8 +33,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
 	int32 PlayerModel;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
-	float PrimaryHue;
+	TArray<float> PrimaryHue;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
-	float SecondaryHue;
+	TArray<float> SecondaryHue;
 	
 };

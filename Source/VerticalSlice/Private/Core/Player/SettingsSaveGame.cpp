@@ -10,6 +10,10 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	MusicVolume = 0.75f;
 	MouseSensitivity = 1.0f;
 	PlayerModel = 0;
-	PrimaryHue = 0.0f;
-	SecondaryHue = 0.0f;
+	PrimaryHue.Add(0.0f);
+	PrimaryHue.Add(0.0f);
+	PrimaryHue.Add(0.0f);
+	SecondaryHue.Add(0.0f);
+	SecondaryHue.Add(0.0f);
+	SecondaryHue.Add(0.0f);
 }
