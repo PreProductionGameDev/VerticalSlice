@@ -50,13 +50,6 @@ bool UMainMenu::Initialize()
 		return false;
 	}
 
-	// TODO: SETUP THE REST OF THE MAIN MENU
-	if (!ensure(B_Host != nullptr)) return false;
-	B_Host->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
-
-	if (!ensure(B_Join != nullptr)) return false;
-	B_Join->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
-	
 	return true;
 }
 
@@ -70,8 +63,8 @@ void UMainMenu::HostServer()
 
 void UMainMenu::JoinServer()
 {
-	if (NetworkingInterface != nullptr)
-	{
-		NetworkingInterface->RefreshServerList();
-	}
+	//if (NetworkingInterface != nullptr)
+	//{
+	//	NetworkingInterface->RefreshServerList();
+	//}
 }

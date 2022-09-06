@@ -56,7 +56,7 @@ public:
     // Join the Server from the index
     virtual void Join(uint32 Index) override;
     // Refresh the Server List
-    virtual void RefreshServerList() override;
+    virtual void RefreshServerList(class UServerFinder* InServerFinder) override;
 
     // Scoreboard Sorting
     UFUNCTION(BlueprintCallable)
@@ -87,6 +87,9 @@ protected:
     void OnFindSessionsComplete(bool bSuccess);
     // Delegate for the Async Server Join
     void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
+    UPROPERTY()
+    class UServerFinder* ServerFinder;
     
     // Menu System
     // The WidgetClass

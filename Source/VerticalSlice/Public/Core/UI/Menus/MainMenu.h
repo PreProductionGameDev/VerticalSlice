@@ -33,18 +33,14 @@ protected:
 	virtual bool Initialize() override;
 
 private:
-	UPROPERTY(meta = (BindWidget))
-	class UButton* B_Host;
-	UPROPERTY(meta = (BindWidget))
-	class UButton* B_Join;
 
 	UPROPERTY(meta = (BindWidget))
 	class UServerFinder* WB_ServerList;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void HostServer();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void JoinServer();
 
 	INetworkInterface* NetworkingInterface;

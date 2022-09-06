@@ -8,6 +8,12 @@
 #include "Components/ScrollBox.h"
 #include "Core/UI/Menus/ServerResult.h"
 
+void UServerFinder::NativeConstruct()
+{
+	Super::NativeConstruct();
+	SetNetworkInterface(Cast<INetworkInterface>(GetGameInstance()));
+}
+
 UServerFinder::UServerFinder(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer)
 {
 	
@@ -15,8 +21,21 @@ UServerFinder::UServerFinder(const FObjectInitializer& ObjectInitializer) : UUse
 
 void UServerFinder::SetNetworkInterface(INetworkInterface* InNetworkInterface)
 {
+	if(!InNetworkInterface)
+	{
+		return;
+	}
 	NetworkInterface = InNetworkInterface;
+	if(!JoinButton)
+	{
+		return;
+	}
 	JoinButton->OnClicked.AddDynamic(this, &UServerFinder::JoinServer);
+	if(!RefreshButton)
+	{
+
+		return;
+	}
 	RefreshButton->OnClicked.AddDynamic(this, &UServerFinder::RefreshServerList);
 }
 
@@ -71,6 +90,6 @@ void UServerFinder::RefreshServerList()
 	if (NetworkInterface != nullptr)
 	{
 		ServerList->ClearChildren();
-		NetworkInterface->RefreshServerList();
+		NetworkInterface->RefreshServerList(this);
 	}
 }

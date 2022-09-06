@@ -28,4 +28,13 @@ public:
 	// Gameplay Settings
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Controls")
 	float MouseSensitivity;
+
+	// Cosmetics Settings
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	int32 PlayerModel;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	TArray<float> PrimaryHue;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	TArray<float> SecondaryHue;
+	
 };

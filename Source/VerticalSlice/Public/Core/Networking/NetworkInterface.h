@@ -27,5 +27,5 @@ public:
 
 	virtual void Join(uint32 Index) = 0;
 
-	virtual void RefreshServerList() = 0;
+	virtual void RefreshServerList(class UServerFinder* InServerFinder) = 0;
 };
