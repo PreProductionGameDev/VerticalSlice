@@ -9,4 +9,7 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	SFXVolume = 0.75f;
 	MusicVolume = 0.75f;
 	MouseSensitivity = 1.0f;
+	PlayerModel = 0;
+	PrimaryHue = 0.0f;
+	SecondaryHue = 0.0f;
 }
