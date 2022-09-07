@@ -8,7 +8,7 @@
 /**
  * 
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FServerData 
 {
 	GENERATED_BODY()

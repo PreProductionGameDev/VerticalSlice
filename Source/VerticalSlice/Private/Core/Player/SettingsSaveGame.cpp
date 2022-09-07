@@ -8,12 +8,29 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	MainVolume = 0.75f;
 	SFXVolume = 0.75f;
 	MusicVolume = 0.75f;
+
 	MouseSensitivity = 1.0f;
+
 	PlayerModel = 0;
+
 	PrimaryHue.Add(0.0f);
 	PrimaryHue.Add(0.0f);
 	PrimaryHue.Add(0.0f);
+
 	SecondaryHue.Add(0.0f);
 	SecondaryHue.Add(0.0f);
 	SecondaryHue.Add(0.0f);
+
+	HeadItem.Add(TEXT("0"));
+	HeadItem.Add(TEXT("0"));
+	HeadItem.Add(TEXT("0"));
+
+	BodyItem.Add(TEXT("0"));
+	BodyItem.Add(TEXT("0"));
+	BodyItem.Add(TEXT("0"));
+
+	ExtraItem.Add(TEXT("0"));
+	ExtraItem.Add(TEXT("0"));
+	ExtraItem.Add(TEXT("0"));
+
 }

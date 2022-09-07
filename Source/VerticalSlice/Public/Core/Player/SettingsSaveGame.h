@@ -37,4 +37,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
 	TArray<float> SecondaryHue;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	TArray<FName> HeadItem;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	TArray<FName> BodyItem;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
+	TArray<FName> ExtraItem;
+	
 };
