@@ -113,6 +113,11 @@ void UGA_GravityMovement::SyncCamera()
 	NetworkSync->ReadyForActivation();
 }
 
+/**
+ * @name Jacob
+ * @brief applies an impulse around the indicator and takes the stamina cost
+ * @param TimePressed 
+ */
 void UGA_GravityMovement::OnKeyReleased(float TimePressed)
 {
 	TArray<AActor*> OverlapActors;
@@ -127,7 +132,8 @@ void UGA_GravityMovement::OnKeyReleased(float TimePressed)
 			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
 		}
 	}
-
+	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f);
+	
 	GetWorld()->DestroyActor(ImpulseIndicator);
 	
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);
