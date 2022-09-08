@@ -40,7 +40,7 @@ AFP_Character::AFP_Character()
 	// Add the Ability System Component
 	AbilitySystemComponent = CreateDefaultSubobject<UPlayerAbilitySystemComponent>(TEXT("Ability System"));
 	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	// Create the Player Health AttributeSet
 	Attributes = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("Attributes"));
