@@ -40,6 +40,9 @@ public:
     // Gets and saves the models to the map
     UFUNCTION(BlueprintCallable)
     void StoreModels();
+    // Gets and saves the skins to the map
+    UFUNCTION(BlueprintCallable)
+    void StoreSkins();
 
     // Menu Creation
     UFUNCTION(BlueprintCallable)
@@ -67,6 +70,8 @@ public:
     TMap<FString, FVector> SavedColors;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, int32> SavedModels;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<FString, FName> SavedSkins;
     // Settings Saved Game Asset
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
