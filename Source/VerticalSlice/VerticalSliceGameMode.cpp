@@ -6,12 +6,14 @@
 
 AVerticalSliceGameMode::AVerticalSliceGameMode()
 {
+	// NOTE: THIS CAUSED A CIRCULAR INCLUDE, NOT ENTIRELY SURE WHY
+	// COMMENTING IT OUT FIXED OUR PROBLEMS. ALSO DONT ASK WHY
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ShiitakeSorcerers/Character/BP_FPCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+	//static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ShiitakeSorcerers/Character/BP_FPCharacter"));
+	//if (PlayerPawnBPClass.Class != NULL)
+	//{
+	//	DefaultPawnClass = PlayerPawnBPClass.Class;
+	//}
 }
 
 void AVerticalSliceGameMode::ServerTravel(FString Map)
