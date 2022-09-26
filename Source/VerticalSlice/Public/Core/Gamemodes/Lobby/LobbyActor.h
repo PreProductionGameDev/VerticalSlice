@@ -55,4 +55,19 @@ public:
 	int DoRep_CurrentMesh;
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnRep_SetCurrentMesh();
+
+	UPROPERTY(ReplicatedUsing=OnRep_SetHeadMesh, EditAnywhere, BlueprintReadWrite)
+	FName DoRep_HeadMesh;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnRep_SetHeadMesh();
+
+	UPROPERTY(ReplicatedUsing=OnRep_SetBodyMesh, EditAnywhere, BlueprintReadWrite)
+	FName DoRep_BodyMesh;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnRep_SetBodyMesh();
+
+	UPROPERTY(ReplicatedUsing=OnRep_SetOtherMesh, EditAnywhere, BlueprintReadWrite)
+	FName DoRep_OtherMesh;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnRep_SetOtherMesh();
 };
