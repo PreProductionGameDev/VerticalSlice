@@ -1,4 +1,5 @@
 // 2022 ChronoOwl Studios
+// Jacob
 
 #pragma once
 
@@ -14,6 +15,7 @@ class VERTICALSLICE_API UUtilityFunctionLibrary : public UBlueprintFunctionLibra
 {
 	GENERATED_BODY()
 public:
+
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetAppVersion"), Category = "Game Config")
 	static FString GetAppVersion();

@@ -746,6 +746,68 @@ void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeCha
 }
 
 
+/**
+ * @name Jacob
+ * @brief Blueprint Callable function to play a sound on every client
+ * @param WorldContextObject 
+ * @param Sound 
+ * @param Location 
+ * @param Rotation 
+ * @param VolumeMultiplier 
+ * @param PitchMultiplier 
+ * @param StartTime 
+ * @param AttenuationSettings 
+ * @param ConcurrencySettings 
+ * @param OwningActor 
+ * @param InitialParams 
+ */
+void AFP_Character::ServerPlaySoundAtLocation_Implementation(const AActor* WorldContextObject, USoundBase* Sound,
+	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
+	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
+	UInitialActiveSoundParams* InitialParams)
+{
+	MulticastPlaySoundAtLocation(WorldContextObject,Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
+}
+
+/**
+ * @name Jacob
+ * @brief Multicast call for the sound to be played on every client at the given location
+ * @param WorldContextObject 
+ * @param Sound 
+ * @param Location 
+ * @param Rotation 
+ * @param VolumeMultiplier 
+ * @param PitchMultiplier 
+ * @param StartTime 
+ * @param AttenuationSettings 
+ * @param ConcurrencySettings 
+ * @param OwningActor 
+ * @param InitialParams 
+ */
+void AFP_Character::MulticastPlaySoundAtLocation_Implementation(const AActor* WorldContextObject, USoundBase* Sound,
+	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
+	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
+	UInitialActiveSoundParams* InitialParams)
+{
+	UGameplayStatics::PlaySoundAtLocation(WorldContextObject,Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
+}
+
+void AFP_Character::ServerSpawnSoundAttached_Implementation(USoundBase* Sound, USceneComponent* AttachToComponent,
+	FName AttachPointName, FVector Location, FRotator Rotation, EAttachLocation::Type LocationType,
+	bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime,
+	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, bool bAutoDestroy)
+{
+	MulticastSpawnSoundAttached(Sound, AttachToComponent, AttachPointName, Location, Rotation, LocationType, bStopWhenAttachedToDestroyed, VolumeMultiplier, PitchMultiplier, StartTime, AttenuationSettings, ConcurrencySettings, bAutoDestroy);
+}
+
+void AFP_Character::MulticastSpawnSoundAttached_Implementation(USoundBase* Sound, USceneComponent* AttachToComponent,
+	FName AttachPointName, FVector Location, FRotator Rotation, EAttachLocation::Type LocationType,
+	bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime,
+	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, bool bAutoDestroy)
+{
+	UGameplayStatics::SpawnSoundAttached(Sound, AttachToComponent, AttachPointName, Location, Rotation, LocationType, bStopWhenAttachedToDestroyed, VolumeMultiplier, PitchMultiplier, StartTime, AttenuationSettings, ConcurrencySettings, bAutoDestroy);
+}
+
 ABElement* AFP_Character::ActiveElement()
 {
 	if(bIsPrimaryElement)
