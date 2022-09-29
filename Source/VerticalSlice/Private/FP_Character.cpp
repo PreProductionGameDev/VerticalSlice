@@ -761,7 +761,7 @@ void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeCha
  * @param OwningActor 
  * @param InitialParams 
  */
-void AFP_Character::ServerPlaySoundAtLocation_Implementation(const AActor* WorldContextObject, USoundBase* Sound,
+void AFP_Character::ServerPlaySoundAtLocation_Implementation(const UObject* WorldContextObject, USoundBase* Sound,
 	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
 	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
 	UInitialActiveSoundParams* InitialParams)
@@ -784,7 +784,7 @@ void AFP_Character::ServerPlaySoundAtLocation_Implementation(const AActor* World
  * @param OwningActor 
  * @param InitialParams 
  */
-void AFP_Character::MulticastPlaySoundAtLocation_Implementation(const AActor* WorldContextObject, USoundBase* Sound,
+void AFP_Character::MulticastPlaySoundAtLocation_Implementation(const UObject* WorldContextObject, USoundBase* Sound,
 	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
 	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
 	UInitialActiveSoundParams* InitialParams)
