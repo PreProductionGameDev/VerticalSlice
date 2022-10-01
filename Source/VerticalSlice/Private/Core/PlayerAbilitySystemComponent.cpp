@@ -51,3 +51,13 @@ bool UPlayerAbilitySystemComponent::BatchRPCTryActivateAbility(FGameplayAbilityS
 	
 	return AbilityActivated;
 }
+
+const UTexture2D* UPlayerAbilitySystemComponent::GetLastDamagedIcon()
+{
+	if (LastDamagedBy)
+	{
+		return LastDamagedBy;
+	}
+
+	return nullptr;
+}

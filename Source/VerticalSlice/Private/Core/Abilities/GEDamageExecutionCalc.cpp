@@ -4,6 +4,7 @@
 #include "Core/Abilities/GEDamageExecutionCalc.h"
 #include "Core/PlayerAttributeSet.h"
 #include "Core/PlayerAbilitySystemComponent.h"
+#include "Core/Abilities/Utility/GEUIData_KillFeed.h"
 
 struct GSDamageStatics
 {
@@ -31,6 +32,7 @@ UGEDamageExecutionCalc::UGEDamageExecutionCalc()
 
 void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
+
 	UAbilitySystemComponent* TargetAbilitySystemComponent = ExecutionParams.GetTargetAbilitySystemComponent();
 	UAbilitySystemComponent* SourceAbilitySystemComponent = ExecutionParams.GetSourceAbilitySystemComponent();
 
@@ -41,6 +43,7 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 	FGameplayTagContainer AssetTags;
 	Spec.GetAllAssetTags(AssetTags);
 
+		
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 
@@ -56,6 +59,12 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
 	{
 		return;
+	}
+
+	// Set the KillFeed Icon if Valid
+	if (const UGEUIData_KillFeed* KillFeedData = Cast<UGEUIData_KillFeed>(Spec.Def->UIData))
+	{
+		Cast<UPlayerAbilitySystemComponent>(TargetAbilitySystemComponent)->LastDamagedBy = KillFeedData->KillFeedIcon;
 	}
 	
 	float Damage = 0.0f;
