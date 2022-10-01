@@ -31,4 +31,13 @@ public:
 	// bullet is one RPC for SendTargetData. We then send one final RPC for the EndAbility when we're done firing.
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	virtual bool BatchRPCTryActivateAbility(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately);
+
+
+	// The Icon of the Last source of Damage
+	UPROPERTY()
+	UTexture2D* LastDamagedBy;
+	// Return the Last Damaged By Icon
+	UFUNCTION(BlueprintCallable, Category = "KillFeed")
+	const UTexture2D* GetLastDamagedIcon();
+	
 };
