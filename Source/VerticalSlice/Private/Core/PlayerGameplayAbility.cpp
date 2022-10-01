@@ -35,12 +35,10 @@ bool UPlayerGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle
 		{
 			return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
-	else if(bSourceObjectMustBeCurrentElementToActivate && !bSourceObjectMustBeCurrentWeaponToActivate)
+
+	if(bSourceObjectMustBeCurrentElementToActivate && !bSourceObjectMustBeCurrentWeaponToActivate)
 	{
 		AFP_Character* Player = Cast<AFP_Character>(ActorInfo->AvatarActor);
 		if (!(Player && Player->ActiveElement() && Cast<UObject>(Player->ActiveElement()) == GetSourceObject(Handle, ActorInfo)))
