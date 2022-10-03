@@ -66,6 +66,17 @@ public:
 	FGameplayAttributeData MaxSniperReserveAmmo;
 	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxSniperReserveAmmo)
 #pragma endregion Sniper_Values
+// Burst Rifle Ammo
+#pragma region BurstRifle_Values
+	// BurstRifle Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_BurstRifleReserveAmmo)
+	FGameplayAttributeData BurstRifleReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, BurstRifleReserveAmmo)
+	// Sniper Max Reserve Ammo
+	UPROPERTY(BlueprintReadOnly, Category = "Ammo", ReplicatedUsing = OnRep_MaxBurstRifleReserveAmmo)
+	FGameplayAttributeData MaxBurstRifleReserveAmmo;
+	ATTRIBUTER_ACCESSORS(UAmmoAttributeSet, MaxBurstRifleReserveAmmo)
+#pragma endregion BurstRifleValues
 // Rocket Launcher Ammo
 #pragma region Rocket_Values
 	// Rocket Launcher Reserve Ammo
@@ -94,6 +105,7 @@ protected:
 	FGameplayTag SMGAmmoTag;
 	FGameplayTag ShotgunAmmoTag;
 	FGameplayTag SniperAmmoTag;
+	FGameplayTag BurstRifleAmmoTag;
 	FGameplayTag RocketAmmoTag;
 
 	// OnRep Functions are used to make sure the AbilitySystem Internal Representations are Synchronized properly during Replication
@@ -112,6 +124,11 @@ protected:
 	virtual void OnRep_SniperReserveAmmo(const FGameplayAttributeData& OldSniperReserveAmmo);
 	UFUNCTION()
 	virtual void OnRep_MaxSniperReserveAmmo(const FGameplayAttributeData& OldMaxSniperReserveAmmo);
+	// BurstRifle OnRep()
+	UFUNCTION()
+	virtual void OnRep_BurstRifleReserveAmmo(const FGameplayAttributeData& OldBurstRifleReserveAmmo);
+	UFUNCTION()
+	virtual void OnRep_MaxBurstRifleReserveAmmo(const FGameplayAttributeData& OldMaxBurstRifleReserveAmmo);
 	// Rocket OnRep()
 	UFUNCTION()
 	virtual void OnRep_RocketReserveAmmo(const FGameplayAttributeData& OldRocketReserveAmmo);

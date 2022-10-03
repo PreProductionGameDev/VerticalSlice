@@ -54,6 +54,7 @@ void UGA_WeaponPrimary::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		InputRelease->OnRelease.AddDynamic(this, &UGA_WeaponPrimary::FiringCancelled);
 		InputRelease->ReadyForActivation();
 
+		InstantAbility->FireBullet();
 		// Call the Firing loop
 		FireLoop();
 	}
@@ -155,6 +156,7 @@ void UGA_WeaponPrimary::FireShot()
  */
 void UGA_WeaponPrimary::FiringCancelled(float TimePressed)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Cancelled?"))
 	// Cancel the Instant Ability
 	InstantAbility->ExternalEndAbility();
 	// Cancel this Ability

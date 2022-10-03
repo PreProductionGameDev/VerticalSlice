@@ -54,8 +54,6 @@ void UGA_WeaponPrimaryInstantRocket::ActivateAbility(const FGameplayAbilitySpecH
 	ServerWaitForClientData = UAT_ServerWaitForClientTargetData::ServerWaitForClientTargetData(this, FName("None"), false);
 	ServerWaitForClientData->ValidData.AddDynamic(this, &UGA_WeaponPrimaryInstantRocket::HandleTargetData);
 	ServerWaitForClientData->ReadyForActivation();
-
-	FireBullet();
 }
 
 /**
