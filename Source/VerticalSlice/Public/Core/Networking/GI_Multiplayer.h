@@ -34,16 +34,6 @@ public:
     UFUNCTION(BlueprintCallable)
     void LoadSettings();
 
-    // Gets and saves the colors to the map 
-    UFUNCTION(BlueprintCallable)
-    void StoreColors();
-    // Gets and saves the models to the map
-    UFUNCTION(BlueprintCallable)
-    void StoreModels();
-    // Gets and saves the skins to the map
-    UFUNCTION(BlueprintCallable)
-    void StoreSkins();
-
     // Menu Creation
     UFUNCTION(BlueprintCallable)
     void CreateMainMenuUI();
@@ -64,14 +54,7 @@ public:
     // Scoreboard Sorting
     UFUNCTION(BlueprintCallable)
     static TMap<FString, int32> SortScoreBoard(TMap<FString, int32> UnsortedMap);
-
-    // Map to store all of the colors and mapped to the player names
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TMap<FString, FVector> SavedColors;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TMap<FString, int32> SavedModels;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TMap<FString, FName> SavedSkins;
+    
     // Settings Saved Game Asset
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
