@@ -29,6 +29,7 @@ UGA_WeaponPrimaryInstant_HitScan::UGA_WeaponPrimaryInstant_HitScan()
 	// Tag Setup
 	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary.Instant")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
+	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 	
 	// Replication Settings
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
@@ -59,7 +60,7 @@ void UGA_WeaponPrimaryInstant_HitScan::ActivateAbility(const FGameplayAbilitySpe
 	ServerWaitForClientData->ReadyForActivation();
 
 	// Client Fires bullet immediately
-	FireBullet();
+	//FireBullet();
 }
 
 /**
@@ -133,8 +134,6 @@ bool UGA_WeaponPrimaryInstant_HitScan::CheckCost(const FGameplayAbilitySpecHandl
  */
 void UGA_WeaponPrimaryInstant_HitScan::ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
 {
-	//Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
-
 	// Get the Current Weapon and Apply the Cost if not Infinite Ammo
 	if (ABWeapon* CurrentWeapon = Cast<ABWeapon>(GetSourceObject(Handle, ActorInfo)))
 	{
