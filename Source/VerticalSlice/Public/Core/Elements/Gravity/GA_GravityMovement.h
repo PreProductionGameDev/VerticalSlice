@@ -38,6 +38,9 @@ public:
 	UFUNCTION()
 	void OnKeyReleased(float TimePressed);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* SoundCue;
+
 	// shows the casting player where the impulse will come from
 	UPROPERTY()
 	AImpulseIndicator* ImpulseIndicator;
