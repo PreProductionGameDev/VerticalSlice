@@ -11,6 +11,7 @@ UAmmoAttributeSet::UAmmoAttributeSet()
 	ShotgunAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Shotgun"));
 	SniperAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Sniper"));
 	RocketAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket"));
+	BurstRifleAmmoTag = FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.BurstRifle"));
 }
 
 void UAmmoAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -38,6 +39,11 @@ void UAmmoAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		const float Ammo = GetSniperReserveAmmo();
 		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSniperReserveAmmo()));
 	}
+	else if (Data.EvaluatedData.Attribute == GetBurstRifleReserveAmmoAttribute())
+	{
+		const float Ammo = GetBurstRifleReserveAmmo();
+		SetBurstRifleReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxBurstRifleReserveAmmo()));
+	}
 	else if (Data.EvaluatedData.Attribute == GetRocketReserveAmmoAttribute())
 	{
 		const float Ammo = GetRocketReserveAmmo();
@@ -56,6 +62,8 @@ void UAmmoAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxShotgunReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, SniperReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxSniperReserveAmmo, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, BurstRifleReserveAmmo, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxBurstRifleReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, RocketReserveAmmo, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAmmoAttributeSet, MaxRocketReserveAmmo, COND_None, REPNOTIFY_Always);
 }
@@ -67,7 +75,7 @@ FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(const FGame
 	{
 		return GetSMGReserveAmmoAttribute();
 	}
-	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag((FName("Weapon.Ammo.Shotgun"))))
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Shotgun")))
 	{
 		return GetShotgunReserveAmmoAttribute();
 	}
@@ -75,10 +83,15 @@ FGameplayAttribute UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(const FGame
 	{
 		return GetSniperReserveAmmoAttribute();
 	}
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.BurstRifle")))
+	{
+		return GetBurstRifleReserveAmmoAttribute();
+	}
 	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket")))
 	{
 		return  GetRocketReserveAmmoAttribute();
 	}
+	
 	return FGameplayAttribute();
 }
 
@@ -96,6 +109,10 @@ FGameplayAttribute UAmmoAttributeSet::GetMaxReserveAmmoAttributeFromTag(const FG
 	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Sniper")))
 	{
 		return GetMaxSniperReserveAmmoAttribute();
+	}
+	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.BurstRifle")))
+	{
+		return GetMaxBurstRifleReserveAmmoAttribute();
 	}
 	if (PrimaryAmmoTag == FGameplayTag::RequestGameplayTag(FName("Weapon.Ammo.Rocket")))
 	{
@@ -133,6 +150,16 @@ void UAmmoAttributeSet::OnRep_SniperReserveAmmo(const FGameplayAttributeData& Ol
 void UAmmoAttributeSet::OnRep_MaxSniperReserveAmmo(const FGameplayAttributeData& OldMaxSniperReserveAmmo)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, MaxSniperReserveAmmo, OldMaxSniperReserveAmmo);
+}
+
+void UAmmoAttributeSet::OnRep_BurstRifleReserveAmmo(const FGameplayAttributeData& OldBurstRifleReserveAmmo)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, BurstRifleReserveAmmo, OldBurstRifleReserveAmmo);
+}
+
+void UAmmoAttributeSet::OnRep_MaxBurstRifleReserveAmmo(const FGameplayAttributeData& OldMaxBurstRifleReserveAmmo)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAmmoAttributeSet, MaxBurstRifleReserveAmmo, OldMaxBurstRifleReserveAmmo);
 }
 
 void UAmmoAttributeSet::OnRep_RocketReserveAmmo(const FGameplayAttributeData& OldRocketReserveAmmo)
