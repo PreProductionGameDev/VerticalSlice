@@ -29,16 +29,16 @@ public:
 	
 	// The Firing Loop to Delay between each shot
 	UFUNCTION()
-	void FireLoop();
+	virtual void FireLoop();
 	// The instant Shot Fired function
 	UFUNCTION()
-	void FireShot();
+	virtual void FireShot();
 	// When Firing gets cancelled
 	UFUNCTION()
-	void FiringCancelled(float TimePressed);
+	virtual void FiringCancelled(float TimePressed);
 	// Wait until the next Valid Shot
 	UFUNCTION()
-	void WaitForValidShot();
+	virtual void WaitForValidShot();
 	
 	// Recoil Time
 	float RecoilTime = 0.0f;
