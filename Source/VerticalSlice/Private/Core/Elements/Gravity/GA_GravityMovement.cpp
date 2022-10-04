@@ -34,7 +34,10 @@ void UGA_GravityMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handl
                                           const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
+	if(Cast<AFP_Character>(GetOwningActorFromActorInfo())->GetStamina() < 0.5f)
+	{
+		CancelAbility(Handle, ActorInfo, ActivationInfo, false);
+	}
 	// Spawn Parameters
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
@@ -120,20 +123,22 @@ void UGA_GravityMovement::SyncCamera()
  */
 void UGA_GravityMovement::OnKeyReleased(float TimePressed)
 {
-	TArray<AActor*> OverlapActors;
-	TArray<AActor*> IgnoredActors;
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	if(UKismetSystemLibrary::SphereOverlapActors(this, ImpulseIndicator->GetActorLocation(),800.0f,ObjectTypes,AFP_Character::StaticClass(),IgnoredActors,OverlapActors ))
+	if(Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OverlappedActors"));
-
-		for(AActor* OverlapedActor : OverlapActors)
+		TArray<AActor*> OverlapActors;
+		TArray<AActor*> IgnoredActors;
+		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+		if(UKismetSystemLibrary::SphereOverlapActors(this, ImpulseIndicator->GetActorLocation(),800.0f,ObjectTypes,AFP_Character::StaticClass(),IgnoredActors,OverlapActors ))
 		{
-			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
+			UE_LOG(LogTemp, Warning, TEXT("OverlappedActors"));
+
+			for(AActor* OverlapedActor : OverlapActors)
+			{
+				Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
+				Cast<AFP_Character>(OverlapedActor)->ServerPlaySoundAtLocation(this, SoundCue, ImpulseIndicator->GetActorLocation(), ImpulseIndicator->GetActorRotation());
+			}
 		}
 	}
-	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f);
-	
 	GetWorld()->DestroyActor(ImpulseIndicator);
 	
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);

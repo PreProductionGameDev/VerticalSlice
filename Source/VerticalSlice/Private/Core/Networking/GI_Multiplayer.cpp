@@ -50,60 +50,6 @@ void UGI_Multiplayer::LoadSettings()
     }
 }
 
-void UGI_Multiplayer::StoreColors()
-{
-    //gets all of the lobby actors
-    TArray<AActor*> Actors;
-    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
-
-    //go through the array and match each user name to the player color and add it to the map
-    for(AActor* Actor: Actors)
-    {
-        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
-        if(Controller!= nullptr)
-        {
-            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
-            SavedColors.Add(Controller->PlayerState->GetPlayerName(), FVector( LobbyActor->DoRep_Hue1, LobbyActor->DoRep_Hue2, LobbyActor->DoRep_Hue3));
-        }
-    }
-}
-
-void UGI_Multiplayer::StoreModels()
-{
-    //gets all of the lobby actors
-    TArray<AActor*> Actors;
-    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
-    
-    //go through the array and match each user name to the player color and add it to the map
-    for(AActor* Actor: Actors)
-    {
-        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
-        if(Controller!= nullptr)
-        {
-            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
-            SavedModels.Add(Controller->PlayerState->GetPlayerName(), LobbyActor->DoRep_CurrentMesh);
-        }
-    }
-}
-
-void UGI_Multiplayer::StoreSkins()
-{
-    //gets all of the lobby actors
-    TArray<AActor*> Actors;
-    UGameplayStatics::GetAllActorsOfClass(this, ALobbyActor::StaticClass(), Actors);
-    //go through the array and match each user name to the player color and add it to the map
-    for(AActor* Actor: Actors)
-    {
-        APlayerController* Controller = Cast<APlayerController>(Actor->GetOwner());
-        if(Controller!= nullptr)
-        {
-            ALobbyActor* LobbyActor = Cast<ALobbyActor>(Actor);
-            SavedSkins.Add(Controller->PlayerState->GetPlayerName(),
-            FName(LobbyActor->DoRep_HeadMesh.ToString() + "_" + LobbyActor->DoRep_BodyMesh.ToString() + "_" + LobbyActor->DoRep_OtherMesh.ToString()));
-        }
-    }
-}
-
 void UGI_Multiplayer::CreateMainMenuUI()
 {
     if (!ensure(MenuClass != nullptr))
