@@ -93,7 +93,7 @@ void UGA_GravityMovement::MoveImpulsePoint()
 	Params.AddIgnoredActor(GetOwningActorFromActorInfo());
 	Params.AddIgnoredActor(ImpulseIndicator);
 	FVector Begin =  Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentLocation();
-	FVector End = Begin +  Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentRotation().Vector() * 1000 ;
+	FVector End = Begin +  Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentRotation().Vector() * 800 ;
 
 	// Teleports to where the hit was or where the max range is 
 	if(GetWorld()->LineTraceSingleByChannel(OutHit, Begin, End, CollisionChannel, Params))
