@@ -129,12 +129,8 @@ public:
 	void ServerEquipWeapon(ABWeapon* NewWeapon);
 	void ServerEquipWeapon_Implementation(ABWeapon* NewWeapon);
 	bool ServerEquipWeapon_Validate(ABWeapon* NewWeapon);
-	
-	/*
-	 * TODO: Cycling Between Weapons requires additional logic
-	 * Have not been setup yet.
-	 */
 
+	// Weapon Swapping
 	UFUNCTION(BlueprintCallable)
 	void NextWeapon();
 	UFUNCTION(BlueprintCallable)
