@@ -62,6 +62,7 @@ void AFP_Character::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & Out
 	DOREPLIFETIME_CONDITION(AFP_Character, PrimaryElement, COND_None);
 	DOREPLIFETIME_CONDITION(AFP_Character, SecondaryElement, COND_None);
 	DOREPLIFETIME_CONDITION(AFP_Character, bIsPrimaryElement, COND_None);
+	DOREPLIFETIME_CONDITION(AFP_Character, WeaponInv, COND_None);
 	
 }
 
@@ -248,7 +249,7 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 	}
 
 	// Add the New Weapon the the Map.
-	WeaponInventory.Add(NewWeapon->WeaponTag, NewWeapon);
+	WeaponInv.Add(FWeaponInventory(NewWeapon->WeaponTag, NewWeapon));
 	NewWeapon->SetOwningCharacter(this);
 	NewWeapon->AddAbilities();
 
@@ -274,7 +275,8 @@ bool AFP_Character::RemoveWeaponFromInventory(ABWeapon* WeaponToRemove)
 		}
 
 		// Remove the Weapon and Reset Weapon information
-		WeaponInventory.Remove(WeaponToRemove->WeaponTag);
+		//Weapon Inventory.Remove(WeaponToRemove->WeaponTag);
+		WeaponInv.RemoveAt(WeaponInv.IndexOfByKey(WeaponToRemove->WeaponTag));
 		WeaponToRemove->DeleteWeapon();
 
 		// Currently Does not handle drop
@@ -295,15 +297,13 @@ void AFP_Character::RemoveAllWeaponsFromInventory()
 
 	// UnEquips Current Weapon
 	UnEquipCurrentWeapon();
-
-	TArray<FGameplayTag> WeaponKeys;
-	WeaponInventory.GetKeys(WeaponKeys);
-
-	for (FGameplayTag WeaponKey : WeaponKeys)
+	
+	for (int i = 0; i < WeaponInv.Num(); i++)
 	{
-		RemoveWeaponFromInventory(WeaponInventory.FindRef(WeaponKey));
+		RemoveWeaponFromInventory(WeaponInv[i].Weapon);
 	}
-	WeaponInventory.Empty();
+	
+	WeaponInv.Empty();
 }
 
 void AFP_Character::EquipWeapon(ABWeapon* NewWeapon)
@@ -320,6 +320,21 @@ void AFP_Character::EquipWeapon(ABWeapon* NewWeapon)
 	{
 		SetCurrentWeapon(NewWeapon, CurrentWeapon);
 	}
+}
+
+bool AFP_Character::DoesWeaponTagExistInInventory(FGameplayTag InWeaponTag) const
+{
+	return WeaponInv.Contains(InWeaponTag);
+}
+
+bool AFP_Character::IsWeaponTagCurrentlyEquipped(FGameplayTag InWeaponTag) const
+{
+	return CurrentWeapon->WeaponTag == InWeaponTag;
+}
+
+void AFP_Character::EquipWeaponFromTag(FGameplayTag inTag)
+{
+	SetCurrentWeapon(WeaponInv[WeaponInv.IndexOfByKey(inTag)].Weapon, CurrentWeapon);
 }
 
 void AFP_Character::ServerEquipWeapon_Implementation(ABWeapon* NewWeapon)
@@ -524,44 +539,10 @@ void AFP_Character::HandleHealthChanged(float DeltaValue, const FGameplayTagCont
 	}
 }
 
-void AFP_Character::ServerSetWeaponOnTag_Implementation(FGameplayTag WeaponTag)
-{
-	SwapToWeaponOnTag(WeaponTag);
-}
-
-bool AFP_Character::ServerSetWeaponOnTag_Validate()
-{
-	return true;
-}
-
-void AFP_Character::ClientSetWeapon_Implementation(ABWeapon* WeaponToEquip)
-{
-	EquipWeapon(WeaponToEquip);
-}
-
-void AFP_Character::SwapToWeaponOnTag(FGameplayTag WeaponTag)
-{
-	if (!WeaponInventory.Contains(WeaponTag))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO WEAPON TAG"));
-		return;
-	}
-
-	if (CurrentWeapon == WeaponInventory.FindRef(WeaponTag))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("WEAPON IS CURRENT WEAPON"));
-		return;
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("CALLED EQUIP WEAPON. ISSUE MUST BE HERE"));
-	ClientSetWeapon(WeaponInventory.FindRef(WeaponTag));
-	//SetCurrentWeapon(WeaponInventory.FindRef(WeaponTag), CurrentWeapon);
-}
-
 bool AFP_Character::DoesWeaponExistInInventory(const ABWeapon* InWeapon) const
 {
 	// Finds the specific tag in the map and returns true if it is there.
-	return WeaponInventory.Contains(InWeapon->WeaponTag);
+	return WeaponInv.Contains(InWeapon->WeaponTag);
 }
 
 void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)

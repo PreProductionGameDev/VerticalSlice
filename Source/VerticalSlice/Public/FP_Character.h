@@ -14,6 +14,7 @@
 #include "Camera/CameraComponent.h"
 #include "Core/Elements/BElement.h"
 #include "Core/Weapons/BWeapon.h"
+#include "Core/Weapons/FWeaponInventory.h"
 
 
 #include "FP_Character.generated.h"
@@ -111,6 +112,14 @@ public:
 	// Equip a Weapon
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	void EquipWeapon(ABWeapon* NewWeapon);
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	bool DoesWeaponTagExistInInventory(FGameplayTag InWeaponTag) const;
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	bool IsWeaponTagCurrentlyEquipped(FGameplayTag InWeaponTag) const;
+	
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void EquipWeaponFromTag(FGameplayTag inTag);
 
 	// Server functionality for Equipping the Weapon
 	UFUNCTION(Server, Reliable)
@@ -208,8 +217,8 @@ protected:
 	TArray<TSubclassOf<ABWeapon>> DefaultInventoryWeapons;
 	// The Players Weapons Inventory.
 	// Access each weapon by its Gameplay Tag
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|Weapon")
-	TMap<FGameplayTag, ABWeapon*> WeaponInventory;	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ShiitakeShowdown|Weapons", Replicated)
+	TArray<FWeaponInventory> WeaponInv;
 	// Array of Weapon order
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowDown|Weapon")
 	TArray<FGameplayTag> WeaponOrder;
@@ -219,18 +228,7 @@ protected:
 	// The Location to Attach the weapon to
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName WeaponAttachPoint;
-
-	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void ServerSetWeaponOnTag(FGameplayTag WeaponTag);
-	void ServerSetWeaponOnTag_Implementation(FGameplayTag WeaponTag);
-	bool ServerSetWeaponOnTag_Validate();
-
-	UFUNCTION(Client, Reliable)
-	void ClientSetWeapon(ABWeapon* WeaponToEquip);
-	void ClientSetWeapon_Implementation(ABWeapon* WeaponToEquip);
 	
-	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
-	void SwapToWeaponOnTag(FGameplayTag WeaponTag);
 	// Returns true if the weapon exists in the inventory.
 	bool DoesWeaponExistInInventory(const ABWeapon* InWeapon) const;
 	// Swap Between weapons

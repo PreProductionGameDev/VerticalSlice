@@ -19,6 +19,11 @@ enum class EPlayerAbilityInputID : uint8
 	Respawn,
 	UtilityAbility,
 	MovementAbility,
+	SMG,
+	Shotgun,
+	Sniper,
+	AssaultRifle,
+	RocketLauncher,
 };
 
 // TODO: Figure out if we use this or not. Legacy code?

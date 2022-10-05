@@ -203,11 +203,11 @@ void ABWeapon::UnEquip()
 	}
 
 	// Necessary to detach for visibility reasons
-	WeaponMesh1P->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+	WeaponMesh1P->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 	WeaponMesh1P->SetVisibility(false, true);
 
 	// Detach Third person view model as well
-	WeaponMesh3P->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+	WeaponMesh3P->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 	WeaponMesh3P->CastShadow = false;
 	WeaponMesh3P->bCastHiddenShadow = false;
 	// This has to be done like this otherwise a lingering shadow can be caused
