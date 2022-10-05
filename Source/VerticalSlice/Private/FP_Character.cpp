@@ -306,6 +306,11 @@ void AFP_Character::RemoveAllWeaponsFromInventory()
 	WeaponInv.Empty();
 }
 
+int AFP_Character::WeaponInventoryLength()
+{
+	return WeaponInv.Num();
+}
+
 void AFP_Character::EquipWeapon(ABWeapon* NewWeapon)
 {
 	// Client tells server to swap weapon, and weapon is changed locally
@@ -345,6 +350,58 @@ void AFP_Character::ServerEquipWeapon_Implementation(ABWeapon* NewWeapon)
 bool AFP_Character::ServerEquipWeapon_Validate(ABWeapon* NewWeapon)
 {
 	return true;
+}
+
+void AFP_Character::NextWeapon()
+{
+	int CurrentWeaponIndex = WeaponOrder.IndexOfByKey(CurrentWeaponTag);
+	
+	for (int counter = 0; counter < WeaponOrder.Num(); counter++)
+	{
+		// Increase and Loop the Current Weapon Index
+		CurrentWeaponIndex += 1;
+		if (CurrentWeaponIndex == WeaponOrder.Num())
+		{
+			CurrentWeaponIndex = 0;
+		}
+
+		// If weapon tag is not the current Weapon
+		if (WeaponOrder[CurrentWeaponIndex] != CurrentWeaponTag)
+		{
+			// Check if the weapon exists
+			if (DoesWeaponTagExistInInventory(WeaponOrder[CurrentWeaponIndex]))
+			{
+				EquipWeaponFromTag(WeaponOrder[CurrentWeaponIndex]);
+				break;
+			}
+		}
+	}
+}
+
+void AFP_Character::PrevWeapon()
+{
+	int CurrentWeaponIndex = WeaponOrder.IndexOfByKey(CurrentWeaponTag);
+	
+	for (int counter = 0; counter < WeaponOrder.Num(); counter++)
+	{
+		// Increase and Loop the Current Weapon Index
+		CurrentWeaponIndex -= 1;
+		if (CurrentWeaponIndex < 0)
+		{
+			CurrentWeaponIndex = WeaponOrder.Num() - 1;
+		}
+
+		// If weapon tag is not the current Weapon
+		if (WeaponOrder[CurrentWeaponIndex] != CurrentWeaponTag)
+		{
+			// Check if the weapon exists
+			if (DoesWeaponTagExistInInventory(WeaponOrder[CurrentWeaponIndex]))
+			{
+				EquipWeaponFromTag(WeaponOrder[CurrentWeaponIndex]);
+				break;
+			}
+		}
+	}
 }
 
 void AFP_Character::CreateHitMarker_Implementation(bool isHit)

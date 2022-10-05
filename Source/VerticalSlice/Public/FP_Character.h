@@ -109,6 +109,9 @@ public:
 	// Clear all Weapons from the Player's Inventory
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	void RemoveAllWeaponsFromInventory();
+	// Weapon Inventory Length
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	int WeaponInventoryLength();
 	// Equip a Weapon
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	void EquipWeapon(ABWeapon* NewWeapon);
@@ -132,6 +135,11 @@ public:
 	 * Have not been setup yet.
 	 */
 
+	UFUNCTION(BlueprintCallable)
+	void NextWeapon();
+	UFUNCTION(BlueprintCallable)
+	void PrevWeapon();
+	
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void CreateHitMarker(bool isHit);
 
