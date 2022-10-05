@@ -75,6 +75,10 @@ void UGA_GravityMovement::EndAbility(const FGameplayAbilitySpecHandle Handle,
                                      bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	if(bWasCancelled)
+	{
+		GetWorld()->DestroyActor(ImpulseIndicator);
+	}
 }
 
 /**

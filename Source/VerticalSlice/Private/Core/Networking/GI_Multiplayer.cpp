@@ -63,20 +63,6 @@ void UGI_Multiplayer::CreateMainMenuUI()
         return;
     }
     Menu->AddToViewport();
-
-    // Setup Input for the Player Controller
-    APlayerController* PlayerController = GetFirstLocalPlayerController();
-    if (!ensure(PlayerController != nullptr))
-    {
-        return;
-    }
-
-    FInputModeUIOnly InputModeData;
-    InputModeData.SetWidgetToFocus(Menu->TakeWidget());
-    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-    PlayerController->SetInputMode(InputModeData);
-    PlayerController->bShowMouseCursor = true;
-
     Menu->SetNetworkInterface(this);
 }
 
