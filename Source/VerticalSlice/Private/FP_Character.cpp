@@ -799,12 +799,12 @@ void AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged(const FOnAttributeCha
  * @param OwningActor 
  * @param InitialParams 
  */
-void AFP_Character::ServerPlaySoundAtLocation_Implementation(const UObject* WorldContextObject, USoundBase* Sound,
+void AFP_Character::ServerPlaySoundAtLocation_Implementation(USoundBase* Sound,
 	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
 	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
 	UInitialActiveSoundParams* InitialParams)
 {
-	MulticastPlaySoundAtLocation(WorldContextObject,Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
+	MulticastPlaySoundAtLocation(Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
 }
 
 /**
@@ -822,12 +822,12 @@ void AFP_Character::ServerPlaySoundAtLocation_Implementation(const UObject* Worl
  * @param OwningActor 
  * @param InitialParams 
  */
-void AFP_Character::MulticastPlaySoundAtLocation_Implementation(const UObject* WorldContextObject, USoundBase* Sound,
+void AFP_Character::MulticastPlaySoundAtLocation_Implementation(USoundBase* Sound,
 	FVector Location, FRotator Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime,
 	USoundAttenuation* AttenuationSettings, USoundConcurrency* ConcurrencySettings, const AActor* OwningActor,
 	UInitialActiveSoundParams* InitialParams)
 {
-	UGameplayStatics::PlaySoundAtLocation(WorldContextObject,Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
+	UGameplayStatics::PlaySoundAtLocation(this,Sound,Location,Rotation,VolumeMultiplier,PitchMultiplier,StartTime,AttenuationSettings,ConcurrencySettings,OwningActor, InitialParams);
 }
 
 void AFP_Character::ServerSpawnSoundAttached_Implementation(USoundBase* Sound, USceneComponent* AttachToComponent,

@@ -38,6 +38,9 @@ public:
 	UFUNCTION()
 	void OnKeyReleased(float TimePressed);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlaySound(FVector Location);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USoundBase* SoundCue;
 
