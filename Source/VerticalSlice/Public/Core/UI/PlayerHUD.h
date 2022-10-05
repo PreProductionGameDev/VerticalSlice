@@ -41,6 +41,10 @@ public:
 	// Hit Markers
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MakeHitMarker(bool PlayerKilled);
+	// CrossHair Toggle
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ToggleCrosshair(bool isVisible);
+	
 
 	// Kill Feed
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
