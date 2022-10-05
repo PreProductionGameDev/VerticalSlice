@@ -75,6 +75,13 @@ void UGA_GravityMovement::EndAbility(const FGameplayAbilitySpecHandle Handle,
                                      bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	if(bWasCancelled)
+	{
+		if(ImpulseIndicator)
+		{
+			GetWorld()->DestroyActor(ImpulseIndicator);
+		}
+	}
 }
 
 /**
@@ -135,11 +142,12 @@ void UGA_GravityMovement::OnKeyReleased(float TimePressed)
 			for(AActor* OverlapedActor : OverlapActors)
 			{
 				Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
-				Cast<AFP_Character>(OverlapedActor)->ServerPlaySoundAtLocation(this, SoundCue, ImpulseIndicator->GetActorLocation(), ImpulseIndicator->GetActorRotation());
 			}
 		}
 	}
+	PlaySound(ImpulseIndicator->GetActorLocation());
 	GetWorld()->DestroyActor(ImpulseIndicator);
+	ImpulseIndicator= nullptr;
 	
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), false, false);
 }
