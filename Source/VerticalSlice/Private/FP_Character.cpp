@@ -334,7 +334,11 @@ bool AFP_Character::DoesWeaponTagExistInInventory(FGameplayTag InWeaponTag) cons
 
 bool AFP_Character::IsWeaponTagCurrentlyEquipped(FGameplayTag InWeaponTag) const
 {
-	return CurrentWeapon->WeaponTag == InWeaponTag;
+	if (CurrentWeapon)
+	{
+		return CurrentWeapon->WeaponTag == InWeaponTag;
+	}
+	return false;
 }
 
 void AFP_Character::EquipWeaponFromTag(FGameplayTag inTag)
