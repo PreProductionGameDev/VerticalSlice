@@ -42,4 +42,7 @@ public:
 	// stops the spawn timer
 	UFUNCTION()
 	void StopSpawning(float TimeHeld);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USoundBase* Sound;
 };

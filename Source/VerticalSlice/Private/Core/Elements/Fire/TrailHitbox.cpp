@@ -29,6 +29,7 @@ ATrailHitbox::ATrailHitbox()
 	{
 		FireSystem = NiagaraSystem.Object;
 	}
+	Sound = nullptr;
 }
 
 /**
@@ -50,6 +51,8 @@ void ATrailHitbox::BeginPlay()
 	FTimerManager& TimerManager= GetWorld()->GetTimerManager();
 	BurnTimer = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
 	TimerManager.SetTimer(BurnTimer, DynamicDelegate, 0.1f, true,0);
+
+	Cast<AFP_Character>(GetInstigator())->ServerPlaySoundAtLocation(Sound, GetActorLocation(), GetActorRotation());
 	
 }
 

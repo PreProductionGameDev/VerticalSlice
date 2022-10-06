@@ -39,4 +39,7 @@ public:
 	UPROPERTY()
 	UNiagaraSystem* FireSystem;
 
+	UPROPERTY()
+	USoundBase* Sound;
+
 };

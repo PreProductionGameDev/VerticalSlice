@@ -100,11 +100,14 @@ void UGA_FireMovement::SpawnFire()
 		StopSpawning(0.0f);
 	}
 	UE_LOG(LogTemp, Warning, TEXT("FireSpawned"));
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
 	const FVector SpawnLocation = GetCurrentActorInfo()->OwnerActor->GetActorLocation();
-	const FRotator SpawnRotation = GetCurrentActorInfo()->OwnerActor->GetActorRotation();
-	GetWorld()->SpawnActor(ATrailHitbox::StaticClass(), &SpawnLocation, &SpawnRotation, SpawnParameters);
+	const FTransform SpawnTransform = FTransform(SpawnLocation);
+	ATrailHitbox* SpawnedFire = GetWorld()->SpawnActorDeferred<ATrailHitbox>(ATrailHitbox::StaticClass(), SpawnTransform, Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor), Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor));
+	if(SpawnedFire)
+	{
+		SpawnedFire->Sound = Sound;
+		UGameplayStatics::FinishSpawningActor(SpawnedFire,SpawnTransform);
+	}
 }
 
 /**
