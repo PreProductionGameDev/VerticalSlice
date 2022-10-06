@@ -46,6 +46,9 @@ protected:
 	TOptional<uint32> SelectedIndex;
 
 public:
+
+	UFUNCTION()
+	void ResetSelected();
 	
 	UFUNCTION(BlueprintCallable)
 	void JoinServer();

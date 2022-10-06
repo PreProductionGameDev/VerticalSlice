@@ -24,6 +24,9 @@ public:
 
 	// Populate the Server Data
 	void PopulateServerData(FServerData& ServerData);
+
+	UFUNCTION()
+	void ResetText();
 	
 private:
 	// The ServerName displayed

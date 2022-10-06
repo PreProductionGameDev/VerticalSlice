@@ -76,6 +76,11 @@ void UServerFinder::SelectIndex(uint32 Index)
 	SelectedIndex = Index;
 }
 
+void UServerFinder::ResetSelected()
+{
+	Cast<UServerResult>(ServerList->GetChildAt( SelectedIndex.GetValue()))->ResetText();
+}
+
 void UServerFinder::JoinServer()
 {
 	// Call the network interface to join a valid server
