@@ -6,6 +6,7 @@
 #include "OnlineSessionSettings.h"
 #include "Components/Button.h"
 #include "Components/ScrollBox.h"
+#include "Components/TextBlock.h"
 #include "Core/UI/Menus/ServerResult.h"
 
 void UServerFinder::NativeConstruct()
@@ -79,6 +80,17 @@ void UServerFinder::SelectIndex(uint32 Index)
 void UServerFinder::ResetSelected()
 {
 	Cast<UServerResult>(ServerList->GetChildAt( SelectedIndex.GetValue()))->ResetText();
+}
+
+void UServerFinder::UpdateServerSettings()
+{
+	// Call the network interface to join a valid server
+	if (NetworkInterface != nullptr && SelectedIndex.IsSet())
+	{
+		FString Container;
+		NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.SessionSettings.Get(TEXT("ServerGameMode"),Container);
+		GameMode->SetText(FText::FromString(Container));
+	}
 }
 
 void UServerFinder::JoinServer()

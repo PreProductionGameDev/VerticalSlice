@@ -35,6 +35,12 @@ protected:
 	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* GameMode;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Map;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* RefreshButton;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -49,6 +55,9 @@ public:
 
 	UFUNCTION()
 	void ResetSelected();
+
+	UFUNCTION()
+	void UpdateServerSettings();
 	
 	UFUNCTION(BlueprintCallable)
 	void JoinServer();

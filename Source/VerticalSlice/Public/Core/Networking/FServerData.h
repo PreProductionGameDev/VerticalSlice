@@ -17,7 +17,7 @@ struct FServerData
 	uint16 CurrentPlayers;
 	uint16 MaxPlayers;
 
-	FGameModeInfo CurrentGameModeInfo;
-	FMapInfo CurrentMapInfo;
+	FString CurrentGameModeInfo;
+	FString CurrentMapInfo;
 	
 };

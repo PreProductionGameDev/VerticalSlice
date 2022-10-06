@@ -28,4 +28,6 @@ public:
 	virtual void Join(uint32 Index) = 0;
 
 	virtual void RefreshServerList(class UServerFinder* InServerFinder) = 0;
+
+	virtual FOnlineSessionSearchResult GetSessionSearchResult(int32 Index) = 0;
 };

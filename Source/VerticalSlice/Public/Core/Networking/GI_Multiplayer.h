@@ -59,6 +59,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
     
+    FOnlineSessionSearchResult GetSessionSearchResult(int32 Index);
+    
 protected:
     IOnlineSessionPtr SessionInterface;
     TSharedPtr<class FOnlineSessionSearch> SessionSearch;

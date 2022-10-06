@@ -231,7 +231,9 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
             Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
             Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;
             Data.Name = SearchResult.Session.OwningUserName;
-
+            SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY,Data.CurrentGameModeInfo);
+            SearchResult.Session.SessionSettings.Get(SERVER_MAP_SETTINGS_KEY,Data.CurrentMapInfo);
+            
             //FGameModeInfo GameModeInfo;
             //if (SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY, GameModeInfo))
             //{
@@ -331,5 +333,10 @@ TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> Unsort
     }
     return SortedMap;
     
+}
+
+FOnlineSessionSearchResult UGI_Multiplayer::GetSessionSearchResult(int32 Index)
+{
+    return SessionSearch->SearchResults[Index];
 }
 
