@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core/Abilities/GameplayEffects/GameplayEffectContext.h"
 #include "GameFramework/Actor.h"
 #include "BProjectile.generated.h"
 
@@ -19,6 +20,8 @@ class VERTICALSLICE_API ABProjectile : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABProjectile();
+
+	void SetEffectSpec(FGameplayEffectSpecHandle inEffectSpec);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,6 +30,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 	// Projectile Movement Component
 	UPROPERTY(VisibleDefaultsOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
@@ -36,4 +42,13 @@ protected:
 	// The Projectile Mesh
 	UPROPERTY(VisibleDefaultsOnly)
 	UStaticMeshComponent* ProjectileMesh;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FGameplayEffectSpecHandle EffectSpec;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<UGameplayEffect> GameplayEffectClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float ExplosionRadius;
 };
