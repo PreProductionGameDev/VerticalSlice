@@ -90,6 +90,8 @@ void UServerFinder::UpdateServerSettings()
 		FString Container;
 		NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.SessionSettings.Get(TEXT("ServerGameMode"),Container);
 		GameMode->SetText(FText::FromString(Container));
+		NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.SessionSettings.Get(TEXT("ServerMap"),Container);
+		Map->SetText(FText::FromString(Container));
 	}
 }
 

@@ -58,8 +58,17 @@ public:
     // Settings Saved Game Asset
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
+
+    UFUNCTION(BlueprintCallable)
+    void SetGameMode(FString GameMode);
+
+    UFUNCTION(BlueprintCallable)
+	void SetMap(FString Map);
+
+    UFUNCTION(BlueprintCallable)
+    void SetPlayers(int32 Players);
     
-    FOnlineSessionSearchResult GetSessionSearchResult(int32 Index);
+    virtual FOnlineSessionSearchResult GetSessionSearchResult(int32 Index) override;
     
 protected:
     IOnlineSessionPtr SessionInterface;

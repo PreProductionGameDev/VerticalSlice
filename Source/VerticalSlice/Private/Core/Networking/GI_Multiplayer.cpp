@@ -149,7 +149,6 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bAllowJoinInProgress = true;
         SessionSettings.Set(SERVER_GAME_MODE_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
         SessionSettings.Set(SERVER_MAP_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
         
         SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
     }    
@@ -333,6 +332,21 @@ TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> Unsort
     }
     return SortedMap;
     
+}
+
+void UGI_Multiplayer::SetGameMode(FString GameMode)
+{
+    SessionInterface->GetSessionSettings(SESSION_NAME)->Set(SERVER_GAME_MODE_SETTINGS_KEY, GameMode);
+}
+
+void UGI_Multiplayer::SetMap(FString Map)
+{
+    SessionInterface->GetSessionSettings(SESSION_NAME)->Set(SERVER_MAP_SETTINGS_KEY, Map);
+
+}
+
+void UGI_Multiplayer::SetPlayers(int32 Players)
+{
 }
 
 FOnlineSessionSearchResult UGI_Multiplayer::GetSessionSearchResult(int32 Index)
