@@ -220,9 +220,15 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 		const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
 		//auto* Projectile = GetWorld()->SpawnActor(ProjectileClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
+
+		FGameplayEffectSpecHandle DamageGameplayEffectSpec = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
+		DamageGameplayEffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageGameplayEffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), static_cast<float>(SourceWeapon->GetDamage()));
+
+		//FGameplayEffectContextHandle DamageEffectContext = UAbilitySystemBlueprintLibrary::GetEffectContext(DamageGameplayEffectSpec);
 		
 		ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
 		Projectile->SetOwner(OwningPlayer);
+		Projectile->SetEffectSpec(DamageGameplayEffectSpec);
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}
