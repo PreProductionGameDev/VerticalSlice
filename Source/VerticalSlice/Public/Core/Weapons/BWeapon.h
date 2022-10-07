@@ -150,6 +150,9 @@ public:
 	int32 GetDamage() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShodown|UI")
 	class UTexture2D* GetUITexture() const;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool Pickupable = false;
 	
 protected:
 	// The AbilitySystemComponent of the owning player

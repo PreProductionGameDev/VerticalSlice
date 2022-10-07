@@ -433,6 +433,14 @@ void ABWeapon::BeginPlay()
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);
 	}
+
+	if (!Pickupable)
+	{
+		// Shadows can often appear with a set straight to false. This ensures no shadows 
+		WeaponMesh3P->CastShadow = false;
+		WeaponMesh3P->SetVisibility(true, true);
+		WeaponMesh3P->SetVisibility(false, true);
+	}
 	
 	Super::BeginPlay();
 }
