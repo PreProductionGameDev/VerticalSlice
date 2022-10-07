@@ -39,7 +39,7 @@ public:
 	
 	// Whether or not to spawn this weapon with collision enabled (Pickup Mode)
 	// Set to false when spawning directly into a player's inventory or true when spawning into the world in pickup mode.
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Replicated)
 	bool bSpawnWithCollision;
 	// Tag used for the FP Anim blueprint
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
