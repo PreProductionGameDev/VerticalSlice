@@ -86,6 +86,8 @@ protected:
     void OnFindSessionsComplete(bool bSuccess);
     // Delegate for the Async Server Join
     void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+    // Delegate for the Server Settings update
+    void OnSessionSettingsUpdate(FName SessionName, const FOnlineSessionSettings& UpdatedSettings);
 
     UPROPERTY()
     class UServerFinder* ServerFinder;
@@ -97,3 +99,5 @@ protected:
     // The Menu Instance
     class UMainMenu* Menu;
 };
+
+

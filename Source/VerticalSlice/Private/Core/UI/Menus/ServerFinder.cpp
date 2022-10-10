@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
+#include "Components/VerticalBox.h"
 #include "Core/UI/Menus/ServerResult.h"
 
 void UServerFinder::NativeConstruct()
@@ -87,11 +88,17 @@ void UServerFinder::UpdateServerSettings()
 	// Call the network interface to join a valid server
 	if (NetworkInterface != nullptr && SelectedIndex.IsSet())
 	{
+		ServerBox->SetVisibility(ESlateVisibility::Visible);
 		FString Container;
+		
 		NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.SessionSettings.Get(TEXT("ServerGameMode"),Container);
 		GameMode->SetText(FText::FromString(Container));
 		NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.SessionSettings.Get(TEXT("ServerMap"),Container);
 		Map->SetText(FText::FromString(Container));
+		Container = NetworkInterface->GetSessionSearchResult(SelectedIndex.GetValue()).Session.OwningUserName;
+		RoomName->SetText(FText::FromString(Container));
+
+		UpdateIcons();
 	}
 }
 
@@ -108,6 +115,7 @@ void UServerFinder::RefreshServerList()
 {
 	if (NetworkInterface != nullptr)
 	{
+		ServerBox->SetVisibility(ESlateVisibility::Hidden);
 		ServerList->ClearChildren();
 		NetworkInterface->RefreshServerList(this);
 	}

@@ -35,13 +35,19 @@ protected:
 	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* RefreshButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UVerticalBox* ServerBox;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* RoomName;
+	
+	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* GameMode;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Map;
-
-	UPROPERTY(meta = (BindWidget))
-	class UButton* RefreshButton;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<UUserWidget> ServerRowClass;
@@ -58,6 +64,9 @@ public:
 
 	UFUNCTION()
 	void UpdateServerSettings();
+
+	UFUNCTION( BlueprintImplementableEvent)
+	void UpdateIcons();
 	
 	UFUNCTION(BlueprintCallable)
 	void JoinServer();
