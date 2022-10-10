@@ -190,6 +190,16 @@ ABWeapon* AFP_Character::GetCurrentWeapon() const
 	return CurrentWeapon;
 }
 
+void AFP_Character::GiveDefaultInventory()
+{
+	if (GetLocalRole() < ROLE_Authority)
+	{
+		return;
+	}
+
+	SpawnDefaultInventory();
+}
+
 bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 {
 	// If the weapon is in the inventory, pickup just ammo.
@@ -252,7 +262,7 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 	WeaponInv.Add(FWeaponInventory(NewWeapon->WeaponTag, NewWeapon));
 	NewWeapon->SetOwningCharacter(this);
 	NewWeapon->AddAbilities();
-
+	
 	// If User needs to equip the weapon
 	// Equip and Sync Weapon
 	if (bEquipWeapon)
@@ -297,13 +307,15 @@ void AFP_Character::RemoveAllWeaponsFromInventory()
 
 	// UnEquips Current Weapon
 	UnEquipCurrentWeapon();
-	
-	for (int i = 0; i < WeaponInv.Num(); i++)
+
+	const int InvSize = WeaponInv.Num();
+	for (int i = InvSize - 1; i >= 0; i--)
 	{
 		RemoveWeaponFromInventory(WeaponInv[i].Weapon);
 	}
 	
 	WeaponInv.Empty();
+	CurrentWeaponTag = NoWeaponTag;
 }
 
 int AFP_Character::WeaponInventoryLength()

@@ -97,7 +97,9 @@ public:
 	// Get the Current Equipped Weapon
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	ABWeapon* GetCurrentWeapon() const;
-	
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	void GiveDefaultInventory();
 	// Adds a new weapon to the inventory.
 	// Will return false if weapon already exists in inventory
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
