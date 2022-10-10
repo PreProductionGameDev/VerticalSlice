@@ -15,6 +15,7 @@
 const static FName SESSION_NAME = TEXT("GameSession");
 const static FName SERVER_GAME_MODE_SETTINGS_KEY = TEXT("ServerGameMode");
 const static FName SERVER_MAP_SETTINGS_KEY = TEXT("ServerMap");
+const static FName SERVER_PLAYER_COUNT = TEXT("ServerPlayer");
 
 UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
@@ -152,6 +153,7 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bAllowJoinInProgress = true;
         SessionSettings.Set(SERVER_GAME_MODE_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
         SessionSettings.Set(SERVER_MAP_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+        SessionSettings.Set(SERVER_PLAYER_COUNT, 1, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
         
         SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
     }    
@@ -231,7 +233,7 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
         {
             FServerData Data;
             Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
-            Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;
+            SearchResult.Session.SessionSettings.Get(SERVER_PLAYER_COUNT, Data.CurrentPlayers);
             Data.Name = SearchResult.Session.OwningUserName;
             SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY,Data.CurrentGameModeInfo);
             SearchResult.Session.SessionSettings.Get(SERVER_MAP_SETTINGS_KEY,Data.CurrentMapInfo);
@@ -344,21 +346,30 @@ TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> Unsort
 
 void UGI_Multiplayer::SetGameMode(FString GameMode)
 {
-    FOnlineSessionSettings* OldSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
+    FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
     
-    OldSettings->Set(SERVER_GAME_MODE_SETTINGS_KEY, GameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+    LocalSessionSettings->Set(SERVER_GAME_MODE_SETTINGS_KEY, GameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
     
-    SessionInterface->UpdateSession(SESSION_NAME,*OldSettings , true);
+    SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
 }
 
 void UGI_Multiplayer::SetMap(FString Map)
 {
-    SessionInterface->GetSessionSettings(SESSION_NAME)->Set(SERVER_MAP_SETTINGS_KEY, Map);
+    FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
+    
+    LocalSessionSettings->Set(SERVER_MAP_SETTINGS_KEY, Map, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+    
+    SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
 
 }
 
 void UGI_Multiplayer::SetPlayers(int32 Players)
 {
+    FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
+    
+    LocalSessionSettings->Set(SERVER_PLAYER_COUNT, Players, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+    
+    SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
 }
 
 FOnlineSessionSearchResult UGI_Multiplayer::GetSessionSearchResult(int32 Index)

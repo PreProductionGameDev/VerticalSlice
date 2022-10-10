@@ -14,7 +14,7 @@ struct FServerData
 	GENERATED_BODY()
 
 	FString Name;
-	uint16 CurrentPlayers;
+	int32 CurrentPlayers = 0;
 	uint16 MaxPlayers;
 
 	FString CurrentGameModeInfo;
