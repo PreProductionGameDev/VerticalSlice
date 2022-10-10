@@ -89,6 +89,7 @@ void ABWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	DOREPLIFETIME_CONDITION(ABWeapon, OwningCharacter, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, PrimaryClipAmmo, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, MaxPrimaryClipAmmo, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(ABWeapon, bSpawnWithCollision, COND_None);
 }
 
 void ABWeapon::PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker)
@@ -432,7 +433,24 @@ void ABWeapon::BeginPlay()
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);
+		UE_LOG(LogTemp, Warning, TEXT("HELLO"));
 	}
+
+	if (!bSpawnWithCollision)
+	{
+		// Shadows can often appear with a set straight to false. This ensures no shadows 
+		WeaponMesh3P->CastShadow = false;
+		WeaponMesh3P->SetVisibility(true, true);
+		WeaponMesh3P->SetVisibility(false, true);
+	}
+
+	//if (!Pickupable)
+	//{
+	//	// Shadows can often appear with a set straight to false. This ensures no shadows 
+	//	WeaponMesh3P->CastShadow = false;
+	//	WeaponMesh3P->SetVisibility(true, true);
+	//	WeaponMesh3P->SetVisibility(false, true);
+	//}
 	
 	Super::BeginPlay();
 }

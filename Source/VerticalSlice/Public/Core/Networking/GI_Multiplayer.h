@@ -58,8 +58,17 @@ public:
     // Settings Saved Game Asset
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USettingsSaveGame* Settings;
+
+    UFUNCTION(BlueprintCallable)
+    void SetGameMode(FString GameMode);
+
+    UFUNCTION(BlueprintCallable)
+	void SetMap(FString Map);
+
+    UFUNCTION(BlueprintCallable)
+    void SetPlayers(int32 Players);
     
-    FOnlineSessionSearchResult GetSessionSearchResult(int32 Index);
+    virtual FOnlineSessionSearchResult GetSessionSearchResult(int32 Index) override;
     
 protected:
     IOnlineSessionPtr SessionInterface;
@@ -77,6 +86,8 @@ protected:
     void OnFindSessionsComplete(bool bSuccess);
     // Delegate for the Async Server Join
     void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+    // Delegate for the Server Settings update
+    void OnSessionSettingsUpdate(FName SessionName, const FOnlineSessionSettings& UpdatedSettings);
 
     UPROPERTY()
     class UServerFinder* ServerFinder;
@@ -88,3 +99,5 @@ protected:
     // The Menu Instance
     class UMainMenu* Menu;
 };
+
+
