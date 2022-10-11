@@ -32,12 +32,12 @@ void UAmmoAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	else if (Data.EvaluatedData.Attribute == GetShotgunReserveAmmoAttribute())
 	{
 		const float Ammo = GetShotgunReserveAmmo();
-		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSMGReserveAmmo()));
+		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxShotgunReserveAmmo()));
 	}
 	else if (Data.EvaluatedData.Attribute == GetSniperReserveAmmoAttribute())
 	{
 		const float Ammo = GetSniperReserveAmmo();
-		SetShotgunReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSniperReserveAmmo()));
+		SetSniperReserveAmmo(FMath::Clamp<float>(Ammo, 0, GetMaxSniperReserveAmmo()));
 	}
 	else if (Data.EvaluatedData.Attribute == GetBurstRifleReserveAmmoAttribute())
 	{
