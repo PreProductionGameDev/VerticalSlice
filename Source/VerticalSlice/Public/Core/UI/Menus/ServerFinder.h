@@ -27,7 +27,8 @@ public:
 	void SelectIndex(uint32 Index);
 protected:
 	INetworkInterface* NetworkInterface;
-	
+
+public:
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* ServerList;
 
@@ -35,19 +36,19 @@ protected:
 	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* RefreshButton;
+	UButton* RefreshButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* ServerBox;
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* RoomName;
 	
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* GameMode;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* GameMode;
 	
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Map;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* Map;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<UUserWidget> ServerRowClass;
