@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Border.h"
 #include "Core/Networking/FServerData.h"
 #include "Core/Networking/NetworkInterface.h"
 #include "ServerFinder.generated.h"
@@ -27,7 +28,8 @@ public:
 	void SelectIndex(uint32 Index);
 protected:
 	INetworkInterface* NetworkInterface;
-	
+
+public:
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* ServerList;
 
@@ -35,19 +37,26 @@ protected:
 	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* RefreshButton;
+	UButton* RefreshButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* ServerBox;
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* RoomName;
 	
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* GameMode;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* GameMode;
 	
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Map;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* Map;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UBorder* Searching;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UBorder* Joining;
+	
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<UUserWidget> ServerRowClass;

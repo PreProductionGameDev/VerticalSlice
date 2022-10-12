@@ -124,6 +124,7 @@ void UGI_Multiplayer::Host()
         if (ExistingSession != nullptr)
         {
             SessionInterface->DestroySession(SESSION_NAME);
+            
         }
         else
         {
@@ -151,8 +152,8 @@ void UGI_Multiplayer::CreateSession()
         SessionSettings.bUsesPresence = true;
         SessionSettings.bUseLobbiesIfAvailable = true;
         SessionSettings.bAllowJoinInProgress = true;
-        SessionSettings.Set(SERVER_GAME_MODE_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-        SessionSettings.Set(SERVER_MAP_SETTINGS_KEY, FString("ROWNAME"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+        SessionSettings.Set(SERVER_GAME_MODE_SETTINGS_KEY, FString("CTF"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+        SessionSettings.Set(SERVER_MAP_SETTINGS_KEY, FString("Temple"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
         SessionSettings.Set(SERVER_PLAYER_COUNT, 1, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
         
         SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
@@ -199,7 +200,7 @@ void UGI_Multiplayer::OnDestroySessionComplete(FName SessionName, bool bSuccess)
     if (bSuccess)
     {
         UE_LOG(LogTemp, Warning, TEXT("PREVIOUS SESSION DESTROYED. NEW ONE MADE"));
-        CreateSession();
+        SessionInterface->DestroySession(SESSION_NAME);
     }
 }
 
@@ -237,27 +238,7 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
             Data.Name = SearchResult.Session.OwningUserName;
             SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY,Data.CurrentGameModeInfo);
             SearchResult.Session.SessionSettings.Get(SERVER_MAP_SETTINGS_KEY,Data.CurrentMapInfo);
-            
-            //FGameModeInfo GameModeInfo;
-            //if (SearchResult.Session.SessionSettings.Get(SERVER_GAME_MODE_SETTINGS_KEY, GameModeInfo))
-            //{
-            //    Data.CurrentGameModeInfo = GameModeInfo;
-            //}
-            //else
-            //{
-            //    Data.CurrentGameModeInfo = FGameModeInfo();
-            //}
-//
-            //FMapInfo MapInfo;
-            //if (SearchResult.Session.SessionSettings.Get(SERVER_MAP_SETTINGS_KEY, MapInfo))
-            //{
-            //    Data.CurrentMapInfo = MapInfo;
-            //}
-            //else
-            //{
-            //    Data.CurrentMapInfo = MapInfo;
-            //}
-            
+           
             ServerNames.Add(Data);
         }
 
