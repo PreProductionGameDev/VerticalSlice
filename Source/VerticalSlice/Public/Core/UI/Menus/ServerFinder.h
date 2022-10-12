@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Border.h"
 #include "Core/Networking/FServerData.h"
 #include "Core/Networking/NetworkInterface.h"
 #include "ServerFinder.generated.h"
@@ -49,6 +50,13 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UTextBlock* Map;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UBorder* Searching;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UBorder* Joining;
+	
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TSubclassOf<UUserWidget> ServerRowClass;

@@ -43,6 +43,7 @@ void UServerFinder::SetNetworkInterface(INetworkInterface* InNetworkInterface)
 
 void UServerFinder::SetServerList(TArray<FServerData> ServerNames)
 {
+	Searching->SetVisibility(ESlateVisibility::Hidden);
 	UWorld* World = this->GetWorld();
 	if (!ensure(World != nullptr)) return;
 
@@ -107,6 +108,7 @@ void UServerFinder::JoinServer()
 	// Call the network interface to join a valid server
 	if (NetworkInterface != nullptr && SelectedIndex.IsSet())
 	{
+		Joining->SetVisibility(ESlateVisibility::Visible);
 		NetworkInterface->Join(SelectedIndex.GetValue());
 	}
 }
@@ -115,6 +117,7 @@ void UServerFinder::RefreshServerList()
 {
 	if (NetworkInterface != nullptr)
 	{
+		Searching->SetVisibility(ESlateVisibility::Visible);
 		ServerBox->SetVisibility(ESlateVisibility::Hidden);
 		ServerList->ClearChildren();
 		NetworkInterface->RefreshServerList(this);
