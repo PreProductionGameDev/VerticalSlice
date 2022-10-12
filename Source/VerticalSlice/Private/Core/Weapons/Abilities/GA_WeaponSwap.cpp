@@ -29,14 +29,24 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (const AFP_Character* Player = Cast<AFP_Character>(GetCurrentSourceObject()))
 	{
-		Character->EquipWeaponFromTag(WeaponTag);
-		FGameplayTagContainer EquipContainer;
-		EquipContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Equip"));
-		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(EquipContainer);
+		ABWeapon* Weapon = Player->GetCurrentWeapon();
+		if (Weapon)
+		{
+			if (UAnimMontage* Montage = Cast<UAnimMontage>(Weapon->GetWeaponMesh1P()->GetAnimInstance()))
+			{
+				const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+				if (Montage->IsValidSectionIndex(SectionID))
+				{
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::SwapWeapon);
+					return;
+				}
+			}
+		}
 	}
-	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	SwapWeapon(FName(), FBranchingPointNotifyPayload());
 }
 
 void UGA_WeaponSwap::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
@@ -51,4 +61,16 @@ bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		return Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag);
 	}
 	return false;
+}
+
+void UGA_WeaponSwap::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	{
+		Character->EquipWeaponFromTag(WeaponTag);
+		FGameplayTagContainer EquipContainer;
+		EquipContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Equip"));
+		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(EquipContainer);
+	}
+	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 }

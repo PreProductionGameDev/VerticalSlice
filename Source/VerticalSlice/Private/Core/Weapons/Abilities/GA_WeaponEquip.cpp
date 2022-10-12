@@ -52,5 +52,8 @@ void UGA_WeaponEquip::EndAbility(const FGameplayAbilitySpecHandle Handle, const 
 void UGA_WeaponEquip::MontageNotifyEvent(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Notify Occured"));
-	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	if (NotifyName == FName("Equip"))
+	{
+		EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	}
 }

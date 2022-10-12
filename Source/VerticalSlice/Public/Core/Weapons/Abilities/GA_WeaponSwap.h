@@ -24,7 +24,12 @@ public:
 	// Check if we can Activate the Ability
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
 
+	UFUNCTION()
+	void SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag WeaponTag;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UAnimMontage> EquipMontage;
 };
