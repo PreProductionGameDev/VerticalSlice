@@ -18,6 +18,7 @@ UGA_WeaponPrev::UGA_WeaponPrev()
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary.Instant")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Secondary")));
+	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Equip")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 
@@ -31,6 +32,9 @@ void UGA_WeaponPrev::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
 	{
 		Character->PrevWeapon();
+		FGameplayTagContainer EquipContainer;
+		EquipContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Equip"));
+		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(EquipContainer);
 	}
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 }

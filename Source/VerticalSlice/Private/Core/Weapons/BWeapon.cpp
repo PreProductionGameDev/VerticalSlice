@@ -117,7 +117,10 @@ void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 		if (OwningCharacter->GetCurrentWeapon() != this)
 		{
 			WeaponMesh1P->SetVisibility(false, true);
-
+			if (Equip1PMontage)
+			{
+				WeaponMesh1P->GetAnimInstance()->Montage_Play(Equip1PMontage);
+			}
 			// Shadows can often appear with a set straight to false. This ensures no shadows 
 			WeaponMesh3P->CastShadow = false;
 			WeaponMesh3P->SetVisibility(true, true);

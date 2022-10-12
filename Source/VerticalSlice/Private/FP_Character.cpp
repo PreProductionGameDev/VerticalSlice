@@ -670,20 +670,6 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		{
 			PrimaryReserveAmmoChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(CurrentWeapon->PrimaryAmmoType)).AddUObject(this, &AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged);
 		}
-
-		// Handle FirstPerson Equip Montage
-		// TODO: Weapon Equip Animations
-		UAnimMontage* Equip1PMontage = CurrentWeapon->GetEquip1PMontage();
-		if (Equip1PMontage && GetFirstPersonMesh())
-		{
-			GetFirstPersonMesh()->GetAnimInstance()->Montage_Play(Equip1PMontage);
-		}	
-		// Handle ThirdPerson Equip Montage
-		UAnimMontage* Equip3PMontage = CurrentWeapon->GetEquip3PMontage();
-		if (Equip3PMontage && GetThirdPersonMesh())
-		{
-			GetThirdPersonMesh()->GetAnimInstance()->Montage_Play(Equip3PMontage);
-		}
 	}
 	else
 	{
