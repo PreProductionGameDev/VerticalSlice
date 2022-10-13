@@ -33,4 +33,22 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	ExtraItem.Add(TEXT("0"));
 	ExtraItem.Add(TEXT("0"));
 
+	bHoldToZoom = true;
+
+	Jump = FKey("Space Bar");
+	PrimaryAction = FKey("Left Mouse Button");
+	SecondaryAction = FKey("Right Mouse Button");
+	Reload = FKey("R");
+	SMG = FKey("1");
+	Shotgun = FKey("3");
+	Sniper = FKey("4");
+	AssaultRifle = FKey("2");
+	RocketLauncher = FKey("5");
+	NextWeapon = FKey("Mouse Wheel Up");
+	PrevWeapon = FKey("Mouse Wheel Down");
+	SwapAbility = FKey("Q");
+	UtilityAbility = FKey("E");
+	MovementAbility = FKey("Left Shift");
+	OpenLeaderboard = FKey("Tab");
+
 }
