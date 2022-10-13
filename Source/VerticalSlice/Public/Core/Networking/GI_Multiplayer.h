@@ -34,6 +34,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void LoadSettings();
 
+    UFUNCTION(BlueprintCallable)
+    void SetBinding(const FName Mapping, const FKey Binding) const;
+
     // Menu Creation
     UFUNCTION(BlueprintCallable)
     void CreateMainMenuUI();
