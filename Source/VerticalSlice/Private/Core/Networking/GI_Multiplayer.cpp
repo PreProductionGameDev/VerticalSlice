@@ -41,7 +41,7 @@ void UGI_Multiplayer::LoadSettings()
 {
     //Attempts to load settings
     Settings = Cast<USettingsSaveGame>(UGameplayStatics::LoadGameFromSlot("Settings",0));
-    if(!IsValid(Settings))
+    if(!IsValid(Settings) && Settings->PrimaryAction != FKey())
     {
         //Creates new settings if it failed to load
         UE_LOG(LogTemp, Warning, TEXT("Settings have failed to load"));
