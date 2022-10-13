@@ -7,7 +7,8 @@
 #include "GA_WeaponEquip.generated.h"
 
 /**
- * 
+ *	An ability to play the equip animation and block all shooting till complete.
+ *	
  */
 UCLASS()
 class VERTICALSLICE_API UGA_WeaponEquip : public UPlayerGameplayAbility

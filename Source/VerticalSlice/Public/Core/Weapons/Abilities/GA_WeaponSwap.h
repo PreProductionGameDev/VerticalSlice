@@ -26,6 +26,9 @@ public:
 
 	UFUNCTION()
 	void SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+	UFUNCTION()
+	void WeaponEquipped(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
