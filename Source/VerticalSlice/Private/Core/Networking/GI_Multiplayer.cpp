@@ -3,6 +3,7 @@
 
 #include "Core/Networking/GI_Multiplayer.h"
 
+#include "DelayAction.h"
 #include "Chaos/PBDCollisionConstraintsContact.h"
 #include "Core/Gamemodes/Lobby/LobbyActor.h"
 #include "GameFramework/GameMode.h"
@@ -11,6 +12,7 @@
 #include "Core/Player/FPPlayerController.h"
 #include "Core/UI/Menus/ServerFinder.h"
 #include "Core/UI/Menus/MainMenu.h"   
+#include "GameFramework/InputSettings.h"
 
 const static FName SESSION_NAME = TEXT("GameSession");
 const static FName SERVER_GAME_MODE_SETTINGS_KEY = TEXT("ServerGameMode");
@@ -39,7 +41,7 @@ void UGI_Multiplayer::LoadSettings()
 {
     //Attempts to load settings
     Settings = Cast<USettingsSaveGame>(UGameplayStatics::LoadGameFromSlot("Settings",0));
-    if(!IsValid(Settings))
+    if(!IsValid(Settings) && Settings->PrimaryAction != FKey())
     {
         //Creates new settings if it failed to load
         UE_LOG(LogTemp, Warning, TEXT("Settings have failed to load"));
@@ -50,7 +52,35 @@ void UGI_Multiplayer::LoadSettings()
             UE_LOG(LogTemp, Fatal, TEXT("Settings have failed to initalize"));
         }
     }
+    SetBinding("Jump", Settings->Jump);
+    SetBinding("PrimaryAction", Settings->PrimaryAction);
+    SetBinding("SecondaryAction", Settings->SecondaryAction);
+    SetBinding("Reload", Settings->Reload);
+    SetBinding("UtilityAbility", Settings->UtilityAbility);
+    SetBinding("SwapAbility", Settings->SwapAbility);
+    SetBinding("SMG", Settings->SMG);
+    SetBinding("Shotgun", Settings->Shotgun);
+    SetBinding("Sniper", Settings->Sniper);
+    SetBinding("AssaultRifle", Settings->AssaultRifle);
+    SetBinding("RocketLauncher", Settings->RocketLauncher);
+    SetBinding("NextWeapon", Settings->NextWeapon);
+    SetBinding("OpenLeaderboard", Settings->OpenLeaderboard);
+    SetBinding("PrevWeapon", Settings->PrevWeapon);
 }
+
+void UGI_Multiplayer::SetBinding(const FName Mapping, const FKey Binding) const
+{
+    UInputSettings* InputSettings = UInputSettings::GetInputSettings();
+    TArray<FInputActionKeyMapping> KeyBinds;
+    InputSettings->GetActionMappingByName(Mapping,KeyBinds);
+    for(FInputActionKeyMapping KeyBind: KeyBinds)
+    {
+        InputSettings->RemoveActionMapping(KeyBind);
+    }
+    InputSettings->AddActionMapping(FInputActionKeyMapping(Mapping,Binding));
+}
+
+
 
 void UGI_Multiplayer::CreateMainMenuUI()
 {
