@@ -29,6 +29,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Controls")
 	float MouseSensitivity;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custome Save|Controls")
+	bool bHoldToZoom;
+
 	// Cosmetics Settings
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
 	int32 PlayerModel;
