@@ -162,6 +162,7 @@ void ABWeapon::Equip()
 	// Setup FirstPerson Mesh if Valid
 	if (WeaponMesh1P)
 	{
+		WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection(FName("Equip"));
 		WeaponMesh1P->SetVisibility(true, true);
 		if (OwningCharacter->GetFirstPersonMesh())
 		{
@@ -176,7 +177,6 @@ void ABWeapon::Equip()
 			{
 				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
-			WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection(FName("Equip"));
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
 		}
