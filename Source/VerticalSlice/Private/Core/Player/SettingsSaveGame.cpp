@@ -33,4 +33,6 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	ExtraItem.Add(TEXT("0"));
 	ExtraItem.Add(TEXT("0"));
 
+	bHoldToZoom = true;
+
 }
