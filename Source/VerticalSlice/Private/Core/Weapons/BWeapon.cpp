@@ -170,11 +170,13 @@ void ABWeapon::Equip()
 			if (OwningCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
 			{
 				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
+				
 			}
 			else
 			{
 				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
+			WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection(FName("Equip"));
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
 		}
