@@ -14,11 +14,13 @@ UGA_WeaponNext::UGA_WeaponNext()
 	bSourceObjectMustBeCurrentElementToActivate = false;
 
 	// Ability Tags
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Swap")));
+	
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Reload")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary.Instant")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Secondary")));
-	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Equip")));
+	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Swap")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 
@@ -48,7 +50,7 @@ bool UGA_WeaponNext::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
 	{
-		return Character->WeaponInventoryLength() > 0;
+		return Character->WeaponInventoryLength() > 0 && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}
 	return false;
 }

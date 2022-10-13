@@ -14,11 +14,23 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 	bSourceObjectMustBeCurrentElementToActivate = false;
 
 	// Ability Tags
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.SMG")));
+	
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.SMG")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.Shotgun")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.Sniper")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.BurstRifle")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Equipped.Rocket")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Reload")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Secondary")));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Swap")));
+	
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Reload")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Primary.Instant")));
 	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Secondary")));
-	CancelAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Weapon.Equip")));
+	
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 
@@ -29,14 +41,27 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (IsLocallyControlled())
 	{
-		Character->EquipWeaponFromTag(WeaponTag);
-		FGameplayTagContainer EquipContainer;
-		EquipContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Equip"));
-		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(EquipContainer);
+		if (const AFP_Character* Player = Cast<AFP_Character>(GetCurrentSourceObject()))
+		{
+			const ABWeapon* Weapon = Player->GetCurrentWeapon();
+			if (Weapon)
+			{
+				if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+				{
+					const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+					if (Montage->IsValidSectionIndex(SectionID))
+					{
+						Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
+						Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::SwapWeapon);
+						return;
+					}
+				}
+			}
+		}
 	}
-	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+	SwapWeapon(FName(), FBranchingPointNotifyPayload());
 }
 
 void UGA_WeaponSwap::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
@@ -48,7 +73,69 @@ bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
 	{
-		return Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag);
+		UE_LOG(LogTemp, Warning, TEXT("SO i wonder what this is %s"), (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) ? TEXT("TRUE") : TEXT("FALSE"));
+		return (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("HUH?"));
 	return false;
+}
+
+void UGA_WeaponSwap::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if (const AFP_Character* Player = Cast<AFP_Character>(GetCurrentSourceObject()))
+	{
+		ABWeapon* Weapon = Player->GetCurrentWeapon();
+		if (Weapon)
+		{
+			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			{
+				const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+				if (Montage->IsValidSectionIndex(SectionID))
+				{
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+				}
+			}
+		}
+	}
+	
+	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	{
+		Character->EquipWeaponFromTag(WeaponTag);
+		ABWeapon* Weapon = Character->GetCurrentWeapon();
+		if (Weapon)
+		{
+			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			{
+				const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
+				if (Montage->IsValidSectionIndex(SectionID))
+				{
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("Equip");
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::WeaponEquipped);
+					return;
+				}
+			}
+		}
+	}
+	WeaponEquipped(FName(), FBranchingPointNotifyPayload());
+}
+
+void UGA_WeaponSwap::WeaponEquipped(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if (const AFP_Character* Player = Cast<AFP_Character>(GetCurrentSourceObject()))
+	{
+		ABWeapon* Weapon = Player->GetCurrentWeapon();
+		if (Weapon)
+		{
+			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			{
+				const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
+				if (Montage->IsValidSectionIndex(SectionID))
+				{
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+				}
+			}
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Weapon Equipped"));
+	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 }
