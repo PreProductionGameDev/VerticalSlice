@@ -45,6 +45,8 @@ void UGA_FireMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 		return;
 	}
+
+	GetAbilitySystemComponentFromActorInfo()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 	
 	//start spawning fire
 	FTimerDynamicDelegate DynamicDelegate;
@@ -84,7 +86,8 @@ void UGA_FireMovement::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 	UCharacterMovementComponent* CharacterMovementComponent= Cast<AFP_Character>(GetActorInfo().OwnerActor)->GetCharacterMovement();
 	CharacterMovementComponent->MaxWalkSpeed = 1200;
 	CharacterMovementComponent->MaxAcceleration = 2048;
-	
+
+	GetAbilitySystemComponentFromActorInfo()->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

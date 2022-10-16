@@ -38,6 +38,9 @@ public:
 	UFUNCTION()
 	void OnKeyReleased(float TimePressed);
 
+	UFUNCTION()
+	void OnGravPulse();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlaySound(FVector Location);
 

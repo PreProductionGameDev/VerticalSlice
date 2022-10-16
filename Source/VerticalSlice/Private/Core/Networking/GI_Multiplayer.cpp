@@ -3,11 +3,8 @@
 
 #include "Core/Networking/GI_Multiplayer.h"
 
-#include "DelayAction.h"
 #include "Chaos/PBDCollisionConstraintsContact.h"
 #include "Core/Gamemodes/Lobby/LobbyActor.h"
-#include "GameFramework/GameMode.h"
-#include "GameFramework/PlayerState.h"
 #include "Core/Networking/FServerData.h"
 #include "Core/Player/FPPlayerController.h"
 #include "Core/UI/Menus/ServerFinder.h"
@@ -41,10 +38,21 @@ void UGI_Multiplayer::LoadSettings()
 {
     //Attempts to load settings
     Settings = Cast<USettingsSaveGame>(UGameplayStatics::LoadGameFromSlot("Settings",0));
-    if(!IsValid(Settings) && Settings->PrimaryAction != FKey())
+    if(!IsValid(Settings) )
     {
         //Creates new settings if it failed to load
         UE_LOG(LogTemp, Warning, TEXT("Settings have failed to load"));
+        Settings = NewObject<USettingsSaveGame>();
+        if(!UGameplayStatics::SaveGameToSlot(Settings, "Settings", 0 ))
+        {
+            //crashes if game failed to create default settings
+            UE_LOG(LogTemp, Fatal, TEXT("Settings have failed to initalize"));
+        }
+    }
+    if(Settings->PrimaryAction != FKey())
+    {
+        //Creates new settings if it failed to load
+        UE_LOG(LogTemp, Warning, TEXT("Keybindings are unbound"));
         Settings = NewObject<USettingsSaveGame>();
         if(!UGameplayStatics::SaveGameToSlot(Settings, "Settings", 0 ))
         {

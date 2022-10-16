@@ -35,7 +35,7 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 
 	bHoldToZoom = true;
 
-	Jump = FKey("Space Bar");
+	Jump = FKey("SpaceBar");
 	PrimaryAction = FKey("Left Mouse Button");
 	SecondaryAction = FKey("Right Mouse Button");
 	Reload = FKey("R");

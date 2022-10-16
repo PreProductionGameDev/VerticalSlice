@@ -36,8 +36,10 @@ void UGA_GravityMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	if(Cast<AFP_Character>(GetOwningActorFromActorInfo())->GetStamina() < 0.5f)
 	{
-		CancelAbility(Handle, ActorInfo, ActivationInfo, false);
+		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
+		return;
 	}
+	
 	// Spawn Parameters
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
@@ -81,6 +83,11 @@ void UGA_GravityMovement::EndAbility(const FGameplayAbilitySpecHandle Handle,
 		{
 			GetWorld()->DestroyActor(ImpulseIndicator);
 		}
+	}
+	else
+	{
+		//tag for dropping the flag
+		GetAbilitySystemComponentFromActorInfo()->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 	}
 }
 
@@ -130,21 +137,31 @@ void UGA_GravityMovement::SyncCamera()
  */
 void UGA_GravityMovement::OnKeyReleased(float TimePressed)
 {
-	if(Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f))
-	{
-		TArray<AActor*> OverlapActors;
-		TArray<AActor*> IgnoredActors;
-		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-		if(UKismetSystemLibrary::SphereOverlapActors(this, ImpulseIndicator->GetActorLocation(),800.0f,ObjectTypes,AFP_Character::StaticClass(),IgnoredActors,OverlapActors ))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("OverlappedActors"));
+	// takes the stamina from the player
+	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f);
+	//tag for dropping the flag
+	GetAbilitySystemComponentFromActorInfo()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
+	ImpulseIndicatorTimerHandle.Invalidate();
+	
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(
+		Handle, this, &UGA_GravityMovement::OnGravPulse, 0.1, false);
+}
 
-			for(AActor* OverlapedActor : OverlapActors)
-			{
-				Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
-			}
+void UGA_GravityMovement::OnGravPulse()
+{
+	TArray<AActor*> OverlapActors;
+	TArray<AActor*> IgnoredActors;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	if(UKismetSystemLibrary::SphereOverlapActors(this, ImpulseIndicator->GetActorLocation(),800.0f,ObjectTypes,AFP_Character::StaticClass(),IgnoredActors,OverlapActors ))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OverlappedActors"));
+		for(AActor* OverlapedActor : OverlapActors)
+		{
+			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
 		}
 	}
+	
 	PlaySound(ImpulseIndicator->GetActorLocation());
 	GetWorld()->DestroyActor(ImpulseIndicator);
 	ImpulseIndicator= nullptr;
