@@ -305,14 +305,12 @@ void UGA_WeaponPrimaryInstant_HitScan::PlayAnimations()
 	// Play First Person Animation
 	if (Weapon1PMesh && WeaponAnimationMontage)
 	{
-		Weapon1PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
 		Weapon1PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
 	}
 
 	// Play Third Person Animation
 	if (Weapon3PMesh && WeaponAnimationMontage)
 	{
-		Weapon3PMesh->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0, EMontagePlayReturnType::MontageLength, 0, true);
 		Weapon3PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
 	}
 }
