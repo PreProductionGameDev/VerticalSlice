@@ -36,16 +36,16 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	bHoldToZoom = true;
 
 	Jump = FKey("SpaceBar");
-	PrimaryAction = FKey("Left Mouse Button");
-	SecondaryAction = FKey("Right Mouse Button");
+	PrimaryAction = FKey("LeftMouseButton");
+	SecondaryAction = FKey("RightMouseButton");
 	Reload = FKey("R");
-	SMG = FKey("1");
-	Shotgun = FKey("3");
-	Sniper = FKey("4");
-	AssaultRifle = FKey("2");
-	RocketLauncher = FKey("5");
-	NextWeapon = FKey("Mouse Wheel Up");
-	PrevWeapon = FKey("Mouse Wheel Down");
+	SMG = FKey("One");
+	AssaultRifle = FKey("Two");
+	Shotgun = FKey("Three");
+	Sniper = FKey("Four");
+	RocketLauncher = FKey("Five");
+	NextWeapon = FKey("MouseWheelUp");
+	PrevWeapon = FKey("MouseWheelDown");
 	SwapAbility = FKey("Q");
 	UtilityAbility = FKey("E");
 	MovementAbility = FKey("Left Shift");
