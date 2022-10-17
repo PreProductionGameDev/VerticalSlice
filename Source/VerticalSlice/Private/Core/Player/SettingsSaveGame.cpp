@@ -3,6 +3,9 @@
 
 #include "Core/Player/SettingsSaveGame.h"
 
+#include "GameFramework/GameUserSettings.h"
+
+
 USettingsSaveGame::USettingsSaveGame() : USaveGame()
 {
 	MainVolume = 0.75f;
@@ -34,21 +37,22 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	ExtraItem.Add(TEXT("0"));
 
 	bHoldToZoom = true;
-
+	
 	Jump = FKey("SpaceBar");
-	PrimaryAction = FKey("Left Mouse Button");
-	SecondaryAction = FKey("Right Mouse Button");
+	PrimaryAction = FKey("LeftMouseButton");
+	SecondaryAction = FKey("RightMouseButton");
 	Reload = FKey("R");
-	SMG = FKey("1");
-	Shotgun = FKey("3");
-	Sniper = FKey("4");
-	AssaultRifle = FKey("2");
-	RocketLauncher = FKey("5");
-	NextWeapon = FKey("Mouse Wheel Up");
-	PrevWeapon = FKey("Mouse Wheel Down");
+	SMG = FKey("One");
+	AssaultRifle = FKey("Two");
+	Shotgun = FKey("Three");
+	Sniper = FKey("Four");
+	RocketLauncher = FKey("Five");
+	NextWeapon = FKey("MouseWheelUp");
+	PrevWeapon = FKey("MouseWheelDown");
 	SwapAbility = FKey("Q");
 	UtilityAbility = FKey("E");
 	MovementAbility = FKey("Left Shift");
 	OpenLeaderboard = FKey("Tab");
 
+	Resolution = FIntPoint(1920,1080);
 }

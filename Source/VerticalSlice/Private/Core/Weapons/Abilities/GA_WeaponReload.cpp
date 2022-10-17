@@ -148,7 +148,6 @@ void UGA_WeaponReload::PlayAnimations()
 {
 	if (SourceWeapon && WeaponAnimationMontage)
 	{	
-		SourceWeapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_Play(WeaponAnimationMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0, true);
 		SourceWeapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection(FName("Reload"));
 	}
 }
