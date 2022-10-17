@@ -3,6 +3,8 @@
 
 #include "Core/Player/SettingsSaveGame.h"
 
+#include "GameFramework/GameUserSettings.h"
+
 
 USettingsSaveGame::USettingsSaveGame() : USaveGame()
 {
@@ -52,4 +54,5 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	MovementAbility = FKey("Left Shift");
 	OpenLeaderboard = FKey("Tab");
 
+	Resolution = FIntPoint(1920,1080);
 }

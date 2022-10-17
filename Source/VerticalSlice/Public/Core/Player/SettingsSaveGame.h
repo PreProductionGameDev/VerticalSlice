@@ -29,11 +29,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Controls")
 	float MouseSensitivity;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custome Save|Controls")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Controls")
 	bool bHoldToZoom;
 
 	//Graphics settings
-	FIntPoint Resolution = FIntPoint(1920,1080);
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Graphics")
+	FIntPoint Resolution;
 	
 	// Cosmetics Settings
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")

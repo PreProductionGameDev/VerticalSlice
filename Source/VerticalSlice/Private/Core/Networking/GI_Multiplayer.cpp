@@ -75,8 +75,9 @@ void UGI_Multiplayer::LoadSettings()
     SetBinding("NextWeapon", Settings->NextWeapon);
     SetBinding("OpenLeaderboard", Settings->OpenLeaderboard);
     SetBinding("PrevWeapon", Settings->PrevWeapon);
-    
-    //UGameUserSettings::SetScreenResolution(Settings->Resolution);
+
+    UGameUserSettings::GetGameUserSettings()->SetScreenResolution(Settings->Resolution);
+    UGameUserSettings::GetGameUserSettings()->ApplySettings(false);
 }
 
 void UGI_Multiplayer::SetBinding(const FName Mapping, const FKey Binding) const
