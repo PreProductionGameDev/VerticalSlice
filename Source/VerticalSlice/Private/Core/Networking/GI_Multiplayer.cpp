@@ -9,6 +9,7 @@
 #include "Core/Player/FPPlayerController.h"
 #include "Core/UI/Menus/ServerFinder.h"
 #include "Core/UI/Menus/MainMenu.h"   
+#include "GameFramework/GameUserSettings.h"
 #include "GameFramework/InputSettings.h"
 
 const static FName SESSION_NAME = TEXT("GameSession");
@@ -74,6 +75,8 @@ void UGI_Multiplayer::LoadSettings()
     SetBinding("NextWeapon", Settings->NextWeapon);
     SetBinding("OpenLeaderboard", Settings->OpenLeaderboard);
     SetBinding("PrevWeapon", Settings->PrevWeapon);
+    
+    //UGameUserSettings::SetScreenResolution(Settings->Resolution);
 }
 
 void UGI_Multiplayer::SetBinding(const FName Mapping, const FKey Binding) const

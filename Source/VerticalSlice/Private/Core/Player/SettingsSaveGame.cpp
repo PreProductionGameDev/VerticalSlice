@@ -3,6 +3,7 @@
 
 #include "Core/Player/SettingsSaveGame.h"
 
+
 USettingsSaveGame::USettingsSaveGame() : USaveGame()
 {
 	MainVolume = 0.75f;
@@ -34,7 +35,7 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	ExtraItem.Add(TEXT("0"));
 
 	bHoldToZoom = true;
-
+	
 	Jump = FKey("SpaceBar");
 	PrimaryAction = FKey("LeftMouseButton");
 	SecondaryAction = FKey("RightMouseButton");

@@ -32,6 +32,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custome Save|Controls")
 	bool bHoldToZoom;
 
+	//Graphics settings
+	FIntPoint Resolution = FIntPoint(1920,1080);
+	
 	// Cosmetics Settings
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
 	int32 PlayerModel;
