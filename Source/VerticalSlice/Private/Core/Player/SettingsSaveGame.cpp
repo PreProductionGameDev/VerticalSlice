@@ -53,6 +53,4 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	UtilityAbility = FKey("E");
 	MovementAbility = FKey("Left Shift");
 	OpenLeaderboard = FKey("Tab");
-
-	Resolution = FIntPoint(1920,1080);
 }
