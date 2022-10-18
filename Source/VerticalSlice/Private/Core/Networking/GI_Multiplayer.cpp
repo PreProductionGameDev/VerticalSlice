@@ -50,7 +50,7 @@ void UGI_Multiplayer::LoadSettings()
             UE_LOG(LogTemp, Fatal, TEXT("Settings have failed to initalize"));
         }
     }
-    if(Settings->PrimaryAction != FKey())
+    if(Settings->PrimaryAction == FKey())
     {
         //Creates new settings if it failed to load
         UE_LOG(LogTemp, Warning, TEXT("Keybindings are unbound"));
@@ -76,8 +76,8 @@ void UGI_Multiplayer::LoadSettings()
     SetBinding("OpenLeaderboard", Settings->OpenLeaderboard);
     SetBinding("PrevWeapon", Settings->PrevWeapon);
 
-    UGameUserSettings::GetGameUserSettings()->SetScreenResolution(Settings->Resolution);
-    UGameUserSettings::GetGameUserSettings()->ApplySettings(false);
+    UGameUserSettings* VideoSettings = UGameUserSettings::GetGameUserSettings();
+    VideoSettings->ApplySettings(false);
 }
 
 void UGI_Multiplayer::SetBinding(const FName Mapping, const FKey Binding) const

@@ -33,8 +33,6 @@ public:
 	bool bHoldToZoom;
 
 	//Graphics settings
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Graphics")
-	FIntPoint Resolution;
 	
 	// Cosmetics Settings
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Save|Cosmetics")
