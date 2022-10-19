@@ -32,6 +32,9 @@ public:
 	// Set the Weapon Icon
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetWeaponIcon(UTexture2D* NewTexture);
+	// Set the Weapon Display Name
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetWeaponName(const FText& WeaponName);
 	// Set the Primary Clip Ammo
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetPrimaryClipAmmo(int32 ClipAmmo);
