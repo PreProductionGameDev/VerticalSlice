@@ -47,10 +47,10 @@ USettingsSaveGame::USettingsSaveGame() : USaveGame()
 	Shotgun = FKey("Three");
 	Sniper = FKey("Four");
 	RocketLauncher = FKey("Five");
-	NextWeapon = FKey("MouseWheelUp");
-	PrevWeapon = FKey("MouseWheelDown");
+	NextWeapon = FKey("MouseScrollUp");
+	PrevWeapon = FKey("MouseScrollDown");
 	SwapAbility = FKey("Q");
 	UtilityAbility = FKey("E");
-	MovementAbility = FKey("Left Shift");
+	MovementAbility = FKey("LeftShift");
 	OpenLeaderboard = FKey("Tab");
 }
