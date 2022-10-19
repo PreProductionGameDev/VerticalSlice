@@ -422,11 +422,6 @@ int32 ABWeapon::GetDamage() const
 	return Damage;
 }
 
-UTexture2D* ABWeapon::GetUITexture() const
-{
-	return WeaponIcon;
-}
-
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values

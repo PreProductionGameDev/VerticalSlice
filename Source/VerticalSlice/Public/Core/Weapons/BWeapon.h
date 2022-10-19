@@ -150,8 +150,6 @@ public:
 	float GetRecoilCooldown() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetDamage() const;
-	UFUNCTION(BlueprintCallable, Category = "ShiitakeShodown|UI")
-	class UTexture2D* GetUITexture() const;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool Pickupable = false;
@@ -240,9 +238,6 @@ protected:
 	// Sound when Shooting
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|Audio")
 	class USoundCue* GunshotSound;
-	// UI Icon
-	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|UI")
-	class UTexture2D* WeaponIcon;
 
 	// Cached Gameplay Tags
 	FGameplayTag WeaponPrimaryInstantAbilityTag;
