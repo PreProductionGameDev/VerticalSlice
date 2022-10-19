@@ -36,6 +36,8 @@ public:
 	/*
 	 *	Default Public Variables
 	 */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
+	FText WeaponName;
 	
 	// Whether or not to spawn this weapon with collision enabled (Pickup Mode)
 	// Set to false when spawning directly into a player's inventory or true when spawning into the world in pickup mode.

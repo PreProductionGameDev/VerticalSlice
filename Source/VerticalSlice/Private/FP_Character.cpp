@@ -661,7 +661,8 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		{
 			PlayerController->SetPrimaryClipAmmo(CurrentWeapon->GetPrimaryClipAmmo());
 			PlayerController->SetPrimaryReserveAmmo(GetPrimaryReserveAmmo());
-			PlayerController->GetPlayerHUD()->SetWeaponIcon(CurrentWeapon->GetUITexture());
+			PlayerController->GetPlayerHUD()->SetWeaponName(CurrentWeapon->WeaponName);
+			//PlayerController->GetPlayerHUD()->SetWeaponIcon(CurrentWeapon->GetUITexture());
 		}
 
 		// Setup Ammo Changed Delegates for UI changes
