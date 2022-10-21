@@ -217,7 +217,7 @@ protected:
 	 *	NEW WEAPON SYSTEM
 	 *	Improved the level of GAS Orientated Design
 	 */
-	// Default Weapons for the player upon spawn. Can move into the game mode upon further development
+	// The Base Default Inventory. Will be used if the game mode one is empty
 	// These are the Weapons Equipped upon loading a player.
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ShiitakeShowdown|Weapon")
 	TArray<TSubclassOf<ABWeapon>> DefaultInventoryWeapons;
