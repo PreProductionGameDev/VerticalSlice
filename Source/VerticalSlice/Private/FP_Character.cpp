@@ -14,6 +14,7 @@
 #include "Core/UI/PlayerHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "VerticalSlice/VerticalSliceGameMode.h"
 
 // Sets default values
 AFP_Character::AFP_Character()
@@ -741,16 +742,36 @@ void AFP_Character::SpawnDefaultInventory()
 		return;
 	}
 
+	// Get the GameMode for the Default Inventory
+	AVerticalSliceGameMode* GameMode = Cast<AVerticalSliceGameMode>(GetWorld()->GetAuthGameMode());
+	TArray<TSubclassOf<ABWeapon>> WeaponInvToUse;
+	// If the GameMode is valid, and get the default inventory
+	if (GameMode)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("USING GAMEMODE INV"));
+		WeaponInvToUse = GameMode->GetDefaultInventory();
+	}
+	// If the Inventory is empty, just use player default one
+	if (WeaponInvToUse.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("USING DEFAULT INV"));
+		WeaponInvToUse = DefaultInventoryWeapons;
+	}
+	
 	// Cycle through all Weapons and add them all in
 	// Only Equip the First Weapon
-	for (auto WeaponToAdd: DefaultInventoryWeapons)
+	for (auto WeaponToAdd: WeaponInvToUse)
 	{
-		ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(WeaponToAdd, FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-		NewWeapon->bSpawnWithCollision = false;
-		NewWeapon->FinishSpawning(FTransform::Identity);
+		// Ensure weapon is a valid data entry
+		if (IsValid(WeaponToAdd))
+		{
+			ABWeapon* NewWeapon = GetWorld()->SpawnActorDeferred<ABWeapon>(WeaponToAdd, FTransform::Identity, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+			NewWeapon->bSpawnWithCollision = false;
+			NewWeapon->FinishSpawning(FTransform::Identity);
 
-		const bool bEquipFirstWeapon = WeaponToAdd == DefaultInventoryWeapons[0];
-		AddWeaponToInventory(NewWeapon, bEquipFirstWeapon);
+			const bool bEquipFirstWeapon = WeaponToAdd == DefaultInventoryWeapons[0];
+			AddWeaponToInventory(NewWeapon, bEquipFirstWeapon);
+		}
 	}
 }
 

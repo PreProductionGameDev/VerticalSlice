@@ -21,6 +21,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<TSubclassOf<class AGameMode>> GameModes;
 
+	UFUNCTION(BlueprintCallable)
+	TArray<TSubclassOf<class ABWeapon>> GetDefaultInventory();
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	TArray<TSubclassOf<class ABWeapon>> DefaultInventoryWeapons;
+
 };
 
 

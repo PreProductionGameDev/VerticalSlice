@@ -23,3 +23,8 @@ void AVerticalSliceGameMode::ServerTravel(FString Map)
 	bUseSeamlessTravel = true;
 	World->ServerTravel(Map);
 }
+
+TArray<TSubclassOf<ABWeapon>> AVerticalSliceGameMode::GetDefaultInventory()
+{
+	return DefaultInventoryWeapons;
+}
