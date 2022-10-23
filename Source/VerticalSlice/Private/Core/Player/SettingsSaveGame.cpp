@@ -3,9 +3,6 @@
 
 #include "Core/Player/SettingsSaveGame.h"
 
-#include "GameFramework/GameUserSettings.h"
-
-
 USettingsSaveGame::USettingsSaveGame() : USaveGame()
 {
 	MainVolume = 0.75f;
