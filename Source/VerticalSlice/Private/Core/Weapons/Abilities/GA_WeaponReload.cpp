@@ -85,7 +85,7 @@ void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 bool UGA_WeaponReload::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
 	const AFP_Character* PlayerCharacter = Cast<AFP_Character>(ActorInfo->AvatarActor); 
-	return PlayerCharacter->GetPrimaryClipAmmo() < PlayerCharacter->GetMaxPrimaryClipAmmo() && PlayerCharacter->GetPrimaryReserveAmmo() > 0;
+	return (PlayerCharacter->GetPrimaryClipAmmo() < PlayerCharacter->GetMaxPrimaryClipAmmo() && PlayerCharacter->GetPrimaryReserveAmmo() > 0) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 /**
