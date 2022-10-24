@@ -41,6 +41,7 @@ UGA_WeaponPrimary::UGA_WeaponPrimary()
  */
 void UGA_WeaponPrimary::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
+	UE_LOG(LogTemp, Warning, TEXT("STARTED THE FIRE POG"));
 	// Activates parent logic to allow Ability to Work
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	// Sets up all cached variables
