@@ -72,15 +72,22 @@ void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
 
-	APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController());
-	const TArray<FInputActionKeyMapping> mappings = PlayerController->PlayerInput->GetKeysForAction("PrimaryAction");
-
-	if (PlayerController->PlayerInput->GetKeyState(mappings[0].Key))
+	if (APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DOING THE FIRE AGAIN"));
-		FGameplayTagContainer ActivateAbilityContainer;
-		ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
-		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+		TArray<FInputActionKeyMapping> mappings;
+		TObjectPtr<UPlayerInput> PlayerInput = PlayerController->PlayerInput;
+		if (PlayerInput)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Player Input Valid"));
+			mappings = PlayerInput->GetKeysForAction("PrimaryAction");
+			if (PlayerInput->GetKeyState(mappings[0].Key))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("DOING THE FIRE AGAIN"));
+				FGameplayTagContainer ActivateAbilityContainer;
+				ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
+				GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+			}
+		}
 	}
 }
 
