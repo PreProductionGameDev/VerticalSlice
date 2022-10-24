@@ -70,6 +70,18 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+
+	APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController());
+	const TArray<FInputActionKeyMapping> mappings = PlayerController->PlayerInput->GetKeysForAction("PrimaryAction");
+
+	if (PlayerController->PlayerInput->GetKeyState(mappings[0].Key))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DOING THE FIRE AGAIN"));
+		FGameplayTagContainer ActivateAbilityContainer;
+		ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
+		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+	}
 }
 
 /**
