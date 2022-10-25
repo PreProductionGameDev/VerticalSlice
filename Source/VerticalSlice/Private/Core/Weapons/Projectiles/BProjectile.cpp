@@ -86,16 +86,13 @@ void ABProjectile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(ExplosionRadius);
 	TArray<FHitResult> OutResults;
 
+	DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRadius, 64, FColor::Green, false, 10);
 	if (GetWorld()->SweepMultiByChannel(OutResults, GetActorLocation(), GetActorLocation() + 0.01, FQuat::Identity, ECC_Pawn, Sphere))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HIT OCCURED"));
 		for (FHitResult& hit : OutResults)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("GOING THROUGH HITS"));
-			
 			if (AFP_Character* Character = Cast<AFP_Character>(hit.GetActor()))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("APPLYING DAMAGE"));
 				// gets caster and target ability system components
 				UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetInstigator());
 				UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(Character);
