@@ -95,13 +95,13 @@ bool UGA_WeaponPrimaryInstant_HitScan::CanActivateAbility(const FGameplayAbility
 {
 	if (GA_Primary)
 	{
-		if (abs(GetWorld()->GetTimeSeconds() - TimeOfLastShot) >= SourceWeapon->GetTimeBetweenShots())
+		if (abs(GetWorld()->GetTimeSeconds() - TimeOfLastShot) >= SourceWeapon->GetTimeBetweenShots() && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		{
 			return true;
 		}
 		return false;
 	}
-	return true;
+	return true && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 /**
