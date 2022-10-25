@@ -47,6 +47,10 @@ protected:
 	// Reloading the Ammo server side
 	UFUNCTION()
 	void ReloadAmmo();
+
+	UFUNCTION()
+	void SyncEvent();
+	
 	// Play the Third and First Person Animations
 	UFUNCTION()
 	void PlayAnimations();

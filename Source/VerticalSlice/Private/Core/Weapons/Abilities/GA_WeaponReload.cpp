@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "FP_Character.h"
 #include "Abilities/Tasks/AbilityTask_WaitDelay.h"
+#include "Abilities/Tasks/AbilityTask_NetworkSyncPoint.h"
 
 /**
  * @name Stefan Petrie
@@ -27,7 +28,7 @@ UGA_WeaponReload::UGA_WeaponReload()
 
 	// Replication Settings
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::ServerInitiated;
+	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 }
 
 /**
@@ -54,7 +55,7 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	PlayAnimations();
 	// Wait for the Reload Time
 	UAbilityTask_WaitDelay* WaitDelay = UAbilityTask_WaitDelay::WaitDelay(this, ReloadTime);
-	WaitDelay->OnFinish.AddDynamic(this, &UGA_WeaponReload::ReloadAmmo);
+	WaitDelay->OnFinish.AddDynamic(this, &UGA_WeaponReload::SyncEvent);
 	WaitDelay->ReadyForActivation();
 }
 
@@ -70,6 +71,23 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	// Try to Activate the Shooting ability if the shoot key is pressed down
+	// Handled this way to ensure all validation for fatal errors and to handle networking correctly
+	if (const APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController()))
+	{
+		if (const TObjectPtr<UPlayerInput> PlayerInput = PlayerController->PlayerInput)
+		{
+			TArray<FInputActionKeyMapping> mappings = PlayerInput->GetKeysForAction("PrimaryAction");
+			const FKeyState* KeyState = PlayerInput->GetKeyState(mappings[0].Key);
+			if (KeyState && KeyState->bDown)
+			{
+				FGameplayTagContainer ActivateAbilityContainer;
+				ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
+				GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+			}
+		}
+	}
 }
 
 /**
@@ -85,7 +103,7 @@ void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 bool UGA_WeaponReload::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
 	const AFP_Character* PlayerCharacter = Cast<AFP_Character>(ActorInfo->AvatarActor); 
-	return PlayerCharacter->GetPrimaryClipAmmo() < PlayerCharacter->GetMaxPrimaryClipAmmo() && PlayerCharacter->GetPrimaryReserveAmmo() > 0;
+	return (PlayerCharacter->GetPrimaryClipAmmo() < PlayerCharacter->GetMaxPrimaryClipAmmo() && PlayerCharacter->GetPrimaryReserveAmmo() > 0) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 /**
@@ -138,6 +156,13 @@ void UGA_WeaponReload::ReloadAmmo()
 
 	// End the Ability
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
+}
+
+void UGA_WeaponReload::SyncEvent()
+{
+	UAbilityTask_NetworkSyncPoint* NetworkSync = UAbilityTask_NetworkSyncPoint::WaitNetSync(this, EAbilityTaskNetSyncType::OnlyServerWait);
+	NetworkSync->OnSync.AddDynamic(this, &UGA_WeaponReload::ReloadAmmo);
+	NetworkSync->ReadyForActivation();
 }
 
 /**

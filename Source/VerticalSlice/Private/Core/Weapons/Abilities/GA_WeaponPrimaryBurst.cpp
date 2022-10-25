@@ -41,8 +41,6 @@ UGA_WeaponPrimaryBurst::UGA_WeaponPrimaryBurst()
  */
 void UGA_WeaponPrimaryBurst::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	// Activates Parent Logic to allow Ability to work
-	//Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	// Sets up all Cached Variables
 	SetupCacheables();
 
@@ -61,7 +59,7 @@ void UGA_WeaponPrimaryBurst::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 		const UWorld* World = GetWorld();
 		if (!World) return;
 
-		if (!World->GetTimeSeconds() - InstantAbility->TimeOfLastShot > TimeBetweenShots)
+		if (!(World->GetTimeSeconds() - InstantAbility->TimeOfLastShot > TimeBetweenShots))
 		{
 			// Wait for the next valid shot
 			UAbilityTask_WaitDelay* WaitDelay = UAbilityTask_WaitDelay::WaitDelay(this, TimeBetweenShots - (World->GetTimeSeconds() - InstantAbility->TimeOfLastShot));
