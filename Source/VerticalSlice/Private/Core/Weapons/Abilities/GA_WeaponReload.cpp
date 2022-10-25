@@ -74,17 +74,20 @@ void UGA_WeaponReload::EndAbility(const FGameplayAbilitySpecHandle Handle, const
 
 	// Try to Activate the Shooting ability if the shoot key is pressed down
 	// Handled this way to ensure all validation for fatal errors and to handle networking correctly
-	if (const APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController()))
+	if (IsLocallyControlled())
 	{
-		if (const TObjectPtr<UPlayerInput> PlayerInput = PlayerController->PlayerInput)
+		if (const APlayerController* PlayerController = Cast<APlayerController>(OwningPlayer->GetController()))
 		{
-			TArray<FInputActionKeyMapping> mappings = PlayerInput->GetKeysForAction("PrimaryAction");
-			const FKeyState* KeyState = PlayerInput->GetKeyState(mappings[0].Key);
-			if (KeyState && KeyState->bDown)
+			if (const TObjectPtr<UPlayerInput> PlayerInput = PlayerController->PlayerInput)
 			{
-				FGameplayTagContainer ActivateAbilityContainer;
-				ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
-				GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+				TArray<FInputActionKeyMapping> mappings = PlayerInput->GetKeysForAction("PrimaryAction");
+				const FKeyState* KeyState = PlayerInput->GetKeyState(mappings[0].Key);
+				if (KeyState && KeyState->bDown)
+				{
+					FGameplayTagContainer ActivateAbilityContainer;
+					ActivateAbilityContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary"));
+					GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(ActivateAbilityContainer);
+				}
 			}
 		}
 	}
@@ -130,6 +133,11 @@ void UGA_WeaponReload::SetupCacheables()
  */
 void UGA_WeaponReload::ReloadAmmo()
 {
+	if (OwningPlayer->GetLocalRole() < ROLE_Authority)
+	{
+		return;
+	}
+	
 	if (!ReloadEffect || !SourceWeapon)
 	{
 		return;

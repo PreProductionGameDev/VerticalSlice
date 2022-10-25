@@ -19,6 +19,10 @@ class VERTICALSLICE_API UGA_WeaponPrimaryInstant : public UPlayerGameplayAbility
 public:
 	UGA_WeaponPrimaryInstant();
 
+
+	// Checks if Ability Can Activate
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
+
 	// Creates and fires a bullet
 	UFUNCTION()
 	virtual void FireBullet();

@@ -48,7 +48,7 @@ void UGA_WeaponPrev::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 
 bool UGA_WeaponPrev::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->OwnerActor))
 	{
 		return Character->WeaponInventoryLength() > 0 && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}

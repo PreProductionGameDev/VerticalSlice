@@ -24,6 +24,11 @@ UGA_WeaponPrimaryInstant::UGA_WeaponPrimaryInstant()
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 }
 
+bool UGA_WeaponPrimaryInstant::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+
 /**
  * @name Stefan Petrie
  * @brief Fire the Bullet. OVERRIDE IN CHILDREN IS REQUIRED

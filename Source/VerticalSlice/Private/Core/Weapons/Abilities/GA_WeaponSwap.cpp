@@ -41,9 +41,11 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
+	
+	
 	if (IsLocallyControlled())
 	{
-		if (const AFP_Character* Player = Cast<AFP_Character>(GetCurrentSourceObject()))
+		if (const AFP_Character* Player = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
 		{
 			const ABWeapon* Weapon = Player->GetCurrentWeapon();
 			if (Weapon)
@@ -71,12 +73,11 @@ void UGA_WeaponSwap::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 
 bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->AvatarActor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SO i wonder what this is %s"), (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) ? TEXT("TRUE") : TEXT("FALSE"));
 		return (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("HUH?"));
 	return false;
 }
 
@@ -98,7 +99,7 @@ void UGA_WeaponSwap::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPay
 		}
 	}
 	
-	if (AFP_Character* Character = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (AFP_Character* Character = Cast<AFP_Character>(GetCurrentSourceObject()))
 	{
 		Character->EquipWeaponFromTag(WeaponTag);
 		ABWeapon* Weapon = Character->GetCurrentWeapon();
