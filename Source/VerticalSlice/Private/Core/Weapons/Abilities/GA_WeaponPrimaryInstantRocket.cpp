@@ -292,6 +292,15 @@ void UGA_WeaponPrimaryInstantRocket::SetupCacheables()
  */
 void UGA_WeaponPrimaryInstantRocket::PlayAnimations()
 {
-	// TODO: PLAY ANIMATIONS
-	Super::PlayAnimations();
+	// Play First Person Animation
+	if (Weapon1PMesh && WeaponAnimationMontage)
+	{
+		Weapon1PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
+
+	// Play Third Person Animation
+	if (Weapon3PMesh && WeaponAnimationMontage)
+	{
+		Weapon3PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
 }
