@@ -30,7 +30,7 @@ ABProjectile::ABProjectile()
 		CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 		CollisionComponent->InitSphereRadius(35.0f);
 		RootComponent = CollisionComponent;
-		CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ABProjectile::OnOverlapBegin);
+		CollisionComponent->OnComponentHit.AddDynamic(this, &ABProjectile::OnOverlapBegin);
 	}
 
 	// Create the Default Projectile Mesh
@@ -80,7 +80,7 @@ void ABProjectile::BeginPlay()
 	CollisionComponent->IgnoreActorWhenMoving(Owner, true);
 }
 
-void ABProjectile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ABProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector Normal, const FHitResult& Hit)
 {
 	if (!HasAuthority())
 	{
