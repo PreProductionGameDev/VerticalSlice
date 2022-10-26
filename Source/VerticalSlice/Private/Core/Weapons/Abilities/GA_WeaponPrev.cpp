@@ -99,7 +99,7 @@ void UGA_WeaponPrev::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPay
 			}
 		}
 
-		Player->NextWeapon();
+		Player->PrevWeapon();
 		Weapon = Player->GetCurrentWeapon();
 		if (Weapon)
 		{
