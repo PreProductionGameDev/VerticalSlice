@@ -6,11 +6,11 @@
 
 #include "Core/Abilities/Utility/GEUIData_KillFeed.h"
 
-struct GSDamageStatics
+struct GSDamageStaticsFalloff
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Damage);
 
-	GSDamageStatics()
+	GSDamageStaticsFalloff()
 	{
 		// Snapshot happens at the time of GESpec creation
 		// We're not capturing anything from the Source in this example, but there could be like AttackPower attributes that you might want.
@@ -19,9 +19,9 @@ struct GSDamageStatics
 	}
 };
 
-static const GSDamageStatics& DamageStatics()
+static const GSDamageStaticsFalloff& DamageStatics()
 {
-	static GSDamageStatics DStatics;
+	static GSDamageStaticsFalloff DStatics;
 	return DStatics;
 }
 
