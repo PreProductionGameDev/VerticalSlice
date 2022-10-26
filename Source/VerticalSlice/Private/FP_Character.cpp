@@ -356,7 +356,8 @@ bool AFP_Character::IsWeaponTagCurrentlyEquipped(FGameplayTag InWeaponTag) const
 
 void AFP_Character::EquipWeaponFromTag(FGameplayTag inTag)
 {
-	SetCurrentWeapon(WeaponInv[WeaponInv.IndexOfByKey(inTag)].Weapon, CurrentWeapon);
+	EquipWeapon(WeaponInv[WeaponInv.IndexOfByKey(inTag)].Weapon);
+	//SetCurrentWeapon(WeaponInv[WeaponInv.IndexOfByKey(inTag)].Weapon, CurrentWeapon);
 }
 
 void AFP_Character::ServerEquipWeapon_Implementation(ABWeapon* NewWeapon)

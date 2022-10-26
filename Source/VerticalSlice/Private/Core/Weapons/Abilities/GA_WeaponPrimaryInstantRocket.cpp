@@ -229,6 +229,7 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 		ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
 		Projectile->SetOwner(OwningPlayer);
 		Projectile->SetEffectSpec(DamageGameplayEffectSpec);
+		Projectile->SetDamage(SourceWeapon->GetDamage());
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}
@@ -292,6 +293,15 @@ void UGA_WeaponPrimaryInstantRocket::SetupCacheables()
  */
 void UGA_WeaponPrimaryInstantRocket::PlayAnimations()
 {
-	// TODO: PLAY ANIMATIONS
-	Super::PlayAnimations();
+	// Play First Person Animation
+	if (Weapon1PMesh && WeaponAnimationMontage)
+	{
+		Weapon1PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
+
+	// Play Third Person Animation
+	if (Weapon3PMesh && WeaponAnimationMontage)
+	{
+		Weapon3PMesh->GetAnimInstance()->Montage_JumpToSection(FName("Shoot"));
+	}
 }

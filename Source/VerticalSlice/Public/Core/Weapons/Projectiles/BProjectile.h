@@ -22,6 +22,8 @@ public:
 	ABProjectile();
 
 	void SetEffectSpec(FGameplayEffectSpecHandle inEffectSpec);
+
+	void SetDamage(float inDamage);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -51,4 +53,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float ExplosionRadius;
+
+	UPROPERTY()
+	float Damage;
 };
