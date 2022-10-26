@@ -1,9 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// 2022 ChronoOwl Studios
 
 
-#include "Core/Abilities/GameplayEffects/GEDamageExecutionCalc.h"
+#include "Core/Abilities/EffectExecutionCalculations/GEDamageFalloffExecutionCalc.h"
 #include "Core/PlayerAttributeSet.h"
-#include "Core/PlayerAbilitySystemComponent.h"
+
 #include "Core/Abilities/Utility/GEUIData_KillFeed.h"
 
 struct GSDamageStatics
@@ -25,31 +25,37 @@ static const GSDamageStatics& DamageStatics()
 	return DStatics;
 }
 
-UGEDamageExecutionCalc::UGEDamageExecutionCalc()
+UGEDamageFalloffExecutionCalc::UGEDamageFalloffExecutionCalc()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().DamageDef);
 }
 
-void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+void UGEDamageFalloffExecutionCalc::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
+	// Cache the AbilitySystem component
 	UAbilitySystemComponent* TargetAbilitySystemComponent = ExecutionParams.GetTargetAbilitySystemComponent();
 	UAbilitySystemComponent* SourceAbilitySystemComponent = ExecutionParams.GetSourceAbilitySystemComponent();
-
+    // Get the owning Actor from the Ability System Component
 	AActor* TargetActor = TargetAbilitySystemComponent ? TargetAbilitySystemComponent->GetAvatarActor() : nullptr;
 	AActor* SourceActor = SourceAbilitySystemComponent ? SourceAbilitySystemComponent->GetAvatarActor() : nullptr;
 
+	
+	
+	UE_LOG(LogTemp, Warning, TEXT("SourceActor Name: %s, TargetActor Name: %s"), *SourceAbilitySystemComponent->GetName(), *TargetAbilitySystemComponent->GetName())
+	
+	// Obtain the Gameplay Spec and Get all Asset Tags
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 	FGameplayTagContainer AssetTags;
 	Spec.GetAllAssetTags(AssetTags);
 
-		
+	// Obtain the Tags from the Source and Target
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 
 	FAggregatorEvaluateParameters EvaluateParameters;
 	EvaluateParameters.TargetTags = TargetTags;
 	EvaluateParameters.SourceTags = SourceTags;
-
+	
 	// Ignore Team Damage
 	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
 	{
@@ -60,21 +66,4 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 		return;
 	}
 
-	// Set the KillFeed Icon if Valid
-	if (const UGEUIData_KillFeed* KillFeedData = Cast<UGEUIData_KillFeed>(Spec.Def->UIData))
-	{
-		Cast<UPlayerAbilitySystemComponent>(TargetAbilitySystemComponent)->LastDamagedBy = KillFeedData->KillFeedIcon;
-	}
-	
-	float Damage = 0.0f;
-	// Capture Optional damage value set on the Damage GE as a Calculation modifier under the Execution Calculation
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().DamageDef, EvaluateParameters, Damage);
-	// Add SetByCallerDamage if it exists
-	Damage += FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), false, -1.0f), 0.0f);
-
-	if (Damage > 0.0f)
-	{
-		// Set the Target's Damage meta attribute
-		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().DamageProperty, EGameplayModOp::Additive, Damage));
-	}
 }
