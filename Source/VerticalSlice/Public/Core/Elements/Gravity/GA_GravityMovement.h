@@ -4,7 +4,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ImpulseIndicator.h"
 #include "GameplayAbilities/Public/Abilities/Tasks/AbilityTask_WaitInputRelease.h"
 #include "Core/PlayerGameplayAbility.h"
 #include "GA_GravityMovement.generated.h"
@@ -29,14 +28,12 @@ public:
 
 	//finds a line in front of the player to move impulse point to
 	UFUNCTION()
-	void MoveImpulsePoint();
+	void ThrowImpulse();
 
 	//makes sure the Server has the same camera values as the player
 	UFUNCTION()
 	void SyncCamera();
 
-	UFUNCTION()
-	void OnKeyReleased(float TimePressed);
 
 	UFUNCTION()
 	void OnGravPulse();
@@ -49,14 +46,13 @@ public:
 
 	// shows the casting player where the impulse will come from
 	UPROPERTY()
-	AImpulseIndicator* ImpulseIndicator;
+	AActor* ImpulseIndicator;
 
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<AActor> ImpulseClass;
 	
 	UPROPERTY()
 	FTimerHandle ImpulseIndicatorTimerHandle;
 
-	// Async timer that waits for activation key to be released
-	UPROPERTY()
-	UAbilityTask_WaitInputRelease* InputRelease;
 	
 };

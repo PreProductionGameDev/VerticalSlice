@@ -39,28 +39,10 @@ void UGA_GravityMovement::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
 		return;
 	}
+	Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor)->UseStamina(0.5f);
+	GetAbilitySystemComponentFromActorInfo()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
 	
-	// Spawn Parameters
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
-	const FVector SpawnLocation = GetCurrentActorInfo()->OwnerActor->GetActorLocation();
-	const FRotator SpawnRotation = GetCurrentActorInfo()->OwnerActor->GetActorRotation();
-
-	// Spawns the Indicator
-	ImpulseIndicator = Cast<AImpulseIndicator>(GetWorld()->SpawnActor(AImpulseIndicator::StaticClass(), &SpawnLocation, &SpawnRotation, SpawnParameters));
-	
-	// Start moving indicator
-	FTimerDynamicDelegate DynamicDelegate;
-	DynamicDelegate.BindUFunction(this, "SyncCamera");
-
-	FTimerManager& TimerManager= GetWorld()->GetTimerManager();
-	ImpulseIndicatorTimerHandle = TimerManager.K2_FindDynamicTimerHandle(DynamicDelegate);
-	TimerManager.SetTimer(ImpulseIndicatorTimerHandle, DynamicDelegate, 0.02f, true,0);
-
-	// Execute teleport on input release
-	InputRelease = UAbilityTask_WaitInputRelease::WaitInputRelease(this, true);
-	InputRelease->OnRelease.AddDynamic(this, &UGA_GravityMovement::OnKeyReleased);
-	InputRelease->ReadyForActivation();
+	SyncCamera();
 }
 
 /**
@@ -95,27 +77,20 @@ void UGA_GravityMovement::EndAbility(const FGameplayAbilitySpecHandle Handle,
  * @name Jacob
  * @brief Moves the indicator for the impulse in front of the players camera
  */
-void UGA_GravityMovement::MoveImpulsePoint()
+void UGA_GravityMovement::ThrowImpulse()
 {	
-	// Makes sure stamina doesn't regen while casting
-	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0);
-	
-	// Line cast forward 
-	FHitResult OutHit;
-	ECollisionChannel CollisionChannel = UEngineTypes::ConvertToCollisionChannel(ETraceTypeQuery::TraceTypeQuery3);
-	FCollisionQueryParams Params("LineTraceSingle", SCENE_QUERY_STAT_ONLY(KismetTraceUtils), false);
-	Params.AddIgnoredActor(GetOwningActorFromActorInfo());
-	Params.AddIgnoredActor(ImpulseIndicator);
-	FVector Begin =  Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentLocation();
-	FVector End = Begin +  Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentRotation().Vector() * 800 ;
+	// Spawn Parameters
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Instigator = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor);
+	const FVector SpawnLocation = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor)->FirstPersonCameraComponent.Get()->GetComponentLocation();
+	const FRotator SpawnRotation = Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor)->FirstPersonCameraComponent.Get()->GetComponentRotation();
 
-	// Teleports to where the hit was or where the max range is 
-	if(GetWorld()->LineTraceSingleByChannel(OutHit, Begin, End, CollisionChannel, Params))
-	{
-		ImpulseIndicator->SetActorLocation(OutHit.Location - Cast<AFP_Character>(GetOwningActorFromActorInfo())->FirstPersonCameraComponent->GetComponentRotation().Vector() * 44 );
-		return;
-	}
-	ImpulseIndicator->SetActorLocation(End);
+	// Spawns the Indicator
+	ImpulseIndicator = Cast<AActor>(GetWorld()->SpawnActor(ImpulseClass, &SpawnLocation, &SpawnRotation, SpawnParameters));
+
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &UGA_GravityMovement::OnGravPulse, .8, false);
+
 }
 
 /**
@@ -126,27 +101,10 @@ void UGA_GravityMovement::SyncCamera()
 {
 	Cast<AFP_Character>(GetOwningActorFromActorInfo())->ClientCameraRotation();
 	UAbilityTask_NetworkSyncPoint* NetworkSync = UAbilityTask_NetworkSyncPoint::WaitNetSync(this, EAbilityTaskNetSyncType::BothWait);
-	NetworkSync->OnSync.AddDynamic(this, &UGA_GravityMovement::MoveImpulsePoint);
+	NetworkSync->OnSync.AddDynamic(this, &UGA_GravityMovement::ThrowImpulse);
 	NetworkSync->ReadyForActivation();
 }
 
-/**
- * @name Jacob
- * @brief applies an impulse around the indicator and takes the stamina cost
- * @param TimePressed 
- */
-void UGA_GravityMovement::OnKeyReleased(float TimePressed)
-{
-	// takes the stamina from the player
-	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(0.5f);
-	//tag for dropping the flag
-	GetAbilitySystemComponentFromActorInfo()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Ability.Element.Movement")));
-	ImpulseIndicatorTimerHandle.Invalidate();
-	
-	FTimerHandle Handle;
-	GetWorld()->GetTimerManager().SetTimer(
-		Handle, this, &UGA_GravityMovement::OnGravPulse, 0.1, false);
-}
 
 void UGA_GravityMovement::OnGravPulse()
 {
