@@ -64,6 +64,11 @@ void ABProjectile::SetEffectSpec(FGameplayEffectSpecHandle inEffectSpec)
 	EffectSpec = inEffectSpec;
 }
 
+void ABProjectile::SetDamage(float inDamage)
+{
+	Damage = inDamage;
+}
+
 /**
  * @name Stefan Petrie
  * @brief Begin Play
@@ -93,12 +98,26 @@ void ABProjectile::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 		{
 			if (AFP_Character* Character = Cast<AFP_Character>(hit.GetActor()))
 			{
+				FVector CharLoc = Character->GetActorLocation();
+				FVector ProjLoc = GetActorLocation();
+
+				float Distance =  FVector::Dist(CharLoc, ProjLoc);
+
+				float falloff = FMath::Clamp(1.5f * FMath::Cos(FMath::Pow(Distance / ExplosionRadius, 0.3f) * (PI / 2)), 0, 1);
+
+				Damage = static_cast<int>(falloff * Damage);
+				
 				// gets caster and target ability system components
-				UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetInstigator());
+				UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(this);
 				UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(Character);
 
-				UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, FGameplayTag::RequestGameplayTag("Data.Damage"), 80.0f);			
-			
+				//Damage = Damage * Distance;
+				
+				UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), static_cast<float>(Damage));
+				
+				UE_LOG(LogTemp, Warning, TEXT("%f"), Damage);
+				
+				
 				Character->GetPlayerAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
 			}
 		}
