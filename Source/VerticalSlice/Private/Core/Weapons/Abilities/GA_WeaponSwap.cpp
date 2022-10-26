@@ -36,13 +36,11 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 
 	// Replication Settings
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
+	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalOnly;
 }
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
-{
-	
-	
+{	
 	if (IsLocallyControlled())
 	{
 		if (const AFP_Character* Player = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
@@ -75,7 +73,6 @@ bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->AvatarActor))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SO i wonder what this is %s"), (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) ? TEXT("TRUE") : TEXT("FALSE"));
 		return (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}
 	return false;
