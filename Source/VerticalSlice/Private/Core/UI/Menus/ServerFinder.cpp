@@ -81,7 +81,10 @@ void UServerFinder::SelectIndex(uint32 Index)
 
 void UServerFinder::ResetSelected()
 {
-	Cast<UServerResult>(ServerList->GetChildAt( SelectedIndex.GetValue()))->ResetText();
+	if (SelectedIndex.IsSet())
+	{
+		Cast<UServerResult>(ServerList->GetChildAt( SelectedIndex.GetValue()))->ResetText();
+	}
 }
 
 void UServerFinder::UpdateServerSettings()
