@@ -370,7 +370,11 @@ TMap<FString, int32> UGI_Multiplayer::SortScoreBoard(TMap<FString, int32> Unsort
 void UGI_Multiplayer::SetGameMode(FString GameMode)
 {
     FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
-    
+
+    if(!LocalSessionSettings)
+    {
+        return;
+    }
     LocalSessionSettings->Set(SERVER_GAME_MODE_SETTINGS_KEY, GameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
     
     SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
@@ -379,7 +383,11 @@ void UGI_Multiplayer::SetGameMode(FString GameMode)
 void UGI_Multiplayer::SetMap(FString Map)
 {
     FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
-    
+
+    if(!LocalSessionSettings)
+    {
+        return;
+    }
     LocalSessionSettings->Set(SERVER_MAP_SETTINGS_KEY, Map, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
     
     SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
