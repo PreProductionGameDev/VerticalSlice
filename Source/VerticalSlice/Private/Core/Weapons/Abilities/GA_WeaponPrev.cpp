@@ -77,7 +77,7 @@ bool UGA_WeaponPrev::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->OwnerActor))
 	{
-		return Character->WeaponInventoryLength() > 0 && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+		return Character->WeaponInventoryLength() > 1 && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 	}
 	return false;
 }
