@@ -286,6 +286,10 @@ void UGI_Multiplayer::OnFindSessionsComplete(bool bSuccess)
 
         ServerFinder->SetServerList(ServerNames);
     }
+    else
+    {
+        ServerFinder->SearchFailed();
+    }
 }
 
 void UGI_Multiplayer::Join(uint32 Index)
@@ -399,6 +403,15 @@ void UGI_Multiplayer::SetPlayers(int32 Players)
     FOnlineSessionSettings* LocalSessionSettings = SessionInterface->GetSessionSettings(SESSION_NAME);
     
     LocalSessionSettings->Set(SERVER_PLAYER_COUNT, Players, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+    if(Players >= 8)
+    {
+        LocalSessionSettings->bShouldAdvertise=false;
+    }
+    else
+    {
+        LocalSessionSettings->bShouldAdvertise=true;
+    }
     
     SessionInterface->UpdateSession(SESSION_NAME,*LocalSessionSettings , true);
 }

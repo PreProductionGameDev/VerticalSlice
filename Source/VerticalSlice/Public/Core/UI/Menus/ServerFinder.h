@@ -56,6 +56,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UBorder* Joining;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (BindWidget))
+	UBorder* Failed;
 	
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -82,4 +85,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RefreshServerList();
+
+	UFUNCTION(BlueprintCallable)
+	void SearchFailed();
 };

@@ -126,3 +126,9 @@ void UServerFinder::RefreshServerList()
 		NetworkInterface->RefreshServerList(this);
 	}
 }
+
+void UServerFinder::SearchFailed()
+{
+	Searching->SetVisibility(ESlateVisibility::Hidden);
+	Failed->SetVisibility(ESlateVisibility::Visible);
+}
