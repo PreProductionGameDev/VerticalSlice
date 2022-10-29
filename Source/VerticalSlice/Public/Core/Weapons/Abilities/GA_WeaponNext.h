@@ -29,4 +29,10 @@ public:
 
 	UFUNCTION()
 	void WeaponEquipped(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+private:
+	UPROPERTY()
+	class ABWeapon* PrevWeapon;
+	UPROPERTY()
+	class ABWeapon* NextWeapon;
 };

@@ -71,11 +71,10 @@ void UGA_WeaponSwap::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 
 bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	return true;
-	//if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->AvatarActor))
-	//{
-	//	return (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
-	//}
+	if (AFP_Character* Character = Cast<AFP_Character>(ActorInfo->AvatarActor))
+	{
+		return (Character->DoesWeaponTagExistInInventory(WeaponTag) && !Character->IsWeaponTagCurrentlyEquipped(WeaponTag)) && Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+	}
 	return false;
 }
 
@@ -127,6 +126,5 @@ void UGA_WeaponSwap::WeaponEquipped(FName NotifyName, const FBranchingPointNotif
 			}
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Weapon Equipped"));
 	EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, false);
 }

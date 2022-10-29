@@ -25,8 +25,14 @@ public:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
 
 	UFUNCTION()
-void SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	void SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 
 	UFUNCTION()
 	void WeaponEquipped(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+private:
+	UPROPERTY()
+	class ABWeapon* PrevWeapon;
+	UPROPERTY()
+	class ABWeapon* NextWeapon;
 };

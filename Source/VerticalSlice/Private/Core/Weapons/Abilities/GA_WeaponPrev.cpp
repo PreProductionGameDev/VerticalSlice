@@ -42,23 +42,25 @@ void UGA_WeaponPrev::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 {
 	if (IsLocallyControlled())
 	{
-		if (const AFP_Character* Player = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+		if (ABWeapon* Weapon = Cast<ABWeapon>(GetCurrentSourceObject()))
 		{
-			const ABWeapon* Weapon = Player->GetCurrentWeapon();
-			if (Weapon)
+			if (AFP_Character* Player =  Cast<AFP_Character>(Weapon->GetOwner()))
 			{
-				if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+				ABWeapon* CurrentWeapon = Player->GetCurrentWeapon();
+				if (UAnimMontage* Montage = CurrentWeapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 				{
 					const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
 					if (Montage->IsValidSectionIndex(SectionID))
 					{
-						Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
-						Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponPrev::SwapWeapon);
+						PrevWeapon = CurrentWeapon;
+						Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
+						Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &UGA_WeaponPrev::SwapWeapon);
 						return;
 					}
 				}
 			}
 		}
+
 		SwapWeapon(FName(), FBranchingPointNotifyPayload());}
 	}
 
@@ -70,6 +72,10 @@ void UGA_WeaponPrev::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 		// I opted to remove canceling from ending the ability after failing to fix
 		return;
 	}
+
+	PrevWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+	NextWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -84,33 +90,33 @@ bool UGA_WeaponPrev::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 void UGA_WeaponPrev::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
-	if (AFP_Character* Player = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (PrevWeapon)
 	{
-		ABWeapon* Weapon = Player->GetCurrentWeapon();
-		if (Weapon)
+		if (UAnimMontage* Montage = PrevWeapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 		{
-			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+			if (Montage->IsValidSectionIndex(SectionID))
 			{
-				const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
-				if (Montage->IsValidSectionIndex(SectionID))
-				{
-					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
-				}
+				PrevWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
 			}
 		}
-
-		Player->PrevWeapon();
-		Weapon = Player->GetCurrentWeapon();
-		if (Weapon)
+		
+		if (AFP_Character* Character = Cast<AFP_Character>(PrevWeapon->GetOwner()))
 		{
-			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			Character->PrevWeapon();
+			ABWeapon* Weapon = Character->GetCurrentWeapon();
+			NextWeapon = Weapon;
+			if (Weapon)
 			{
-				const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
-				if (Montage->IsValidSectionIndex(SectionID))
+				if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 				{
-					Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("Equip");
-					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponPrev::WeaponEquipped);
-					return;
+					const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
+					if (Montage->IsValidSectionIndex(SectionID))
+					{
+						Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("Equip");
+						Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddUniqueDynamic(this, &UGA_WeaponPrev::WeaponEquipped);
+						return;
+					}
 				}
 			}
 		}
@@ -120,17 +126,16 @@ void UGA_WeaponPrev::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPay
 
 void UGA_WeaponPrev::WeaponEquipped(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
-	if (const AFP_Character* Player = Cast<AFP_Character>(GetOwningActorFromActorInfo()))
+	if (IsLocallyControlled())
 	{
-		ABWeapon* Weapon = Player->GetCurrentWeapon();
-		if (Weapon)
+		if (NextWeapon)
 		{
-			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+			if (UAnimMontage* Montage = NextWeapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 			{
-				const int32 SectionID = Montage->GetSectionIndex("Equip");
+				const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
 				if (Montage->IsValidSectionIndex(SectionID))
 				{
-					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+					NextWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
 				}
 			}
 		}
