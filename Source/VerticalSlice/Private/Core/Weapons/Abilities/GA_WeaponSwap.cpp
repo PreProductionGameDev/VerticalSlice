@@ -80,31 +80,34 @@ bool UGA_WeaponSwap::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 void UGA_WeaponSwap::SwapWeapon(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
-	if (const ABWeapon* Weapon = Cast<ABWeapon>(GetCurrentSourceObject()))
+	if (IsLocallyControlled())
 	{
-		if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+		if (const ABWeapon* Weapon = Cast<ABWeapon>(GetCurrentSourceObject()))
 		{
-			const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
-			if (Montage->IsValidSectionIndex(SectionID))
+			if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 			{
-				Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
-			}
-		}
-		
-		if (AFP_Character* Character = Cast<AFP_Character>(Weapon->GetOwner()))
-		{
-			Character->EquipWeaponFromTag(WeaponTag);
-			Weapon = Character->GetCurrentWeapon();
-			if (Weapon)
-			{
-				if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+				const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+				if (Montage->IsValidSectionIndex(SectionID))
 				{
-					const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
-					if (Montage->IsValidSectionIndex(SectionID))
+					Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+				}
+			}
+			
+			if (AFP_Character* Character = Cast<AFP_Character>(Weapon->GetOwner()))
+			{
+				Character->EquipWeaponFromTag(WeaponTag);
+				Weapon = Character->GetCurrentWeapon();
+				if (Weapon)
+				{
+					if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 					{
-						Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("Equip");
-						Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::WeaponEquipped);
-						return;
+						const int32 SectionID = Montage->GetSectionIndex(FName("Equip"));
+						if (Montage->IsValidSectionIndex(SectionID))
+						{
+							//Weapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("Equip");
+							Weapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::WeaponEquipped);
+							return;
+						}
 					}
 				}
 			}
