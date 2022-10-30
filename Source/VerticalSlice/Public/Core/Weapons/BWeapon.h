@@ -83,8 +83,6 @@ public:
 	// Overlap for Picking up the weapon
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	UFUNCTION()
-	void DelayedWeaponVis();
 	// Called when Player equips this weapon
 	virtual void Equip();
 	// Called when Player UnEquips this weapon
