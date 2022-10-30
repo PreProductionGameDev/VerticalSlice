@@ -14,7 +14,7 @@
 ABWeapon::ABWeapon()
 {
  	// Disable Actor Tick
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	// Network Setup
 	bReplicates = true;
 	bNetUseOwnerRelevancy = true;
@@ -42,7 +42,7 @@ ABWeapon::ABWeapon()
 	WeaponMesh1P->CastShadow = false;
 	WeaponMesh1P->SetVisibility(false, true);
 	WeaponMesh1P->SetupAttachment(CollisionComp);
-	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
+	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 
 	// Pickup Location
 	WeaponMesh3PickupRelativeLocation = FVector(0.0f, -25.0f, 0.0f); // Tweak as see fits
@@ -56,7 +56,7 @@ ABWeapon::ABWeapon()
 	WeaponMesh3P->SetVisibility(true, true);
 	WeaponMesh3P->SetVisibility(false, true);
 	WeaponMesh3P->bOwnerNoSee = true;
-	WeaponMesh3P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
+	WeaponMesh3P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 
 	// Setup Weapon Gameplay Tags
 	WeaponPrimaryInstantAbilityTag = FGameplayTag::RequestGameplayTag("Ability.Weapon.Primary.Instant");
@@ -164,6 +164,7 @@ void ABWeapon::Equip()
 	{
 		if (OwningCharacter->GetFirstPersonMesh())
 		{
+			WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection("Equip");
 			// TODO: SOLVE WARNINGS THIS THROWS CAUSE NO SKELETAL MESH 
 			// Attaches and sets correct display. Might need to tweak upon applying the models
 			if (OwningCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
@@ -178,8 +179,7 @@ void ABWeapon::Equip()
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
 		}
-		WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection(FName("Equip"));
-		WeaponMesh1P->SetVisibility(true, true);
+		WeaponMesh1P->RefreshBoneTransforms();
 	}
 
 	// Setup ThirdPerson Mesh if Valid
@@ -443,6 +443,8 @@ void ABWeapon::BeginPlay()
 		WeaponMesh3P->SetVisibility(true, true);
 		WeaponMesh3P->SetVisibility(false, true);
 	}
+
+	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 
 	//if (!Pickupable)
 	//{
