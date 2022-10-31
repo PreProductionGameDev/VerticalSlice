@@ -40,22 +40,26 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 }
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
-{	
+{
+	UE_LOG(LogTemp, Warning, TEXT("OWO WHATS TIS?"));
 	if (IsLocallyControlled())
 	{
 		if (const ABWeapon* Weapon = Cast<ABWeapon>(GetCurrentSourceObject()))
 		{
 			if (AFP_Character* Player =  Cast<AFP_Character>(Weapon->GetOwner()))
 			{
-				if (UAnimMontage* Montage = Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+				if (Player->GetCurrentWeapon())
 				{
-					const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
-					if (Montage->IsValidSectionIndex(SectionID))
+					if (UAnimMontage* Montage = Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 					{
-						UE_LOG(LogTemp, Warning, TEXT("UN EQUIP THIS"));
-						Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
-						Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::SwapWeapon);
-						return;
+						const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
+						if (Montage->IsValidSectionIndex(SectionID))
+						{
+							UE_LOG(LogTemp, Warning, TEXT("UN EQUIP THIS"));
+							Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
+							Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::SwapWeapon);
+							return;
+						}
 					}
 				}
 			}
