@@ -151,6 +151,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetDamage() const;
 
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Ammo")
+	int32 GetTotalAmmo() const;
+		
 	UPROPERTY(BlueprintReadWrite)
 	bool Pickupable = false;
 	

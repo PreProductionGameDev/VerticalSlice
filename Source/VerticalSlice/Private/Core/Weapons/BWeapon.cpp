@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Core/Abilities/AbilityTargetActor/ATA_LineTrace.h"
+#include "Core/Abilities/AttributeSets/AmmoAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -420,6 +421,18 @@ float ABWeapon::GetRecoilCooldown() const
 int32 ABWeapon::GetDamage() const
 {
 	return Damage;
+}
+
+int32 ABWeapon::GetTotalAmmo() const
+{
+	int32 TotalAmmo = PrimaryClipAmmo;
+	bool hasReserve;
+	const float ReserveAmmo = OwningCharacter->GetPlayerAbilitySystemComponent()->GetGameplayAttributeValue(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(WeaponTag), hasReserve);
+	if (hasReserve)
+	{
+		TotalAmmo += static_cast<int32>(ReserveAmmo);
+	}
+	return TotalAmmo;
 }
 
 void ABWeapon::BeginPlay()
