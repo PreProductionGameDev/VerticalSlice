@@ -50,16 +50,19 @@ void UGEDamageExecutionCalc::Execute_Implementation(const FGameplayEffectCustomE
 	EvaluateParameters.TargetTags = TargetTags;
 	EvaluateParameters.SourceTags = SourceTags;
 
-	// Ignore Team Damage
-	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
+	if (TargetAbilitySystemComponent != SourceAbilitySystemComponent)
 	{
-		return;
+		// Ignore Team Damage
+		if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
+		{
+			return;
+		}
+		if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
+		{
+			return;
+		}
 	}
-	if (TargetAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))) && SourceAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
-	{
-		return;
-	}
-
+	
 	// Set the KillFeed Icon if Valid
 	if (const UGEUIData_KillFeed* KillFeedData = Cast<UGEUIData_KillFeed>(Spec.Def->UIData))
 	{
