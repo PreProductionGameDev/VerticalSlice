@@ -17,6 +17,7 @@ class VERTICALSLICE_API ABProjectile : public AActor
 {
 	GENERATED_BODY()
 	
+	
 public:	
 	// Sets default values for this actor's properties
 	ABProjectile();
@@ -54,6 +55,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float ExplosionRadius;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UNiagaraSystem* NiagaraComponent;
+	
 	UPROPERTY()
 	float Damage;
 };
