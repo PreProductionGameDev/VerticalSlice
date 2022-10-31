@@ -237,6 +237,9 @@ protected:
 	bool DoesWeaponExistInInventory(const ABWeapon* InWeapon) const;
 	// Swap Between weapons
 	void SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon);
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
+	class ABWeapon* GetWeaponFromTag(FGameplayTag WeaponTag);
 	// UnEquip specified weapon.
 	void UnEquipWeapon(ABWeapon* WeaponToUnEquip);
 	// UnEquips the current Weapon. Used for dropping.

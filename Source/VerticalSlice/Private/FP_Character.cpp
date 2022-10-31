@@ -671,6 +671,16 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 	}
 }
 
+ABWeapon* AFP_Character::GetWeaponFromTag(FGameplayTag WeaponTag)
+{
+	if (!DoesWeaponTagExistInInventory(WeaponTag))
+	{
+		return nullptr;
+	}
+
+	return WeaponInv.FindByKey(WeaponTag)->Weapon;
+}
+
 void AFP_Character::UnEquipWeapon(ABWeapon* WeaponToUnEquip)
 {
 	// Might cause issues when called explicitly when the CurrentWeapon == WeaponToUnEquip
