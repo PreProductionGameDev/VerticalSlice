@@ -238,6 +238,9 @@ protected:
 	// Swap Between weapons
 	void SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ThirdPersonWeaponAnim(int32 WeaponInt);
+
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	class ABWeapon* GetWeaponFromTag(FGameplayTag WeaponTag);
 	// UnEquip specified weapon.

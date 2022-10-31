@@ -654,7 +654,6 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 			PlayerController->SetPrimaryClipAmmo(CurrentWeapon->GetPrimaryClipAmmo());
 			PlayerController->SetPrimaryReserveAmmo(GetPrimaryReserveAmmo());
 			PlayerController->GetPlayerHUD()->SetWeaponName(CurrentWeapon->WeaponName);
-			//PlayerController->GetPlayerHUD()->SetWeaponIcon(CurrentWeapon->GetUITexture());
 		}
 
 		// Setup Ammo Changed Delegates for UI changes
@@ -663,6 +662,8 @@ void AFP_Character::SetCurrentWeapon(ABWeapon* NewWeapon, ABWeapon* LastWeapon)
 		{
 			PrimaryReserveAmmoChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(CurrentWeapon->PrimaryAmmoType)).AddUObject(this, &AFP_Character::CurrentWeaponPrimaryReserveAmmoChanged);
 		}
+
+		ThirdPersonWeaponAnim(WeaponOrder.IndexOfByKey(CurrentWeaponTag) + 1);
 	}
 	else
 	{
