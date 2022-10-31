@@ -9,6 +9,9 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
+
 /**
  * @name Stefan Petrie
  * @brief Set ups the Defaults for the Projectile
@@ -82,6 +85,11 @@ void ABProjectile::BeginPlay()
 
 void ABProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector Normal, const FHitResult& Hit)
 {
+	if (NiagaraComponent)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraComponent, GetActorLocation());
+	}
+	
 	if (!HasAuthority())
 	{
 		Destroy();
