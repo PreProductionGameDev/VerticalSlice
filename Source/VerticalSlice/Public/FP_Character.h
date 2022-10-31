@@ -97,9 +97,7 @@ public:
 	// Get the Current Equipped Weapon
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	ABWeapon* GetCurrentWeapon() const;
-
-	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
-	void GiveDefaultInventory();
+	
 	// Adds a new weapon to the inventory.
 	// Will return false if weapon already exists in inventory
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
@@ -251,6 +249,7 @@ protected:
 	void OnRep_CurrentWeapon(ABWeapon* LastWeapon);
 	// Spawns the Default Inventory set in the Blueprint.
 	// Need to abstract the default inventory to be part of the GameMode
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|DefaultInv")
 	void SpawnDefaultInventory();
 	
 	// The CurrentWeapon is only automatically replicated to simulated clients.
@@ -301,7 +300,7 @@ public:
 
 
 	
-	//Equiped element functionality
+	// Equipped element functionality
 	UFUNCTION()
 	ABElement* ActiveElement();
 

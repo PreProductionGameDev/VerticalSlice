@@ -191,16 +191,6 @@ ABWeapon* AFP_Character::GetCurrentWeapon() const
 	return CurrentWeapon;
 }
 
-void AFP_Character::GiveDefaultInventory()
-{
-	if (GetLocalRole() < ROLE_Authority)
-	{
-		return;
-	}
-
-	SpawnDefaultInventory();
-}
-
 bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 {
 	// If the weapon is in the inventory, pickup just ammo.
