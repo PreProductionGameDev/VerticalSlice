@@ -43,8 +43,6 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 {
 	// Cache the Variables
 	SetupCacheables();
-
-	UE_LOG(LogTemp, Warning, TEXT("I SHIT ON U FUCK MAN"));
 	// End Ability if there is no Weapon
 	if (!SourceWeapon)
 	{
