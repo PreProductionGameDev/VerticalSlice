@@ -44,6 +44,7 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	// Cache the Variables
 	SetupCacheables();
 
+	UE_LOG(LogTemp, Warning, TEXT("I SHIT ON U FUCK MAN"));
 	// End Ability if there is no Weapon
 	if (!SourceWeapon)
 	{
@@ -182,5 +183,10 @@ void UGA_WeaponReload::PlayAnimations()
 	if (SourceWeapon && WeaponAnimationMontage)
 	{	
 		SourceWeapon->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection(FName("Reload"));
+	}
+
+	if (AFP_Character* Character = SourceWeapon->GetOwnerCharacter())
+	{
+		Character->SetReloadAnimState(true);
 	}
 }

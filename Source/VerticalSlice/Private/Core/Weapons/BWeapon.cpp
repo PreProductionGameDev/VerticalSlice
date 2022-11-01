@@ -435,6 +435,11 @@ int32 ABWeapon::GetTotalAmmo() const
 	return TotalAmmo;
 }
 
+AFP_Character* ABWeapon::GetOwnerCharacter() const
+{
+	return OwningCharacter;
+}
+
 void ABWeapon::BeginPlay()
 {
 	// Reset the weapon values

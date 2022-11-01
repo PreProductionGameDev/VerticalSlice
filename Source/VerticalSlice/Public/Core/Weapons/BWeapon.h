@@ -153,6 +153,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Ammo")
 	int32 GetTotalAmmo() const;
+
+	class AFP_Character* GetOwnerCharacter() const;
 		
 	UPROPERTY(BlueprintReadWrite)
 	bool Pickupable = false;

@@ -148,7 +148,10 @@ public:
 	// Returns the Equipped Weapons Reserve Ammo from the Attribute Set
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	int32 GetPrimaryReserveAmmo() const;	
-	
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetReloadAnimState(bool isReloading);
+
 protected:
 	// The Visible FirstPerson Mesh
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -240,6 +243,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ThirdPersonWeaponAnim(int32 WeaponInt);
+
 
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapons")
 	class ABWeapon* GetWeaponFromTag(FGameplayTag WeaponTag);
