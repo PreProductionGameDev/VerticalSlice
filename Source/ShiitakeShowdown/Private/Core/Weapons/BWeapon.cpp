@@ -427,6 +427,10 @@ int32 ABWeapon::GetTotalAmmo() const
 {
 	int32 TotalAmmo = PrimaryClipAmmo;
 	bool hasReserve;
+	if(!OwningCharacter)
+	{
+		return 0;
+	}
 	const float ReserveAmmo = OwningCharacter->GetPlayerAbilitySystemComponent()->GetGameplayAttributeValue(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(PrimaryAmmoType), hasReserve);
 	if (hasReserve)
 	{
