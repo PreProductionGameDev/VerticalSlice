@@ -32,13 +32,13 @@ void UServerFinder::SetNetworkInterface(INetworkInterface* InNetworkInterface)
 	{
 		return;
 	}
-	JoinButton->OnClicked.AddDynamic(this, &UServerFinder::JoinServer);
+	JoinButton->OnClicked.AddUniqueDynamic(this, &UServerFinder::JoinServer);
 	if(!RefreshButton)
 	{
 
 		return;
 	}
-	RefreshButton->OnClicked.AddDynamic(this, &UServerFinder::RefreshServerList);
+	RefreshButton->OnClicked.AddUniqueDynamic(this, &UServerFinder::RefreshServerList);
 }
 
 void UServerFinder::SetServerList(TArray<FServerData> ServerNames)
