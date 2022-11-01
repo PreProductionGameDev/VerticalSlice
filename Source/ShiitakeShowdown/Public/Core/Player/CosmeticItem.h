@@ -11,8 +11,8 @@ struct FCosmeticItem : public FTableRowBase
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UTexture2D* Image;
+	UTexture2D* Image = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	USkeletalMesh* SkeletalMeshModel;
+	USkeletalMesh* SkeletalMeshModel = nullptr;
 };
