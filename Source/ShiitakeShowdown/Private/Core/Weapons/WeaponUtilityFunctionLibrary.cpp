@@ -14,7 +14,6 @@ void UWeaponUtilityFunctionLibrary::CheckHitMarker(const FGameplayAbilityTargetD
 {
 	for (int i = 0; i < UAbilitySystemBlueprintLibrary::GetDataCountFromTargetData(TargetData); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HITMARKER GOBBBBBBBBBBBBBBBBRRRRRRRRRRR"));
 		const FHitResult HitResult = UAbilitySystemBlueprintLibrary::GetHitResultFromTargetData(TargetData, i);
 
 		// Get And Validate the Hit Player and their ASC
@@ -44,6 +43,5 @@ void UWeaponUtilityFunctionLibrary::CheckHitMarker(const FGameplayAbilityTargetD
 		const bool HitPlayerIsDying = HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
 		// Create Hit Marker on the owning player
 		OwningPlayer->CreateHitMarker(HitPlayerIsDying);
-		UE_LOG(LogTemp, Warning, TEXT("OwO"));
 	}
 }
