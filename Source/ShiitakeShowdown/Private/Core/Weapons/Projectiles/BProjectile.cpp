@@ -11,6 +11,7 @@
 
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraSystem.h"
+#include "Core/Weapons/WeaponUtilityFunctionLibrary.h"
 
 /**
  * @name Stefan Petrie
@@ -124,6 +125,7 @@ void ABProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* Oth
 				UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), static_cast<float>(Damage));
 				
 				Character->GetPlayerAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
+				UWeaponUtilityFunctionLibrary::CheckHitMarkerWithActors(Character, Cast<AFP_Character>(Owner));
 			}
 		}
 	}
