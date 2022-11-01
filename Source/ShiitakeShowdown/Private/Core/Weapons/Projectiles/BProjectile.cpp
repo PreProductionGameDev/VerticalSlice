@@ -123,9 +123,6 @@ void ABProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* Oth
 				
 				UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), static_cast<float>(Damage));
 				
-				UE_LOG(LogTemp, Warning, TEXT("%f"), Damage);
-				
-				
 				Character->GetPlayerAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
 			}
 		}

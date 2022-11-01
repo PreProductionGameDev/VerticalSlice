@@ -33,7 +33,6 @@ void UServerResult::ResetText()
 void UServerResult::OnClicked()
 {
 	Parent->ResetSelected();
-	UE_LOG(LogTemp, Warning, TEXT("YES %d"), Index);
 	Parent->SelectIndex(Index);
 	this->ServerName->SetColorAndOpacity(FLinearColor(0,1,0,1));
 	Parent->UpdateServerSettings();

@@ -102,7 +102,6 @@ void UGA_FireMovement::SpawnFire()
 	{
 		StopSpawning(0.0f);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("FireSpawned"));
 	const FVector SpawnLocation = GetCurrentActorInfo()->OwnerActor->GetActorLocation();
 	const FTransform SpawnTransform = FTransform(SpawnLocation);
 	ATrailHitbox* SpawnedFire = GetWorld()->SpawnActorDeferred<ATrailHitbox>(ATrailHitbox::StaticClass(), SpawnTransform, Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor), Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor));
@@ -120,8 +119,7 @@ void UGA_FireMovement::SpawnFire()
  */
 void UGA_FireMovement::StopSpawning(float TimeHeld)
 {
-	UE_LOG(LogTemp, Warning, TEXT("keyReleased"));
-	
+
 	GetWorld()->GetTimerManager().ClearTimer(SpawnTimer);
 	SpawnTimer.Invalidate();
 	

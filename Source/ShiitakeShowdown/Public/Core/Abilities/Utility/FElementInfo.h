@@ -17,11 +17,11 @@ struct FElementInfo
  
  // Primary ability 
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
- EPlayerAbilityInputID Primary;
+ EPlayerAbilityInputID Primary = EPlayerAbilityInputID::UtilityAbility;
  // Primary ability 
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
- EPlayerAbilityInputID Movement;
+ EPlayerAbilityInputID Movement = EPlayerAbilityInputID::MovementAbility;
  // Ability HUD component
  UPROPERTY(BlueprintReadWrite, EditAnywhere)
- UTexture2D* Texture;
+ UTexture2D* Texture = nullptr;
 };

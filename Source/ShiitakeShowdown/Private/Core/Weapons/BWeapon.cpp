@@ -87,7 +87,7 @@ void ABWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	// Add the Replication for the required Objects
-	DOREPLIFETIME_CONDITION(ABWeapon, OwningCharacter, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(ABWeapon, OwningPlayerCharacter, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, PrimaryClipAmmo, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, MaxPrimaryClipAmmo, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(ABWeapon, bSpawnWithCollision, COND_None);
@@ -102,20 +102,20 @@ void ABWeapon::PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker
 
 void ABWeapon::SetOwningCharacter(AFP_Character* InOwningCharacter)
 {
-	OwningCharacter = InOwningCharacter;
+	OwningPlayerCharacter = InOwningCharacter;
 	// If the Owning Character is a valid character, handle ownership
 	// Otherwise disconnect from owner
-	if (OwningCharacter)
+	if (OwningPlayerCharacter)
 	{
 		// Called when Added to Inventory
 		// Sets the owner and attaches to owner
-		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
+		AbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwningPlayerCharacter->GetPlayerAbilitySystemComponent());
 		SetOwner(InOwningCharacter);
-		AttachToComponent(OwningCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		AttachToComponent(OwningPlayerCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 		// Disable Pickup Collision sphere
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		if (OwningCharacter->GetCurrentWeapon() != this)
+		if (OwningPlayerCharacter->GetCurrentWeapon() != this)
 		{
 			WeaponMesh1P->SetVisibility(false, true);
 			if (Equip1PMontage)
@@ -142,7 +142,7 @@ void ABWeapon::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	// Ensures pickup of weapon if valid and not currently owned
-	if (IsValid(this) && !OwningCharacter)
+	if (IsValid(this) && !OwningPlayerCharacter)
 	{
 		PickUpOnTouch(Cast<AFP_Character>(OtherActor));
 	}
@@ -151,31 +151,31 @@ void ABWeapon::NotifyActorBeginOverlap(AActor* OtherActor)
 void ABWeapon::Equip()
 {
 	// Validate the Owning Character
-	if (!OwningCharacter)
+	if (!OwningPlayerCharacter)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s %s OwningCharacter is nullptr"), *FString(__FUNCTION__), *GetName());
 		return;
 	}
 
 	// When updating Character. This connects to the models to the person correctly.
-	FName AttachPoint = OwningCharacter->GetWeaponAttachPoint();
+	FName AttachPoint = OwningPlayerCharacter->GetWeaponAttachPoint();
 
 	// Setup FirstPerson Mesh if Valid
 	if (WeaponMesh1P)
 	{
-		if (OwningCharacter->GetFirstPersonMesh())
+		if (OwningPlayerCharacter->GetFirstPersonMesh())
 		{
 			WeaponMesh1P->GetAnimInstance()->Montage_JumpToSection("Equip");
 			// TODO: SOLVE WARNINGS THIS THROWS CAUSE NO SKELETAL MESH 
 			// Attaches and sets correct display. Might need to tweak upon applying the models
-			if (OwningCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
+			if (OwningPlayerCharacter->GetFirstPersonMesh()->DoesSocketExist(AttachPoint))
 			{
-				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
+				WeaponMesh1P->AttachToComponent(OwningPlayerCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
 				
 			}
 			else
 			{
-				WeaponMesh1P->AttachToComponent(OwningCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				WeaponMesh1P->AttachToComponent(OwningPlayerCharacter->GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
 			WeaponMesh1P->SetRelativeLocation(WeaponMesh1PEquippedRelativeLocation);
 			WeaponMesh1P->SetRelativeRotation(WeaponMesh1PEquippedRelativeRotation);
@@ -188,13 +188,13 @@ void ABWeapon::Equip()
 	{
 		WeaponMesh3P->SetVisibility(true, true);
 		// Attaches and sets correct display. Might need to tweak upon applying the models
-		if (OwningCharacter->GetThirdPersonMesh()->DoesSocketExist(AttachPoint))
+		if (OwningPlayerCharacter->GetThirdPersonMesh()->DoesSocketExist(AttachPoint))
 		{
-			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
+			WeaponMesh3P->AttachToComponent(OwningPlayerCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachPoint);
 		}
 		else
 		{
-			WeaponMesh3P->AttachToComponent(OwningCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			WeaponMesh3P->AttachToComponent(OwningPlayerCharacter->GetThirdPersonMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		}
 			
 		WeaponMesh3P->SetRelativeLocation(WeaponMesh3PEquippedRelativeLocation);
@@ -204,7 +204,7 @@ void ABWeapon::Equip()
 
 void ABWeapon::UnEquip()
 {
-	if (OwningCharacter == nullptr)
+	if (OwningPlayerCharacter == nullptr)
 	{
 		return;
 	}
@@ -224,17 +224,17 @@ void ABWeapon::UnEquip()
 
 void ABWeapon::AddAbilities()
 {
-	if (!IsValid(OwningCharacter) || !OwningCharacter->GetPlayerAbilitySystemComponent())
+	if (!IsValid(OwningPlayerCharacter) || !OwningPlayerCharacter->GetPlayerAbilitySystemComponent())
 	{
 		return;
 	}
 	
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningPlayerCharacter->GetPlayerAbilitySystemComponent());
 
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningCharacter->GetLocalRole())));
+		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningPlayerCharacter->GetLocalRole())));
 		return;
 	}
 
@@ -253,12 +253,12 @@ void ABWeapon::AddAbilities()
 
 void ABWeapon::RemoveAbilities()
 {
-	if (!IsValid(OwningCharacter) || !OwningCharacter->GetPlayerAbilitySystemComponent())
+	if (!IsValid(OwningPlayerCharacter) || !OwningPlayerCharacter->GetPlayerAbilitySystemComponent())
 	{
 		return;
 	}
 
-	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningCharacter->GetPlayerAbilitySystemComponent());
+	UPlayerAbilitySystemComponent* ASC = Cast<UPlayerAbilitySystemComponent>(OwningPlayerCharacter->GetPlayerAbilitySystemComponent());
 
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
@@ -427,11 +427,11 @@ int32 ABWeapon::GetTotalAmmo() const
 {
 	int32 TotalAmmo = PrimaryClipAmmo;
 	bool hasReserve;
-	if(!OwningCharacter)
+	if(!OwningPlayerCharacter)
 	{
 		return 0;
 	}
-	const float ReserveAmmo = OwningCharacter->GetPlayerAbilitySystemComponent()->GetGameplayAttributeValue(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(PrimaryAmmoType), hasReserve);
+	const float ReserveAmmo = OwningPlayerCharacter->GetPlayerAbilitySystemComponent()->GetGameplayAttributeValue(UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(PrimaryAmmoType), hasReserve);
 	if (hasReserve)
 	{
 		TotalAmmo += static_cast<int32>(ReserveAmmo);
@@ -441,7 +441,7 @@ int32 ABWeapon::GetTotalAmmo() const
 
 AFP_Character* ABWeapon::GetOwnerCharacter() const
 {
-	return OwningCharacter;
+	return OwningPlayerCharacter;
 }
 
 void ABWeapon::BeginPlay()
@@ -449,13 +449,12 @@ void ABWeapon::BeginPlay()
 	// Reset the weapon values
 	ResetWeapon();
 	
-	if (!OwningCharacter && bSpawnWithCollision)
+	if (!OwningPlayerCharacter && bSpawnWithCollision)
 	{
 		// Spawned into the world without an owner, enable collision as we are in pickup mode
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);
-		UE_LOG(LogTemp, Warning, TEXT("HELLO"));
 	}
 
 	if (!bSpawnWithCollision)

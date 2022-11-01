@@ -20,17 +20,13 @@ const static FName SERVER_PLAYER_COUNT = TEXT("ServerPlayer");
 UGI_Multiplayer::UGI_Multiplayer(const FObjectInitializer& ObjectInitializer)
 {
     const IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem != nullptr)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
-    }
 }
 
 void UGI_Multiplayer::SaveSettings()
 {
     if(!UGameplayStatics::SaveGameToSlot(Settings, "Settings", 0 ))
     {
-        //warns the client that saving failed
+        // warns the client that saving failed
         UE_LOG(LogTemp, Warning, TEXT("Settings have failed to save"));
     }
 }
@@ -239,11 +235,7 @@ void UGI_Multiplayer::OnCreateSessionComplete(FName SessionName, bool bSuccess)
 
 void UGI_Multiplayer::OnDestroySessionComplete(FName SessionName, bool bSuccess)
 {
-    if (bSuccess)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("PREVIOUS SESSION DESTROYED. NEW ONE MADE"));
-        SessionInterface->DestroySession(SESSION_NAME);
-    }
+    UE_LOG(LogTemp, Warning, TEXT("Destroy Session Success %d"), static_cast<uint16_t>(bSuccess));
 }
 
 void UGI_Multiplayer::RefreshServerList(UServerFinder* InServerFinder)
