@@ -4,6 +4,7 @@
 #include "Core/Elements/Gravity/GA_GravityMovement.h"
 #include "Abilities/Tasks/AbilityTask_NetworkSyncPoint.h"
 #include "FP_Character.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 /**
@@ -121,6 +122,8 @@ void UGA_GravityMovement::OnGravPulse()
 	}
 	
 	PlaySound(ImpulseIndicator->GetActorLocation());
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, NiagaraSystem, ImpulseIndicator->GetActorLocation());
 	GetWorld()->DestroyActor(ImpulseIndicator);
 	ImpulseIndicator= nullptr;
 	

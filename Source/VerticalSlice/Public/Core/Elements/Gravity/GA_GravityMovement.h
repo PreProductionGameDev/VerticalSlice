@@ -54,5 +54,8 @@ public:
 	UPROPERTY()
 	FTimerHandle ImpulseIndicatorTimerHandle;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UNiagaraSystem* NiagaraSystem;
+
 	
 };
