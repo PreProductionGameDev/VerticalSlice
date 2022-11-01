@@ -218,7 +218,7 @@ protected:
 
 	// The Character who Owns this Weapon
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ShiitakeShowdown|GASWeapon")
-	AFP_Character* OwningCharacter;
+	AFP_Character* OwningPlayerCharacter;
 
 	// The Array of Abilities for the weapon
 	UPROPERTY(EditAnywhere, Category = "ShiitakeShowdown|GASWeapon")

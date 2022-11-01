@@ -18,7 +18,7 @@ struct FGameModeInfo : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Description;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class AVerticalSliceGameMode* GameMode;
+	class AVerticalSliceGameMode* GameMode = nullptr;
 };
 
 USTRUCT(BlueprintType)
@@ -31,5 +31,5 @@ struct FMapInfo : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Path;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UTexture2D* PreviewImage;
+	class UTexture2D* PreviewImage = nullptr;
 };
