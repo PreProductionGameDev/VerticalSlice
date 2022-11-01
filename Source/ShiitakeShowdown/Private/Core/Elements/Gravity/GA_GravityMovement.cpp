@@ -114,7 +114,6 @@ void UGA_GravityMovement::OnGravPulse()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	if(UKismetSystemLibrary::SphereOverlapActors(this, ImpulseIndicator->GetActorLocation(),800.0f,ObjectTypes,AFP_Character::StaticClass(),IgnoredActors,OverlapActors ))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OverlappedActors"));
 		for(AActor* OverlapedActor : OverlapActors)
 		{
 			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);

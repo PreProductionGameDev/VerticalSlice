@@ -750,13 +750,11 @@ void AFP_Character::SpawnDefaultInventory()
 	// If the GameMode is valid, and get the default inventory
 	if (GameMode)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("USING GAMEMODE INV"));
 		WeaponInvToUse = GameMode->GetDefaultInventory();
 	}
 	// If the Inventory is empty, just use player default one
 	if (WeaponInvToUse.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("USING DEFAULT INV"));
 		WeaponInvToUse = DefaultInventoryWeapons;
 	}
 	

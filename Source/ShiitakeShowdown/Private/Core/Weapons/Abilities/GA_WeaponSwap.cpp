@@ -41,7 +41,6 @@ UGA_WeaponSwap::UGA_WeaponSwap()
 
 void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OWO WHATS TIS?"));
 	if (IsLocallyControlled())
 	{
 		if (const ABWeapon* Weapon = Cast<ABWeapon>(GetCurrentSourceObject()))
@@ -55,7 +54,6 @@ void UGA_WeaponSwap::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 						const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
 						if (Montage->IsValidSectionIndex(SectionID))
 						{
-							UE_LOG(LogTemp, Warning, TEXT("UN EQUIP THIS"));
 							Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->Montage_JumpToSection("UnEquip");
 							Player->GetCurrentWeapon()->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &UGA_WeaponSwap::SwapWeapon);
 							return;

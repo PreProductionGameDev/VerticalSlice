@@ -46,7 +46,6 @@ void UGA_WeaponReload::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	// End Ability if there is no Weapon
 	if (!SourceWeapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Reload Invalid"));
 		EndAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true, true);
 	}
 	

@@ -455,7 +455,6 @@ void ABWeapon::BeginPlay()
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);
-		UE_LOG(LogTemp, Warning, TEXT("HELLO"));
 	}
 
 	if (!bSpawnWithCollision)

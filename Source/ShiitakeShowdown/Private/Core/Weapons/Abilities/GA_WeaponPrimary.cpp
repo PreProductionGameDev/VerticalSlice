@@ -41,7 +41,6 @@ UGA_WeaponPrimary::UGA_WeaponPrimary()
  */
 void UGA_WeaponPrimary::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("STARTED THE FIRE POG"));
 	// Activates parent logic to allow Ability to Work
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	// Sets up all cached variables
@@ -157,7 +156,6 @@ void UGA_WeaponPrimary::FireShot()
  */
 void UGA_WeaponPrimary::FiringCancelled(float TimePressed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Cancelled?"))
 	// Cancel the Instant Ability
 	InstantAbility->ExternalEndAbility();
 	// Cancel this Ability
@@ -194,7 +192,7 @@ void UGA_WeaponPrimary::SetupCacheables()
 		SourceWeapon = Cast<ABWeapon>(GetCurrentSourceObject());
 		if(!SourceWeapon)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("NO SOURCE WEAPON"));
+			UE_LOG(LogTemp, Warning, TEXT("Weapon WarningL: No Source Weapon"));
 			return;
 		}
 	}
@@ -212,7 +210,7 @@ void UGA_WeaponPrimary::SetupCacheables()
 		InstantAbility = Cast<UGA_WeaponPrimaryInstant>(UGASBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromHandle(PlayerASC, InstantAbilityHandle));
 		if (!InstantAbility)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("NO INSTANT ABILITY"));
+			UE_LOG(LogTemp, Warning, TEXT("Weapon Warning: No Instant Ability"));
 			return;
 		}
 	}

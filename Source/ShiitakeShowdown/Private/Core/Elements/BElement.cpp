@@ -56,7 +56,6 @@ void ABElement::AddAbilities()
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningPlayer->GetLocalRole())));
 		return;
 	}
 
@@ -88,7 +87,6 @@ void ABElement::RemoveAbilities()
 	// Validity check if AbilitySystemComponent Exists
 	if (!ASC)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s %s Role: %s ASC is null"), *FString(__FUNCTION__), *GetName(), *(FindObject<UEnum>(ANY_PACKAGE, TEXT("ENetRole"), true)->GetNameStringByValue(OwningPlayer->GetLocalRole())));
 		return;
 	}
 

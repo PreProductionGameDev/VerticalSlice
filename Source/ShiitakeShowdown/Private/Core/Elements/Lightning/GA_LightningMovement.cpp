@@ -134,7 +134,6 @@ void UGA_LightningMovement::SyncCamera()
  */
 void UGA_LightningMovement::OnKeyReleased(float TimePressed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("release"));
 	Cast<AFP_Character>(GetOwningActorFromActorInfo())->UseStamina(StaminaCost);
 	
 	// Clean up timer
