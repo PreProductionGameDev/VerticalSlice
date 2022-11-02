@@ -73,8 +73,14 @@ void UGA_WeaponPrev::EndAbility(const FGameplayAbilitySpecHandle Handle, const F
 		return;
 	}
 
-	PrevWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
-	NextWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+	if (PrevWeapon)
+	{
+		PrevWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+	}
+	if (NextWeapon)
+	{
+		NextWeapon->GetWeaponMesh1P()->GetAnimInstance()->OnPlayMontageNotifyBegin.Clear();
+	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
