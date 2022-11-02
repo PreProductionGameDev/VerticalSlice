@@ -455,6 +455,7 @@ void ABWeapon::BeginPlay()
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		WeaponMesh3P->CastShadow = true;
 		WeaponMesh3P->SetVisibility(true, true);
+		WeaponMesh3P->SetRelativeScale3D(PickupMeshScale);
 	}
 
 	if (!bSpawnWithCollision)
@@ -463,6 +464,7 @@ void ABWeapon::BeginPlay()
 		WeaponMesh3P->CastShadow = false;
 		WeaponMesh3P->SetVisibility(true, true);
 		WeaponMesh3P->SetVisibility(false, true);
+		WeaponMesh3P->SetRelativeScale3D(TPMeshScale);
 	}
 
 	WeaponMesh1P->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
@@ -493,7 +495,7 @@ void ABWeapon::PickUpOnTouch(AFP_Character* InCharacter)
 	// TODO: Add the weapon to the inventory and disable Meshes
 	if (InCharacter->AddWeaponToInventory(this, false))
 	{
-		
+		WeaponMesh3P->SetRelativeScale3D(TPMeshScale);
 	}
 }
 

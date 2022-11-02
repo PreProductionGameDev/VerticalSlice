@@ -215,6 +215,12 @@ protected:
 	FVector WeaponMesh3PEquippedRelativeLocation;
 	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
 	FRotator WeaponMesh3PEquippedRelativeRotation;
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
+	FVector TPMeshScale = FVector(1.0f, 1.0f, 1.0f);
+
+	UPROPERTY(EditDefaultsOnly, Category = "ShiitakeShowdown|GASWeapon")
+	FVector PickupMeshScale = FVector(1.0f, 1.0f, 1.0f);
+
 
 	// The Character who Owns this Weapon
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ShiitakeShowdown|GASWeapon")
