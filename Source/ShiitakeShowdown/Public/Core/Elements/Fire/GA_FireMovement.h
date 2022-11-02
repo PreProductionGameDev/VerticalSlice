@@ -45,4 +45,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	USoundBase* Sound;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<UGameplayEffect> DamageEffect;
 };

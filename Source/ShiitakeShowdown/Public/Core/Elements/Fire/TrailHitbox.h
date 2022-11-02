@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
@@ -41,5 +42,8 @@ public:
 
 	UPROPERTY()
 	USoundBase* Sound;
+
+	UPROPERTY()
+	FGameplayEffectSpecHandle DamageEffect;
 
 };

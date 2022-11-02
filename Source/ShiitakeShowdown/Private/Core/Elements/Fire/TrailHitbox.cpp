@@ -76,33 +76,7 @@ void ATrailHitbox::BurnCheck()
 			UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetInstigator());
 			UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(Character);
 
-			//creates gameplay effect
-			UGameplayEffect* GameplayEffect = NewObject<UGameplayEffect>(GetTransientPackage(), "GE_TrailBurn");
-			GameplayEffect->DurationPolicy = EGameplayEffectDurationType::Instant;
-
-			//set health modifier information
-			FGameplayModifierInfo DamageModifierInfo;
-			DamageModifierInfo.ModifierOp = EGameplayModOp::Additive;
-			DamageModifierInfo.Attribute = UPlayerAttributeSet::GetHealthAttribute();
-			DamageModifierInfo.ModifierMagnitude = FScalableFloat(-2.0f);
-			GameplayEffect->Modifiers.Add(DamageModifierInfo);
-
-			//tags to ignore
-			GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")));
-			GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
-
-			//checks for team to ignore
-			if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
-			{
-				GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue")));
-			}
-			else if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
-			{
-				GameplayEffect->ApplicationTagRequirements.IgnoreTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Team.Red")));
-			}
-
-			//apply the created effect
-			AbilitySystemComponent->ApplyGameplayEffectToTarget(GameplayEffect,TargetAbilitySystemComponent);
+			TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*DamageEffect.Data.Get());
 		}
 	}
 }
