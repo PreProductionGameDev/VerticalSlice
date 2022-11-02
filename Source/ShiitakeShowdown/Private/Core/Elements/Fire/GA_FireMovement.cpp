@@ -4,6 +4,7 @@
 
 #include "Core/Elements/Fire/GA_FireMovement.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "FP_Character.h"
 #include "Abilities/Tasks/AbilityTask.h"
 #include "Core/Elements/Fire/TrailHitbox.h"
@@ -107,6 +108,9 @@ void UGA_FireMovement::SpawnFire()
 	ATrailHitbox* SpawnedFire = GetWorld()->SpawnActorDeferred<ATrailHitbox>(ATrailHitbox::StaticClass(), SpawnTransform, Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor), Cast<AFP_Character>(GetCurrentActorInfo()->OwnerActor));
 	if(SpawnedFire)
 	{
+		FGameplayEffectSpecHandle DamageEffectSpec = MakeOutgoingGameplayEffectSpec(DamageEffect);
+		DamageEffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageEffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), 2.0f);
+		SpawnedFire->DamageEffect = DamageEffectSpec;
 		SpawnedFire->Sound = Sound;
 		UGameplayStatics::FinishSpawningActor(SpawnedFire,SpawnTransform);
 	}
