@@ -27,7 +27,8 @@ void UWeaponUtilityFunctionLibrary::CheckHitMarker(const FGameplayAbilityTargetD
 		if (!SourcePlayerASC) continue;
 
 		// Return if the Player is dead
-		if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Dead")))) return;
+		if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Dead"))))
+			continue;
 
 		// Return if both players are Blue team
 		if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) &&
@@ -44,4 +45,37 @@ void UWeaponUtilityFunctionLibrary::CheckHitMarker(const FGameplayAbilityTargetD
 		// Create Hit Marker on the owning player
 		OwningPlayer->CreateHitMarker(HitPlayerIsDying);
 	}
+}
+
+void UWeaponUtilityFunctionLibrary::CheckHitMarkerWithActors(AFP_Character* HitPlayer, AFP_Character* OwningPlayer)
+{
+	if (!HitPlayer)
+		return;
+	const UAbilitySystemComponent* HitPlayerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitPlayer);
+	if (!HitPlayerASC)
+		return;
+
+	// Get the Source Player's ASC
+	const UAbilitySystemComponent* SourcePlayerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwningPlayer);
+	if (!SourcePlayerASC)
+		return;
+
+	// Return if the Player is dead
+	if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Dead"))))
+		return;
+
+	// Return if both players are Blue team
+	if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))) &&
+		SourcePlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Blue"))))
+			return;
+
+	// Return if both players are Red Team
+	if (HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))) &&
+		SourcePlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Team.Red"))))
+			return;
+
+	// Check if player has entered the dying state
+	const bool HitPlayerIsDying = HitPlayerASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Dying")));
+	// Create Hit Marker on the owning player
+	OwningPlayer->CreateHitMarker(HitPlayerIsDying);
 }

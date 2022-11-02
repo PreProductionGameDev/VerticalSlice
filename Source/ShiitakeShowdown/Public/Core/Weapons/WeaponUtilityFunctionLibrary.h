@@ -21,4 +21,7 @@ public:
 	// Check if the player should receive a Hit Marker for their attack 
 	UFUNCTION(BlueprintCallable, Category="ShiitakeShowdown|Weapon")
 	static void CheckHitMarker(const FGameplayAbilityTargetDataHandle& TargetData, AFP_Character* OwningPlayer);
+
+	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Weapon")
+	static void CheckHitMarkerWithActors(AFP_Character* HitPlayer, AFP_Character* OwningPlayer);
 };
