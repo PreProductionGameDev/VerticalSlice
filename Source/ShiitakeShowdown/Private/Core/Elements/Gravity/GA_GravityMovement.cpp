@@ -122,7 +122,7 @@ void UGA_GravityMovement::OnGravPulse()
 	
 	PlaySound(ImpulseIndicator->GetActorLocation());
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, NiagaraSystem, ImpulseIndicator->GetActorLocation());
+	SpawnPulse();
 	GetWorld()->DestroyActor(ImpulseIndicator);
 	ImpulseIndicator= nullptr;
 	

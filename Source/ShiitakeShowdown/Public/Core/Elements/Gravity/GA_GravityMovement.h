@@ -45,7 +45,7 @@ public:
 	USoundBase* SoundCue;
 
 	// shows the casting player where the impulse will come from
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AActor* ImpulseIndicator;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -56,6 +56,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class UNiagaraSystem* NiagaraSystem;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnPulse();
 
 	
 };
