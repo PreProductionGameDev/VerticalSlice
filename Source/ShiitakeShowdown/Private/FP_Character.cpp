@@ -229,7 +229,7 @@ bool AFP_Character::AddWeaponToInventory(ABWeapon* NewWeapon, bool bEquipWeapon)
 			GEAmmoPickup->Modifiers.SetNum(ID + 1);
 			FGameplayModifierInfo& InfoAmmo = GEAmmoPickup->Modifiers[ID];
 			// Add A Clip amount to the ammo pool
-			InfoAmmo.ModifierMagnitude = FScalableFloat(NewWeapon->GetPrimaryClipAmmo());
+			InfoAmmo.ModifierMagnitude = FScalableFloat(NewWeapon->GetPickupAmmo());
 			InfoAmmo.ModifierOp = EGameplayModOp::Additive;
 			InfoAmmo.Attribute = UAmmoAttributeSet::GetReserveAmmoAttributeFromTag(NewWeapon->PrimaryAmmoType);
 		}

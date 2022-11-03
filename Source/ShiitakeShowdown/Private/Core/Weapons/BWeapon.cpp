@@ -403,6 +403,11 @@ int32 ABWeapon::GetAmmoCost() const
 	return AmmoCost;
 }
 
+int32 ABWeapon::GetPickupAmmo() const
+{
+	return PickupAmmoCount;
+}
+
 int32 ABWeapon::GetNumberOfShots() const
 {
 	return ShotCount;

@@ -142,6 +142,7 @@ public:
 	UCurveVector* GetRecoilPattern() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetAmmoCost() const;
+	int32 GetPickupAmmo() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
 	int32 GetNumberOfShots() const;
 	UFUNCTION(BlueprintCallable, Category = "ShiitakeShowdown|Stats")
@@ -170,6 +171,8 @@ protected:
 	// Max Clip Size
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, ReplicatedUsing = OnRep_MaxPrimaryClipAmmo, Category = "ShiitakeShowdown|GASWeapon|Ammo")
 	int32 MaxPrimaryClipAmmo;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Ammo")
+	int32 PickupAmmoCount;
 	// Infinite Ammo for Specific GameModes or Testing
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "ShiitakeShowdown|GASWeapon|Ammo")
 	bool bInfiniteAmmo;
