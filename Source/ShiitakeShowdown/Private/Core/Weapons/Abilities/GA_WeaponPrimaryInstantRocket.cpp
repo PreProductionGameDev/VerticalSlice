@@ -219,19 +219,21 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 
 		const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
-		//auto* Projectile = GetWorld()->SpawnActor(ProjectileClass, &SpawnLocation, &SpawnRotation, SpawnParameters);
-
 		FGameplayEffectSpecHandle DamageGameplayEffectSpec = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
 		DamageGameplayEffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageGameplayEffectSpec, FGameplayTag::RequestGameplayTag(FName("Data.Damage")), static_cast<float>(SourceWeapon->GetDamage()));
-
-		//FGameplayEffectContextHandle DamageEffectContext = UAbilitySystemBlueprintLibrary::GetEffectContext(DamageGameplayEffectSpec);
-		
+		const FGameplayEffectContextHandle DamageEffectContext = UAbilitySystemBlueprintLibrary::GetEffectContext(DamageGameplayEffectSpec);
+		UGASBlueprintFunctionLibrary::EffectContextAddTargetData(DamageEffectContext, TargetData);
+	
 		ABProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABProjectile>(ProjectileClass, SpawnTransform);
 		Projectile->SetOwner(OwningPlayer);
 		Projectile->SetEffectSpec(DamageGameplayEffectSpec);
 		Projectile->SetDamage(SourceWeapon->GetDamage());
 
 		Projectile->FinishSpawning(SpawnTransform);
+
+		FGameplayCueParameters GameplayCueParams;
+		GameplayCueParams.EffectContext = DamageEffectContext;
+		K2_ExecuteGameplayCueWithParams(GameplayCueWeaponFire, GameplayCueParams);
 	}
 	
 }

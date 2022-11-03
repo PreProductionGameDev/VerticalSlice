@@ -90,6 +90,11 @@ void ABProjectile::OnOverlapBegin(UPrimitiveComponent* HitComponent, AActor* Oth
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraComponent, GetActorLocation());
 	}
+
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+	}
 	
 	if (!HasAuthority())
 	{

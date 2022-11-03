@@ -60,4 +60,7 @@ protected:
 	
 	UPROPERTY()
 	float Damage;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class USoundBase* ExplosionSound;
 };

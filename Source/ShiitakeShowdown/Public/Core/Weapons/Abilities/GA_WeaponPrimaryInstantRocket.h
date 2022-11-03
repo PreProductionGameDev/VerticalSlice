@@ -72,7 +72,11 @@ protected:
 	// Tag for End of player Aiming
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FGameplayTag AimingRemovalTag;
+	// Gameplay Cue Tag for Firing the Weapon
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FGameplayTag GameplayCueWeaponFire;
 
+	
 	// Class for the Projectile 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<class ABProjectile> ProjectileClass;
