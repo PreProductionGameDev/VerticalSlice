@@ -46,7 +46,7 @@ void UGA_WeaponNext::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 			if (AFP_Character* Player =  Cast<AFP_Character>(Weapon->GetOwner()))
 			{
 				ABWeapon* CurrentWeapon = Player->GetCurrentWeapon();
-				if (UAnimMontage* Montage = Weapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
+				if (UAnimMontage* Montage = CurrentWeapon->GetWeaponMesh1P()->GetAnimInstance()->GetCurrentActiveMontage())
 				{
 					const int32 SectionID = Montage->GetSectionIndex(FName("UnEquip"));
 					if (Montage->IsValidSectionIndex(SectionID))
