@@ -202,10 +202,6 @@ void UGA_WeaponPrimaryInstantRocket::HandleTargetData(const FGameplayAbilityTarg
 	}
 
 	PlayAnimations();
-
-	// TODO: SETUP GAMEPLAY EFFECT CREATION
-	// PASS TO THE PROJECTILE CREATED
-
 	// Spawn the Projectile on Server Only
 	if (OwningPlayer->HasAuthority())
 	{
