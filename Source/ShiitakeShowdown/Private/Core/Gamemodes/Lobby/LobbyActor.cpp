@@ -65,7 +65,7 @@ void ALobbyActor::BeginPlay()
 	if(IsOwnedBy(Controller))
 	{
 		Controller->bShowMouseCursor=true;
-		ResetCamera();
+		
 	}
 }
 
