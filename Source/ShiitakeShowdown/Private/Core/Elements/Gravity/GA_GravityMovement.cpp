@@ -116,7 +116,7 @@ void UGA_GravityMovement::OnGravPulse()
 	{
 		for(AActor* OverlapedActor : OverlapActors)
 		{
-			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2500.0f, true, true);
+			Cast<AFP_Character>(OverlapedActor)->LaunchCharacter((OverlapedActor->GetActorLocation()- ImpulseIndicator->GetActorLocation()).GetSafeNormal()*2800.0f, true, true);
 		}
 	}
 	
